@@ -15,7 +15,7 @@ class Project extends Object {
 
 	function __construct($projectPath) {
 		$this->path = $projectPath;
-		$foldernames = array_reverse(explode(DIRECTORY_SEPARATOR, $projectPath));
+		$foldernames = array_reverse(explode('/', $projectPath));
 		foreach($foldernames as $name) {
 			if (!in_array($name, array('', 'website', 'development', 'release'))) {
 				$this->identifier = $name;

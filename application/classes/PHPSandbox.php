@@ -56,7 +56,7 @@ class PHPSandbox extends Object implements Component {
 			2 => array('pipe', 'w')
 		);
 
-		$this->process = proc_open('php', $descriptorspec, $pipes, NULL, NULL);
+		$this->process = proc_open($this->resolvePhpBin(), $descriptorspec, $pipes, NULL, NULL);
 
 		if (is_resource($this->process)) {
 			// $pipes now looks like this:
@@ -78,6 +78,13 @@ class PHPSandbox extends Object implements Component {
 		if (is_resource($this->process)) {
 			proc_close($this->process);
 		}
+	}
+
+	private function resolvePhpBin() {
+		if (file_exists('c:/wamp/bin/php')) {
+			return 'c:/wamp/bin/php/php5.3.0/php.exe'; // raw guess ;)
+		}
+		return 'php';
 	}
 }
 ?>

@@ -40,10 +40,6 @@ class Module extends Object {
 				$info[ucfirst($name)] = $value;
 			}
 		}
-		if (empty($info['Version'])) {
-			$info['Version'] = VersionControl::get_version($this->path);
-		}
-		$info['Revision'] = VersionControl::get_revision($this->path);
 		return $info;
 	}
 
@@ -54,7 +50,7 @@ class Module extends Object {
 		$path = $this->path.'utils/';
 		if (file_exists($path)) {
 			if (file_exists($path.'classes')) {
-				$GLOBALS['Library']->extract_definitions_from_folder($path.'classes/');
+				$GLOBALS['AutoLoader']->inspectFolder($path.'classes/');
 			}
 
 			return include($path.'getUtils.php');
