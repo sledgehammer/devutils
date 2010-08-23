@@ -1,0 +1,11 @@
+.fail {
+	color: red;
+	font-weight: bold;
+}
+.pass {
+	color: green;
+	font-weight: bold;
+}
+.testline {
+	line-height:170%;
+}

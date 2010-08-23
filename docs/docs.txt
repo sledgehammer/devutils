@@ -1,0 +1,18 @@
+
+Installatie DevUtils
+---------------------
+
+Je kopieerd de devutils/public/ map zet in een submap van de DocumentRoot van een sledgehammer enabled website.
+En hernoem deze map naar bv: "devutils".
+(De map werkt met behulp van een .htaccess, daarom moet de map in de (Apache)DocumentRoot staan.)
+
+
+Het rewrite.php bestand zoekt naar de DevUtils projectmap in de volgende plaatsen:
+ * /var/www/devutils
+ * $projectmap/devutils/
+ * $projectmap/public/devutils/
+
+ * 1 niveau hoger. (Het devutils project bevind zich in het andere project)
+
+Kenmerkend bestand: "sledgehammer/core/init.php"
+Als de de devutils staan op /var/www/devutils/ doorzoekt /var/www/*

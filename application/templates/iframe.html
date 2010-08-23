@@ -1,0 +1,19 @@
+<iframe src="<?php echo $src; ?>"></iframe>
+<?php javascript_once(WEBPATH.'core/javascript/jquery.js', 'jquery'); ?>
+<style>
+	body, html {
+		height:100%;
+	}
+	div.contents, iframe {
+		margin: 0;
+		padding: 0;
+	}
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('iframe').height($('body').height() - $('div.menu').height() - $('div.statusbar').height());
+	$(window).resize(function() { 
+		$('iframe').height($('body').height() - $('div.menu').height() - $('div.statusbar').height());
+	});
+});
+</script>

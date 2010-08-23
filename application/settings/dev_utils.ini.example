@@ -1,0 +1,7 @@
+; Configureer paden naar projecten
+; DevUtils zal zelf zoeken naar sledgehammer projecten in de paden die geconfigureerd staan in scan_folders.ini
+;
+; De structuur van dit ini bestand is als volgt:
+; "filename die in devutils gebruikt word" = "path/to/project"
+; Bijvoorbeeld: 
+devutils = /var/www/devutils/
