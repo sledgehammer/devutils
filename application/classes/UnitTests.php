@@ -20,15 +20,15 @@ class UnitTests extends VirtualFolder {
 		foreach ($tests as $filename) {
 			$module = dirname($filename);
 			$filename = basename($filename);
-			$files[] = $this->project->modules[$module]->path.'tests/'.$filename;
+			$files[] = $this->project->modules[$module]->path.'tests'.DIRECTORY_SEPARATOR.$filename;
 		}
 		return $this->build($this->project->name.' TestSuite', $files);
 	}
 
 	function dynamicFilename($filename) {
-		dump($filename);
-		Breadcrumbs::add('UnitTest '.substr($filename, -4));
-		return $this->build($filename, array($this->module->path.'tests/'.$filename));
+		 deprecated('??');
+		//Breadcrumbs::add('UnitTest '.substr($filename, -4));
+		//return $this->build($filename, array($this->module->path.'tests/'.$filename));
 	}
 
 	function dynamicFoldername($folder, $filename = null) {
@@ -38,11 +38,11 @@ class UnitTests extends VirtualFolder {
 		if ($filename != 'index.html') { // Gaat het om een enkele unittest
 			file_extension($filename, $filename_without_extention);
 			Breadcrumbs::add($filename_without_extention);
-			return $this->build($filename_without_extention, array($module->path.'tests/'.$filename));
+			return $this->build($filename_without_extention, array($module->path.'tests'.DIRECTORY_SEPARATOR.$filename));
 		} else {
 			$tests = $module->getUnitTests();
 			foreach ($tests as $filename) {
-				$files[] = $module->path.'tests/'.$filename;
+				$files[] = $module->path.'tests'.DIRECTORY_SEPARATOR.$filename;
 			}
 			return $this->build('UnitTests - '.$module->name, $files);
 		}
@@ -68,13 +68,12 @@ class UnitTests extends VirtualFolder {
 
 	private function generateTestSuite($title, $tests) {
 		$source = "<?php\n";
-		$source .= "require_once('".PATH."sledgehammer/simpletest/unit_tester.php');\n";
-		$source .= "require_once('".PATH."sledgehammer/simpletest/reporter.php');\n";
-		$source .= "require_once('".$this->project->path."/sledgehammer/core/init_framework.php');\n";
+		$source .= "require_once('".$this->project->path."sledgehammer/core/init_framework.php');\n";
+		$source .= "\$GLOBALS['AutoLoader']->inspectModules(array(array('path'=> '".addslashes(PATH)."sledgehammer/simpletest')));\n";
 		$source .= "\n";
 		$source .= "\$testSuite = new TestSuite('$title');\n";
 		foreach ($tests as $testfile) {
-			$source .= "\$testSuite->addTestFile('".$testfile."');\n";
+			$source .= "\$testSuite->addFile('".addslashes($testfile)."');\n";
 		}
 		//$source .= "ini_set('display_error', true);\n";
 		$source .= "\$testSuite->run(new HtmlReporter());\n";

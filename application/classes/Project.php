@@ -15,7 +15,7 @@ class Project extends Object {
 
 	function __construct($projectPath) {
 		$this->path = $projectPath;
-		$foldernames = array_reverse(explode('/', $projectPath));
+		$foldernames = array_reverse(explode(DIRECTORY_SEPARATOR, $projectPath));
 		foreach($foldernames as $name) {
 			if (!in_array($name, array('', 'website', 'development', 'release'))) {
 				$this->identifier = $name;
@@ -23,7 +23,7 @@ class Project extends Object {
 				break;
 			}
 		}
-		$modules = array_reverse(SledgeHammer::getModules($projectPath.'sledgehammer/'));
+		$modules = array_reverse(SledgeHammer::getModules($projectPath.'sledgehammer'.DIRECTORY_SEPARATOR));
 		foreach ($modules as $identifier => $module) {
 			$this->modules[$identifier] = new Module($identifier, $module['path']);
 			if ($identifier == 'application') {
@@ -44,6 +44,7 @@ class Project extends Object {
 		if ($this->application) {
 			$info = $this->application->getProperties();
 		}
+		$info['Path'] = $this->path;
 		$info['Environment'] = ENVIRONMENT;
 		return $info;
 	}

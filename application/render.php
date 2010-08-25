@@ -3,8 +3,7 @@
  * Wordt aangeroepen vanuit de rewrite.php
  * 
  */
-
-$projectPath = dirname(dirname(dirname($_SERVER['SCRIPT_FILENAME']))).'/'; // public/devutils/rewrite.php = 3x dirname
+$projectPath = dirname(dirname(dirname(str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME'])))).DIRECTORY_SEPARATOR; // public/devutils/rewrite.php = 3x dirname
 $found = false;
 // Doorzoek alle hoger gelegen mappen naar een sledgehammer enabled project.
 while (strlen($projectPath) > 4) {
@@ -13,7 +12,7 @@ while (strlen($projectPath) > 4) {
 		// De map is gevonden 
 		break;
 	}
-	$projectPath = dirname($projectPath).'/';
+	$projectPath = dirname($projectPath).DIRECTORY_SEPARATOR;
 }
 
 if ($found) {

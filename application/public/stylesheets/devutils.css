@@ -64,12 +64,13 @@ dt {
 	float: left;
 	font-weight: bold;
 	white-space: nowrap;
-	padding: 0;
+	padding: 0 0 5px 0;
 	margin-right: 1em;
 }
 dd {
 	white-space: nowrap;
 	margin-left: 10em;
+	padding-bottom: 5px;
 }
 th {
 	font-weight: bold;

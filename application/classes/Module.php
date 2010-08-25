@@ -17,8 +17,8 @@ class Module extends Object {
 
 	function __construct($identifier, $path) {
 		$this->identifier = $identifier; // De identifier wordt binnen de DevUtils website als bestands -en mapnaam gebruikt
-		if (substr($path, -1) !=  '/') {
-			$path .= '/'; // trailing "/" toevoegen
+		if (in_array(substr($path, -1), array('/', '\\')) == false) {
+			$path .= DIRECTORY_SEPARATOR; // trailing "/" toevoegen
 		}
 		$this->path = $path;
 		if ($identifier == 'application') {
