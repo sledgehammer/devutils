@@ -69,8 +69,10 @@ class UnitTests extends VirtualFolder {
 	private function generateTestSuite($title, $tests) {
 		$source = "<?php\n";
 		$source .= "require_once('".$this->project->path."sledgehammer/core/init_framework.php');\n";
-		$source .= "\$GLOBALS['AutoLoader']->inspectModules(array(array('path'=> '".addslashes(PATH)."sledgehammer/simpletest')));\n";
-		$source .= "\n";
+		$source .= "\$GLOBALS['AutoLoader']->inspectModules(array('simpletest' => array(\n";
+		$source .= "\t'name'=> 'DevUtils/SimpleTest',\n";
+		$source .= "\t'path'=> '".addslashes(PATH)."sledgehammer/simpletest'\n";
+		$source .= ")));\n";
 		$source .= "\$testSuite = new TestSuite('$title');\n";
 		foreach ($tests as $testfile) {
 			$source .= "\$testSuite->addFile('".addslashes($testfile)."');\n";

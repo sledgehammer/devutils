@@ -20,8 +20,10 @@ class ModuleFolder extends VirtualFolder {
 
 	function index() {
 		$properties = $this->module->getProperties();
-		$properties['Owner'] = htmlentities($properties['Owner']). ' &lt;<a href="mailto:'.$properties['Owner_email'].'">'.$properties['Owner_email'].'</a>&gt;';
-		unset($properties['Owner_email']);
+		if (isset($properties['Owner_email'])) {
+			$properties['Owner'] = htmlentities($properties['Owner']). ' &lt;<a href="mailto:'.$properties['Owner_email'].'">'.$properties['Owner_email'].'</a>&gt;';
+			unset($properties['Owner_email']);
+		}
 
 //		$this->utils_viewport();
 		return new Template('module.html', array(
