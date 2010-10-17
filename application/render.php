@@ -39,5 +39,5 @@ require_once(dirname(dirname(__FILE__)).'/sledgehammer/core/render_public_folder
 require_once(dirname(dirname(__FILE__)).'/sledgehammer/core/init_framework.php');
 
 $website = new DevUtilsWebsite($projectPath);
-$website->render();
+$website->handleRequest();
 ?>

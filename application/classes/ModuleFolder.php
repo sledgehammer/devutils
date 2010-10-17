@@ -33,17 +33,17 @@ class ModuleFolder extends VirtualFolder {
 		));
 	}
 
-	function execute() {
+	function generateContent() {
 		$suffix = (get_class($this->module) == 'Module') ? ' module' : ' project';
 		$name = $this->module->name.$suffix;
-		getDocument()->title = $name;
+		// getDocument()->title = $name;
 		Breadcrumbs::add($name, $this->getPath());
-		return parent::execute();
+		return parent::generateContent();
 	}
 
 	function phpdocs() {
 		$command = new PhpDocs($this->module);
-		return $command->execute();
+		return $command->generateContent();
 	}
 
 	function phpdocs_folder($filename) {
@@ -51,19 +51,18 @@ class ModuleFolder extends VirtualFolder {
 		if ($filename === false) {
 			$filename = substr(rawurldecode($_SERVER['REQUEST_URI']), strlen($this->getPath(true)));
 		}
-		render_file($path.$filename);
-		return $Command->execute();
+		return new FileDocument($path.$filename);
 	}
 
 	function files_folder() {
 		Breadcrumbs::add('Files', $this->getPath(true));
 		$command = new FileBrowser($this->module->path, array('show_fullpath' => true, 'show_hidden_files' => true));
-		return $command->execute();
+		return $command->generateContent();
 	}
 
 	function utils_folder($filename) {
 		$folder = new UtilsFolder($this->module);
-		return $folder->execute();
+		return $folder->generateContent();
 	}
 
 	/**
@@ -94,11 +93,12 @@ class ModuleFolder extends VirtualFolder {
 	}
 */
 	protected function getDocumentationList() {
+		$iconPrefix = WEBROOT.'icons/';
 		$actions = array(
-			'phpdocs.html' => array('icon' => 'documentation.png', 'label' => 'API Documentation'),
+			'phpdocs.html' => array('icon' => $iconPrefix.'documentation.png', 'label' => 'API Documentation'),
 		);
 		if (file_exists($this->module->path.'docs/')) {
-			$actions['files/docs/'] = array('icon' => 'documents.png', 'label' => 'Documentation');
+			$actions['files/docs/'] = array('icon' => $iconPrefix.'documents.png', 'label' => 'Documentation');
 		}
 
 		//'files/' => array('icon' => 'mime/folder.png', 'label' => 'Files'),

@@ -13,11 +13,11 @@ class PhpDocs extends Object implements Command {
 		$this->object = $object;
 	}
 
-	function execute() {
+	function  generateContent() {
 		$url = URL::info();
 		$base_url = $url['scheme'].'://'.$url['host'].$url['path'];
 		$target_path = PhpDocs::documentation_path($this->object);
-		getDocument()->title = 'API Documentation - '.$this->object->name;
+		//getDocument()->title = 'API Documentation - '.$this->object->name;
 		Breadcrumbs::add('API Documenation');
 
 		if (!empty($_GET['generate_docs'])) { // Moet er documentation gegenereerd worden?

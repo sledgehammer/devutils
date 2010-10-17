@@ -24,33 +24,34 @@ class DevUtilsWebsite extends Website {
 		if (!$this->project) {
 			return new MessageBox('error.gif', 'Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
 		}
+		$iconPrefix = WEBROOT.'icons/';
 		// Utilities
 		$utilityList = array();
 		foreach ($this->project->modules as $moduleID => $module) {
 			foreach ($module->getUtilities() as $utilFilename => $util) {
-				$utilityList[$moduleID.'/utils/'.$utilFilename] = array('icon' => $util->icon, 'label' => $util->title);
+				$utilityList[$moduleID.'/utils/'.$utilFilename] = array('icon' => $iconPrefix.$util->icon, 'label' => $util->title);
 			}
 		}
-		$utilityList['phpinfo.html'] = array('icon' => 'php.gif', 'label' => 'PHP Info');
+		$utilityList['phpinfo.html'] = array('icon' => $iconPrefix.'php.gif', 'label' => 'PHP Info');
 		// Documentation
 		$documentationList = array(
-			'phpdocs.html' => array('icon' => 'documentation.png', 'label' => 'API Documentation')
+			'phpdocs.html' => array('icon' => $iconPrefix.'documentation.png', 'label' => 'API Documentation')
 		);
 		if (file_exists($this->project->path.'docs/')) {
-			$documentationList['files/docs/'] = array('icon' => 'documents.png', 'label' => 'Documentation');
+			$documentationList['files/docs/'] = array('icon' => $iconPrefix.'documents.png', 'label' => 'Documentation');
 		}
 		// Modules
 		$moduleList = array();
 		foreach ($this->project->modules as $name => $module) {
 			if ($name != 'application') {
-				$moduleList[$name.'/'] = array('icon' => '../../module_icons/'.$name.'.png', 'label' => $module->name);
+				$moduleList[$name.'/'] = array('icon' => WEBROOT.'module_icons/'.$name.'.png', 'label' => $module->name);
 			}
 		}
 		// Unittests
 		$tests = $this->project->getUnitTests();
-		$unittestList['tests/'] = array('icon' => 'accept.png', 'label' => 'Run TestSuite');
+		$unittestList['tests/'] = array('icon' => $iconPrefix.'accept.png', 'label' => 'Run TestSuite');
 		foreach ($tests as $testfile) {
-			$unittestList['tests/'.$testfile] = array('icon' => 'test.png', 'label' => substr($testfile, 0, -4));
+			$unittestList['tests/'.$testfile] = array('icon' => $iconPrefix.'test.png', 'label' => substr($testfile, 0, -4));
 		}
 		$template = new Template('project.html', array(
 			'utilities' => new ActionList($utilityList),
@@ -63,8 +64,6 @@ class DevUtilsWebsite extends Website {
 
 	function phpinfo() {
 		Breadcrumbs::add('PHP Info');
-		$this->document->title = 'PHP info';
-		$this->document->stylesheets[] = WEBROOT.'stylesheets/phpinfo.css';
 		return new PHPInfo;
 	}
 
@@ -74,7 +73,7 @@ class DevUtilsWebsite extends Website {
 
 	function phpdocs() {
 		$command = new PhpDocs($this->project);
-		return $command->execute();
+		return $command->generateContent();
 	}
 
 	function project_icon() {
@@ -97,18 +96,18 @@ class DevUtilsWebsite extends Website {
 	 * Als er geen bestand in de module_icons map staat voor de opgegeven module, geeft dan het standaard icoon weer
 	 */
 	function module_icons_folder() {
-		render_file(PATH.'application/public/images/icons/module.png');
+		return new FileDocument(PATH.'application/public/images/icons/module.png');
 	}
 
 	function files_folder() {
 		Breadcrumbs::add('Files', $this->getPath(true));
 		$command = new FileBrowser($this->project->path, array('show_fullpath' => true, 'show_hidden_files' => true));
-		return $command->execute();
+		return $command->generateContent();
 	}
 
 	function tests_folder() {
 		$folder = new UnitTests($this->project);
-		return $folder->execute();
+		return $folder->generateContent();
 	}
 
 	function phpdocs_folder($filename) {
@@ -116,19 +115,25 @@ class DevUtilsWebsite extends Website {
 		if ($filename === false) {
 			$filename = substr(rawurldecode($_SERVER['REQUEST_URI']), strlen($this->getPath(true)));
 		}
-		render_file($path.$filename);
-		return $Command->execute();
+		return new FileDocument($path.$filename);
 	}
 
 	function dynamicFoldername($folder) {
 		if (isset($this->project->modules[$folder])) {
 			$command = new ModuleFolder($this->project->modules[$folder]);
-			return $command->execute();
+			return $command->generateContent();
 		}
 		return $this->onFolderNotFound();
 	}
 
-/*
+	function  generateContent() {
+		if ($this->project) {
+			Breadcrumbs::add($this->project->name.' project', $this->getPath());
+		}
+		return parent::generateContent();
+	}
+
+	/*
 	function login() {
 		if (isset($_SESSION['devutils_login']) &&  $_SESSION['devutils_login'] == 'LOGGED_IN') {
 			return true;
@@ -185,7 +190,7 @@ class DevUtilsWebsite extends Website {
 		$Command->execute();
 	}
 */
-	function wrapComponent($component) {
+	protected function wrapContent($content) {
 		$icon = false;
 		$properties = false;
 		if ($this->project) {
@@ -201,19 +206,14 @@ class DevUtilsWebsite extends Website {
 			'icon' => $icon,
 			'properties' => $properties,
 			'breadcrumbs' => new Breadcrumbs,
-			'contents' => $component,
+			'contents' => $content,
+		), array(
+			'title' => 'DevUtils',
+			'css' => WEBROOT.'stylesheets/devutils.css',
 		));
 		return $template;
 	}
 
-	function initDocument() {
-		parent::initDocument();
-		$this->document->title = 'DevUtils';
-		$this->document->stylesheets[] = WEBROOT.'stylesheets/devutils.css';
-		if ($this->project) {
-			Breadcrumbs::add($this->project->name.' project', $this->getPath());
-		}
-	}
 	function onSessionStart() {
 		return false;
 	}

@@ -19,7 +19,7 @@ class UtilScript extends Util {
 		parent::__construct($title, $icon);
 	}
 
-	function execute() {
+	function generateContent() {
 		$php = '<?php echo "<pre>\\n"; ';
 		if ($this->arguments !== false) {
 			$argv = $this->arguments;

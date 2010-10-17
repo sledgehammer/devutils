@@ -20,9 +20,9 @@ class UtilsFolder extends VirtualFolder {
 		$utils = $this->module->getUtilities();
 		$util = $utils[$filename];
 		Breadcrumbs::add($util->title);
-		getDocument()->title = $util->title;
+		//getDocument()->title = $util->title;
 		Util::$module = $this->module;
-		return $util->execute();
+		return $util->generateContent();
 	}
 }
 ?>
