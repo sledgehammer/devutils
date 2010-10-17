@@ -23,7 +23,7 @@ class PhpDocs extends Object implements Command {
 		if (!empty($_GET['generate_docs'])) { // Moet er documentation gegenereerd worden?
 			if ($_GET['generate_docs'] == 'splash') {
 				// Show "please wait" and generate the docs
-				return new MessageBox('spinner.gif', 'Generating documentation', 'Please wait... <meta http-equiv="refresh" content="0;URL='.$base_url.'?generate_docs=real">');
+				return new MessageBox(WEBROOT.'mvc/icons/MessageBox/spinner.gif', 'Generating documentation', 'Please wait... <meta http-equiv="refresh" content="0;URL='.$base_url.'?generate_docs=real">');
 			} 
 			$result = $this->generate_docs($target_path);
 			if ($result === true) { // Is het genereren misukt?
@@ -34,8 +34,8 @@ class PhpDocs extends Object implements Command {
 		}
 		// Controleer of er reeds documentatie gegenereerd is
 	 	if (!file_exists($target_path.'index.html')) { // No generated documentation found?
-			$Dialog = new DialogBox('warning.png', 'Documentation not generated', 'Do you want to generate the documentation now?', array(
-				'generate' => array('icon' => 'continue.png', 'label'=> 'Generate documentation')
+			$Dialog = new DialogBox('warning', 'Documentation not generated', 'Do you want to generate the documentation now?', array(
+				'generate' => array('icon' => WEBROOT.'icons/continue.png', 'label'=> 'Generate documentation')
 			));
 			$answer = $Dialog->import($errors);
 			if ($answer == 'generate') {
