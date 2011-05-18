@@ -22,7 +22,7 @@ class DevUtilsWebsite extends Website {
 			return new HTML('<h1>Error loading "/rewrite_check.html"</h1>&quot;AllowOverride All&quot; is required in your httpd.conf for this &lt;Directory&gt;<hr />');
 		}
 		if (!$this->project) {
-			return new MessageBox('error.gif', 'Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
+			return new MessageBox('error', 'Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
 		}
 		$iconPrefix = WEBROOT.'icons/';
 		// Utilities
@@ -58,6 +58,8 @@ class DevUtilsWebsite extends Website {
 			'documentation' => new ActionList($documentationList),
 			'modules' => new ActionList($moduleList),
 			'unittests' => new ActionList($unittestList),
+		), array(
+			'title' => $this->project->name.' project',
 		));
 		return $template;
 	}
@@ -208,7 +210,7 @@ class DevUtilsWebsite extends Website {
 			'breadcrumbs' => new Breadcrumbs,
 			'contents' => $content,
 		), array(
-			'title' => 'DevUtils',
+			//'title' => 'DevUtils',
 			'css' => WEBROOT.'stylesheets/devutils.css',
 		));
 		return $template;

@@ -48,12 +48,12 @@ class UnitTests extends VirtualFolder {
 		}
 	}
 
-	function execute() {
+	function  generateContent() {
 		Breadcrumbs::add('TestSuite', $this->getPath());
-		getDocument()->title = 'UnitTests';
-		getDocument()->stylesheets[] = WEBROOT.'core/stylesheets/debug.css';
-		getDocument()->stylesheets[] = WEBROOT.'stylesheets/simpletest.css';
-		return parent::execute();
+		//getDocument()->title = 'UnitTests';
+		//getDocument()->stylesheets[] = WEBROOT.'core/stylesheets/debug.css';
+		//getDocument()->stylesheets[] = WEBROOT.'stylesheets/simpletest.css';
+		return parent::generateContent();
 	}
 	
 	private function build($title, $tests) {
@@ -63,7 +63,9 @@ class UnitTests extends VirtualFolder {
 		mkdirs(dirname($tmpFile));
 		file_put_contents($tmpFile, $source);
 		$uri = URL::info();
-		return new PHPFrame($uri['scheme'].'://'.$uri['host'].WEBPATH.'run_tests/'.$filename);						
+		return new ComponentHeaders(new PHPFrame($uri['scheme'].'://'.$uri['host'].WEBPATH.'run_tests/'.$filename), array(
+			'title' => $title,
+		));
 	} 
 
 	private function generateTestSuite($title, $tests) {

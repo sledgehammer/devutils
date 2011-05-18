@@ -57,6 +57,8 @@ class PhpDocs extends Object implements Command {
 			'src' => $GLOBALS['VirtualFolder']->getPath(true).'phpdocs/index.html',
 			'age' => $age,
 			'regenerateUrl' => $base_url.'?generate_docs=splash'
+		), array(
+			'title' => 'API Documentation',
 		));
 	}
 

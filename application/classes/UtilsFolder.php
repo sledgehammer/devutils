@@ -22,7 +22,9 @@ class UtilsFolder extends VirtualFolder {
 		Breadcrumbs::add($util->title);
 		//getDocument()->title = $util->title;
 		Util::$module = $this->module;
-		return $util->generateContent();
+		return new ComponentHeaders($util->generateContent(), array(
+			'title' => $util->title,
+		), true);
 	}
 }
 ?>

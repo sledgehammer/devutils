@@ -30,6 +30,8 @@ class ModuleFolder extends VirtualFolder {
 			'module' => $this->module,
 			'properties' => new DefinitionList($properties),
 			'documentation' => new ActionList($this->getDocumentationList()),
+		), array(
+			'title' => $this->module->name.' module',
 		));
 	}
 
