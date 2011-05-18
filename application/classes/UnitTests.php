@@ -75,12 +75,13 @@ class UnitTests extends VirtualFolder {
 		$source .= "\t'name'=> 'DevUtils/SimpleTest',\n";
 		$source .= "\t'path'=> '".addslashes(PATH)."sledgehammer/simpletest'\n";
 		$source .= ")));\n";
+		$source .= "require_once('".PATH."application/classes/DevUtilsReporter.php');\n";
 		$source .= "\$testSuite = new TestSuite('$title');\n";
 		foreach ($tests as $testfile) {
 			$source .= "\$testSuite->addFile('".addslashes($testfile)."');\n";
 		}
 		//$source .= "ini_set('display_error', true);\n";
-		$source .= "\$testSuite->run(new HtmlReporter());\n";
+		$source .= "\$testSuite->run(new DevUtilsReporter());\n";
 		
 		$source .= "echo '<center>';\n";
 		$source .= "statusbar();\n";
