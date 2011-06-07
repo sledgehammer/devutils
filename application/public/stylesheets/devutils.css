@@ -155,6 +155,7 @@ div.contents {
 	-moz-border-radius: 12px;
 	-webkit-border-radius: 12px;
 	padding: 2px 12px 12px 12px;
+	position: relative;
 }
 
 .statusbar {
@@ -359,11 +360,10 @@ table.log  tr.title td {
 }
 /* phpDocs*/
 div.refreshButton {
-	float:right;
-	position: relative;
+	position: absolute;
 	text-align: right;
 	z-index: 100;
-	top: -90px; 
-	margin-bottom: -20px;
+	top: -30px; 
+	right: 0;
 }
 

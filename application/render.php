@@ -3,14 +3,15 @@
  * Wordt aangeroepen vanuit de rewrite.php
  * 
  */
-$projectPath = dirname(dirname(dirname(str_replace('/', DIRECTORY_SEPARATOR, $_SERVER['SCRIPT_FILENAME'])))).DIRECTORY_SEPARATOR; // public/devutils/rewrite.php = 3x dirname
+$projectPath = dirname($_SERVER['SCRIPT_FILENAME']);
 $found = false;
 // Doorzoek alle hoger gelegen mappen naar een sledgehammer enabled project.
 while (strlen($projectPath) > 4) {
 	if (file_exists($projectPath.'sledgehammer/core/init_framework.php')) {
-		$found = true;
-		// De map is gevonden 
-		break;
+		if (realpath($projectPath) != realpath(dirname(dirname(__FILE__)))) { // Is dit NIET de sledgehammer map binnen deze devutils?
+			$found = true; // De map is gevonden 
+			break;
+		}
 	}
 	$projectPath = dirname($projectPath).DIRECTORY_SEPARATOR;
 }
