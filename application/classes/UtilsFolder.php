@@ -4,7 +4,7 @@
  *
  * @package DevUtils
  */
-
+namespace SledgeHammer;
 class UtilsFolder extends VirtualFolder {
 
 	private

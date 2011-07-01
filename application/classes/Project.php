@@ -3,7 +3,7 @@
  *
  * @package DevUtils
  */
-
+namespace SledgeHammer;
 class Project extends Object {
 
 	public 
@@ -23,7 +23,7 @@ class Project extends Object {
 				break;
 			}
 		}
-		$modules = array_reverse(SledgeHammer::getModules($projectPath.'sledgehammer'.DIRECTORY_SEPARATOR));
+		$modules = array_reverse(Framework::getModules($projectPath.'sledgehammer'.DIRECTORY_SEPARATOR));
 		foreach ($modules as $identifier => $module) {
 			$this->modules[$identifier] = new Module($identifier, $module['path']);
 			if ($identifier == 'application') {

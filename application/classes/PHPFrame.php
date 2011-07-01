@@ -4,7 +4,7 @@
  * 
  * Een soort iframe principe, maar dan wordt de html direct in document gezet.  
  */
-
+namespace SledgeHammer;
 class PHPFrame extends Object implements Component {
 	
 	private 

@@ -3,7 +3,7 @@
  *
  * @package DevUtils
  */
-
+namespace SledgeHammer;
 class UtilScript extends Util {
 
 	private

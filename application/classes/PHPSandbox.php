@@ -4,7 +4,7 @@
  *
  * @package DevUtils
  */
-
+namespace SledgeHammer;
 class PHPSandbox extends Object implements Component {
 
 	private

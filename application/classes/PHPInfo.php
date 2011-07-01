@@ -4,7 +4,7 @@
  *
  * @package DevUtils
  */
-
+namespace SledgeHammer;
 class PHPInfo extends Object implements Component {
 
 	function getHeaders() {

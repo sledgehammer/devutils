@@ -3,7 +3,7 @@
  * Een Module binnen een Project
  * @package DevUtils
  */
-
+namespace SledgeHammer;
 class Module extends Object {
 
 	public
@@ -64,7 +64,7 @@ class Module extends Object {
 		if (!file_exists($path)) {
 			return $tests;
 		}
-		$dir = new DirectoryIterator($path);
+		$dir = new \DirectoryIterator($path);
 		foreach ($dir as $entry) {
 			if (!$entry->isFile()) {
 				continue;

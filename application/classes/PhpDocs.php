@@ -3,7 +3,7 @@
  *
  * @package DevUtils
  */
-
+namespace SledgeHammer;
 class PhpDocs extends Object implements Command {
 
 	private

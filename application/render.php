@@ -38,6 +38,9 @@ require_once(dirname(dirname(__FILE__)).'/sledgehammer/core/render_public_folder
 // Build website
 require_once(dirname(dirname(__FILE__)).'/sledgehammer/core/init_framework.php');
 
-$website = new DevUtilsWebsite($projectPath);
+
+//dump($AutoLoader->inspectFile(PATH.'application/classes/DevUtilsWebsite.php'));
+//dump($AutoLoader->getInfo('SledgeHammer\DevUtilsWebsite'));
+$website = new SledgeHammer\DevUtilsWebsite($projectPath);
 $website->handleRequest();
 ?>

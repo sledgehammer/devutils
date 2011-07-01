@@ -1,9 +1,10 @@
 <?php
 /**
+ * The DevUtils Application FrontController
  * 
  * @package DevUtils
  */
-
+namespace SledgeHammer;
 class DevUtilsWebsite extends Website {
 
 	public
@@ -17,7 +18,9 @@ class DevUtilsWebsite extends Website {
 	}
 
 	function index() {
-		$contents = file_get_contents(URL::info('scheme').'://'.URL::info('host').str_replace('%2F', '/', rawurlencode($this->getPath())).'rewrite_check.html');
+		$url = URL::getCurrentURL();
+		$url->path = $this->getPath().'rewrite-check.html';
+		$contents = file_get_contents($url);
 		if ($contents != 'Apache Rewrite module is enabled') { // Is het openen van de rewrite_check.html mislukt?
 			return new HTML('<h1>Error loading "/rewrite_check.html"</h1>&quot;AllowOverride All&quot; is required in your httpd.conf for this &lt;Directory&gt;<hr />');
 		}
