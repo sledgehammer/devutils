@@ -14,8 +14,8 @@ class PhpDocs extends Object implements Command {
 	}
 
 	function  generateContent() {
-		$url = URL::info();
-		$base_url = $url['scheme'].'://'.$url['host'].$url['path'];
+		$url = URL::getCurrentURL();
+		$url->query = array();
 		$target_path = PhpDocs::documentation_path($this->object);
 		//getDocument()->title = 'API Documentation - '.$this->object->name;
 		Breadcrumbs::add('API Documenation');
@@ -23,11 +23,12 @@ class PhpDocs extends Object implements Command {
 		if (!empty($_GET['generate_docs'])) { // Moet er documentation gegenereerd worden?
 			if ($_GET['generate_docs'] == 'splash') {
 				// Show "please wait" and generate the docs
-				return new MessageBox(WEBROOT.'mvc/icons/MessageBox/spinner.gif', 'Generating documentation', 'Please wait... <meta http-equiv="refresh" content="0;URL='.$base_url.'?generate_docs=real">');
+				$url->query['generate_docs'] = 'real';
+				return new MessageBox(WEBROOT.'mvc/icons/MessageBox/spinner.gif', 'Generating documentation', 'Please wait... <meta http-equiv="refresh" content="0;URL='.$url.'">');
 			} 
 			$result = $this->generate_docs($target_path);
 			if ($result === true) { // Is het genereren misukt?
-				redirect($base_url); // Toon de documentatie
+				redirect($url); // Toon de documentatie
 			} else {
 				return $result; // Toon de log
 			}
@@ -39,7 +40,8 @@ class PhpDocs extends Object implements Command {
 			));
 			$answer = $Dialog->import($errors);
 			if ($answer == 'generate') {
-				redirect($base_url.'?generate_docs=splash');
+				$url->query['generate_docs'] = 'splash';
+				redirect($url);
 				return;
 			}
 			// Toon dialoog waarmee je de documentatie generator kan starten
@@ -52,11 +54,12 @@ class PhpDocs extends Object implements Command {
 		} else {
 			$age = round($documentation_age, 1).' hours';
 		}
+		$url->query['generate_docs'] = 'splash';
 		// Toon de gegenereerde documentatie
 		return new Template('phpdocs.html', array(
 			'src' => $GLOBALS['VirtualFolder']->getPath(true).'phpdocs/index.html',
 			'age' => $age,
-			'regenerateUrl' => $base_url.'?generate_docs=splash'
+			'regenerateUrl' => $url
 		), array(
 			'title' => 'API Documentation',
 		));
@@ -68,8 +71,7 @@ class PhpDocs extends Object implements Command {
 	 * @param Module|Project $object
 	 */
 	static function documentation_path($object) {
-		$type = strtolower(get_class($object));
-		return PATH.'tmp/phpdocs/'.$type.'/'.$object->identifier.'/';
+		return PATH.'tmp/phpdocs/'.$object->identifier.'/';
 	}
 
 	/**
@@ -90,17 +92,16 @@ class PhpDocs extends Object implements Command {
 
 		$directories = array();
 		$files = array();
-
-		$type = strtolower(get_class($this->object));
+		$type = get_class($this->object);
 		switch ($type) {
 
-			case 'module':
+			case 'SledgeHammer\Module':
 				$directories[] = $source_path.'classes';
 				$files[] = $source_path.'init.php';
 				$files[] = $source_path.'functions.php';
 				break;
 
-			case 'project':
+			case 'SledgeHammer\Project':
 				$directories[] = $source_path.'application/classes';
 				$files[] = $source_path.'application/init.php';
 				$files[] = $source_path.'application/functions.php';
@@ -126,14 +127,20 @@ class PhpDocs extends Object implements Command {
 
 		mkdirs($target_path);
 		file_put_contents($target_path.'dev_utils.ini', $phpdocs_ini);
-
+dump($phpdocs_ini);
 		// PhpDocumentor draaien
-		$url = 'http://'.URL::info('host').str_replace('%2F', '/', rawurlencode(WEBPATH)).'phpdocumentor/docbuilder/builder.php?interface=web&dataform=true&setting_useconfig='.urlencode($target_path.'dev_utils');
+		$url = URL::getCurrentURL();
+		$url->path = WEBPATH.'phpdocumentor/docbuilder/builder.php';
+		$url->query = array(
+			'interface' => 'web',
+			'dataform' => 'true',
+			'setting_useconfig' => $target_path.'dev_utils'
+		);
 		$phpdocs_output = file_get_contents($url);
 		if (file_exists($target_path.'index.html') && strpos($phpdocs_output, '<h1>Operation Completed!!</h1>')) {
 			return true;
 		} else {
-			return new HTML('<a href="'.$url.'">Retry</a><br /><br />'.$phpdocs_output);
+			return new ComponentHeaders(new HTML('<a href="'.$url.'">Retry</a><br /><br />'.$phpdocs_output), array('title' => 'Generating dcumentation - phpDocumentor'));
 		}
 	}
 }

@@ -25,12 +25,6 @@ class UnitTests extends VirtualFolder {
 		return $this->build($this->project->name.' TestSuite', $files);
 	}
 
-	function dynamicFilename($filename) {
-		 deprecated('??');
-		//Breadcrumbs::add('UnitTest '.substr($filename, -4));
-		//return $this->build($filename, array($this->module->path.'tests/'.$filename));
-	}
-
 	function dynamicFoldername($folder, $filename = null) {
 		$files = array();
 		$module = $this->project->modules[$folder];
@@ -50,9 +44,6 @@ class UnitTests extends VirtualFolder {
 
 	function  generateContent() {
 		Breadcrumbs::add('TestSuite', $this->getPath());
-		//getDocument()->title = 'UnitTests';
-		//getDocument()->stylesheets[] = WEBROOT.'core/stylesheets/debug.css';
-		//getDocument()->stylesheets[] = WEBROOT.'stylesheets/simpletest.css';
 		return parent::generateContent();
 	}
 	
@@ -62,8 +53,9 @@ class UnitTests extends VirtualFolder {
 		$tmpFile = PATH.'tmp/unittests/'.$filename;
 		mkdirs(dirname($tmpFile));
 		file_put_contents($tmpFile, $source);
-		$uri = URL::info();
-		return new ComponentHeaders(new PHPFrame($uri['scheme'].'://'.$uri['host'].WEBPATH.'run_tests/'.$filename), array(
+		$url = URL::getCurrentURL();
+		$url->path = WEBPATH.'run_tests/'.$filename;
+		return new ComponentHeaders(new PHPFrame($url), array(
 			'title' => $title,
 		));
 	} 
@@ -84,7 +76,7 @@ class UnitTests extends VirtualFolder {
 		$source .= "\$testSuite->run(new DevUtilsReporter());\n";
 		
 		$source .= "echo '<center>';\n";
-		$source .= "statusbar();\n";
+		$source .= "SledgeHammer\statusbar();\n";
 		$source .= "echo '</center>';\n";
 		$source .= '?>';
 		return $source;
