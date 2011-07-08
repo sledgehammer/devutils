@@ -106,7 +106,7 @@
                             "] and [" . $dumper->describeValue($second) .
                             "] should not be the same object");
             return $this->assert(
-					new falseExpectation(),
+					new FalseExpectation(),
                     SimpleTestCompatibility::isReference($first, $second),
                     $message);
         }

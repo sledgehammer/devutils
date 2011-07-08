@@ -101,7 +101,7 @@ class DevUtilsWebsite extends Website {
 	 * Als er geen bestand in de module_icons map staat voor de opgegeven module, geeft dan het standaard icoon weer
 	 */
 	function module_icons_folder() {
-		return new FileDocument(PATH.'application/public/images/icons/module.png');
+		return new FileDocument(PATH.'application/public/icons/module.png');
 	}
 
 	function files_folder() {
