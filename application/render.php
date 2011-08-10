@@ -26,7 +26,14 @@ if ($found) {
 	$filename = substr($uriPath, strlen($webpath)); // Bestandsnaam is het gedeelte van de uriPath zonder de WEBPATH 
 	if (substr($filename, 0, 10) == 'run_tests/') {
 		// Include het gegenereerde unitest bestand.
-		include(dirname(dirname(__FILE__)).'/tmp/unittests/'.basename($filename));
+		ini_set('display_errors', 1);
+		error_reporting(E_ALL);
+		$user = posix_getpwuid(posix_geteuid());
+		$tmpDir = dirname(dirname(__FILE__)).'tmp/'.$user['name'].'/';
+		if (is_dir($tmpDir) == false) {
+			$tmpDir = '/tmp/sledgehammerTmp/'.md5(dirname(dirname(__FILE__)).'/sledgehammer/core/init.php').'-'.$user['name'].'/'; // Use global tmp folder
+		}
+		include($tmpDir.'UnitTests/'.basename($filename));
 		exit;
 	}
 } else {
