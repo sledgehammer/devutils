@@ -28,10 +28,14 @@ if ($found) {
 		// Include het gegenereerde unitest bestand.
 		ini_set('display_errors', 1);
 		error_reporting(E_ALL);
-		$user = posix_getpwuid(posix_geteuid());
-		$tmpDir = dirname(dirname(__FILE__)).'tmp/'.$user['name'].'/';
-		if (is_dir($tmpDir) == false) {
-			$tmpDir = '/tmp/sledgehammerTmp/'.md5(dirname(dirname(__FILE__)).'/sledgehammer/core/init.php').'-'.$user['name'].'/'; // Use global tmp folder
+		
+		$tmpDir = $projectPath.'tmp'.DIRECTORY_SEPARATOR;
+		if ((is_dir($tmpDir) && is_writable($tmpDir)) == false) {  // Use the project heeft geen schrijfbare tmp folder?
+			$tmpDir = '/tmp/sledgehammer-'.md5(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR).'/';
+			if (function_exists('posix_getpwuid')) {
+				$user = posix_getpwuid(posix_geteuid());
+				$tmpDir .= $user['name'].'/';
+			}
 		}
 		include($tmpDir.'UnitTests/'.basename($filename));
 		exit;
