@@ -36,8 +36,7 @@ class ModuleFolder extends VirtualFolder {
 	}
 
 	function generateContent() {
-		$suffix = (get_class($this->module) == 'Module') ? ' module' : ' project';
-		$name = $this->module->name.$suffix;
+		$name = $this->module->name.' module';
 		// getDocument()->title = $name;
 		Breadcrumbs::add($name, $this->getPath());
 		return parent::generateContent();

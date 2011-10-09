@@ -71,7 +71,7 @@ class PhpDocs extends Object implements Command {
 	 * @param Module|Project $object
 	 */
 	static function documentation_path($object) {
-		return PATH.'tmp/phpdocs/'.$object->identifier.'/';
+		return TMP_DIR.'phpdocs/'.$object->identifier.'/';
 	}
 
 	/**
