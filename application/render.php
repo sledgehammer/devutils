@@ -28,8 +28,7 @@ if ($found) {
 		// Include het gegenereerde unitest bestand.
 		ini_set('display_errors', 1);
 		error_reporting(E_ALL);
-		
-		$tmpDir = $projectPath.'tmp'.DIRECTORY_SEPARATOR;
+		$tmpDir = dirname(dirname(__FILE__)).'/tmp'.DIRECTORY_SEPARATOR;
 		if ((is_dir($tmpDir) && is_writable($tmpDir)) == false) {  // Use the project heeft geen schrijfbare tmp folder?
 			$tmpDir = '/tmp/sledgehammer-'.md5(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR).'/';
 			if (function_exists('posix_getpwuid')) {

@@ -10,7 +10,7 @@ class PHPInfo extends Object implements Component {
 	function getHeaders() {
 		return array(
 			'title' => 'PHP info',
-			'css' => WEBROOT.'stylesheets/phpinfo.css',
+			'css' => WEBROOT.'css/phpinfo.css',
 		);
 	}
 

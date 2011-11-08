@@ -213,8 +213,7 @@ class DevUtilsWebsite extends Website {
 			'breadcrumbs' => new Breadcrumbs,
 			'contents' => $content,
 		), array(
-			//'title' => 'DevUtils',
-			'css' => WEBROOT.'stylesheets/devutils.css',
+			'css' => WEBROOT.'css/devutils.css',
 		));
 		return $template;
 	}
