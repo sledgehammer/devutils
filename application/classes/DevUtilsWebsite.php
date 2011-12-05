@@ -1,7 +1,7 @@
 <?php
 /**
  * The DevUtils Application FrontController
- * 
+ *
  * @package DevUtils
  */
 namespace SledgeHammer;
@@ -101,6 +101,12 @@ class DevUtilsWebsite extends Website {
 	 * Als er geen bestand in de module_icons map staat voor de opgegeven module, geeft dan het standaard icoon weer
 	 */
 	function module_icons_folder() {
+		$url = URL::getCurrentURL();
+		file_extension($url->getFilename(), $module);
+		$icon = $this->project->path.'sledgehammer/'.$module.'/icon.png';
+		if (file_exists($icon)) {
+			return new FileDocument($icon);
+		}
 		return new FileDocument(PATH.'application/public/icons/module.png');
 	}
 
