@@ -7,3 +7,6 @@
 [submodule "sledgehammer/webcomponents"]
 	path = sledgehammer/webcomponents
 	url = git://github.com/bfanger/sledgehammer_webcomponents.git
+[submodule "sledgehammer/forms"]
+	path = sledgehammer/forms
+	url = git://github.com/bfanger/sledgehammer_forms.git

@@ -45,7 +45,9 @@ class DevUtilsWebsite extends Website {
 		}
 		// Modules
 		$moduleList = array();
-		foreach ($this->project->modules as $name => $module) {
+		$sortedModules = $this->project->modules;
+		ksort($sortedModules);
+		foreach ($sortedModules as $name => $module) {
 			if ($name != 'application') {
 				$moduleList[$name.'/'] = array('icon' => WEBROOT.'module_icons/'.$name.'.png', 'label' => $module->name);
 			}

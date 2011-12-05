@@ -22,9 +22,14 @@ class UtilsFolder extends VirtualFolder {
 		Breadcrumbs::add($util->title);
 		//getDocument()->title = $util->title;
 		Util::$module = $this->module;
-		return new ComponentHeaders($util->generateContent(), array(
-			'title' => $util->title,
-		), true);
+		$component = $util->generateContent();
+		if (is_valid_component($component)) {
+			return new ComponentHeaders($component, array(
+				'title' => $util->title,
+			), true);
+		}
+		warning(get_class($util).'->generateContent() didn\'t return a Component');
+		return new HttpError(500);
 	}
 }
 ?>

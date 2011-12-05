@@ -1,7 +1,7 @@
 <?php
 /**
  * Wordt aangeroepen vanuit de rewrite.php
- * 
+ *
  */
 $projectPath = dirname($_SERVER['SCRIPT_FILENAME']);
 $found = false;
@@ -9,7 +9,7 @@ $found = false;
 while (strlen($projectPath) > 4) {
 	if (file_exists($projectPath.'sledgehammer/core/init_framework.php')) {
 		if (realpath($projectPath) != realpath(dirname(dirname(__FILE__)))) { // Is dit NIET de sledgehammer map binnen deze devutils?
-			$found = true; // De map is gevonden 
+			$found = true; // De map is gevonden
 			break;
 		}
 	}
@@ -17,24 +17,25 @@ while (strlen($projectPath) > 4) {
 }
 
 if ($found) {
-	// Controleer of er een UnitTest gestart moet worden?	  
+	// Controleer of er een UnitTest gestart moet worden?
 	$webpath = dirname($_SERVER['SCRIPT_NAME']);
 	if ($webpath != '/') {
 		$webpath .= '/';
 	}
 	$uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // Het path gedeelte van de uri
-	$filename = substr($uriPath, strlen($webpath)); // Bestandsnaam is het gedeelte van de uriPath zonder de WEBPATH 
+	$filename = substr($uriPath, strlen($webpath)); // Bestandsnaam is het gedeelte van de uriPath zonder de WEBPATH
 	if (substr($filename, 0, 10) == 'run_tests/') {
 		// Include het gegenereerde unitest bestand.
 		ini_set('display_errors', 1);
 		error_reporting(E_ALL);
 		$tmpDir = dirname(dirname(__FILE__)).'/tmp'.DIRECTORY_SEPARATOR;
 		if ((is_dir($tmpDir) && is_writable($tmpDir)) == false) {  // Use the project heeft geen schrijfbare tmp folder?
-			$tmpDir = '/tmp/sledgehammer-'.md5(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR).'/';
+			$tmpDir = '/tmp/sledgehammer-'.md5(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR);
 			if (function_exists('posix_getpwuid')) {
 				$user = posix_getpwuid(posix_geteuid());
-				$tmpDir .= $user['name'].'/';
+				$tmpDir .= '-'.$user['name'];
 			}
+			$tmpDir .= '/';
 		}
 		include($tmpDir.'UnitTests/'.basename($filename));
 		exit;
