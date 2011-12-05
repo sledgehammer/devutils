@@ -5,7 +5,7 @@
  * @package DevUtils
  */
 namespace SledgeHammer;
-class PHPSandbox extends Object implements Component {
+class PHPSandbox extends Object implements View {
 
 	private
 		$php_code,
@@ -23,7 +23,7 @@ class PHPSandbox extends Object implements Component {
 		if ($this->start()) {
 			// Output buffering uitzetten
 			while (ob_get_level() > 0) {
-				ob_end_flush(); 
+				ob_end_flush();
 			}
 			// De phpcode naar het php proces sturen
 			fwrite($this->stdin, $this->php_code);

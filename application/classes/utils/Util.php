@@ -5,7 +5,7 @@
  * @package DevUtils
  */
 namespace SledgeHammer;
-abstract class Util extends Object implements Command {
+abstract class Util extends Object implements Controller {
 
 	public static	$module;
 	public

@@ -23,8 +23,8 @@ class UtilsFolder extends VirtualFolder {
 		//getDocument()->title = $util->title;
 		Util::$module = $this->module;
 		$component = $util->generateContent();
-		if (is_valid_component($component)) {
-			return new ComponentHeaders($component, array(
+		if (is_valid_view($component)) {
+			return new ViewHeaders($component, array(
 				'title' => $util->title,
 			), true);
 		}

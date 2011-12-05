@@ -5,7 +5,7 @@
 		echo '<img src="'.WEBROOT.'project_icon.ico" class="icon" style="float:left" />';
 	}
 	render($breadcrumbs);
-	if (is_component($properties)) {
+	if (is_view($properties)) {
 		render($properties);
 	}
 ?>

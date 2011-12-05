@@ -4,7 +4,7 @@
  * @package DevUtils
  */
 namespace SledgeHammer;
-class PhpDocs extends Object implements Command {
+class PhpDocs extends Object implements Controller {
 
 	private
 		$object; // Module of Project
@@ -25,7 +25,7 @@ class PhpDocs extends Object implements Command {
 				// Show "please wait" and generate the docs
 				$url->query['generate_docs'] = 'real';
 				return new MessageBox(WEBROOT.'mvc/icons/MessageBox/spinner.gif', 'Generating documentation', 'Please wait... <meta http-equiv="refresh" content="0;URL='.$url.'">');
-			} 
+			}
 			$result = $this->generate_docs($target_path);
 			if ($result === true) { // Is het genereren misukt?
 				redirect($url); // Toon de documentatie
@@ -83,7 +83,7 @@ class PhpDocs extends Object implements Command {
 			return true;
 		}
 		$time = filectime($target_path.'index.html');
-		return (time() - $time); 
+		return (time() - $time);
 	}
 
 	function generate_docs($target_path) {
@@ -140,7 +140,7 @@ dump($phpdocs_ini);
 		if (file_exists($target_path.'index.html') && strpos($phpdocs_output, '<h1>Operation Completed!!</h1>')) {
 			return true;
 		} else {
-			return new ComponentHeaders(new HTML('<a href="'.$url.'">Retry</a><br /><br />'.$phpdocs_output), array('title' => 'Generating dcumentation - phpDocumentor'));
+			return new HTML('<a href="'.$url.'">Retry</a><br /><br />'.$phpdocs_output, array('title' => 'Generating dcumentation - phpDocumentor'));
 		}
 	}
 }

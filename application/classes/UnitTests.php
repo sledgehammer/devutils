@@ -59,7 +59,7 @@ class UnitTests extends VirtualFolder {
 		file_put_contents($tmpFile, $source);
 		$url = URL::getCurrentURL();
 		$url->path = WEBPATH . 'run_tests/' . $filename;
-		return new ComponentHeaders(new PHPFrame($url), array('title' => $title));
+		return new ViewHeaders(new PHPFrame($url), array('title' => $title));
 	}
 
 	private function generateTestSuite($title, $tests) {
