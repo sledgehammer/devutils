@@ -2,6 +2,7 @@
 /**
  * Wordt aangeroepen vanuit de rewrite.php
  *
+ * @package DevUtils
  */
 $projectPath = dirname($_SERVER['SCRIPT_FILENAME']);
 $found = false;
@@ -15,7 +16,6 @@ while (strlen($projectPath) > 4) {
 	}
 	$projectPath = dirname($projectPath).DIRECTORY_SEPARATOR;
 }
-
 if ($found) {
 	// Controleer of er een UnitTest gestart moet worden?
 	$webpath = dirname($_SERVER['SCRIPT_NAME']);
@@ -44,15 +44,16 @@ if ($found) {
 	$projectPath = '.';
 }
 
+$sledgehammerInitPath = dirname(dirname(__FILE__)).'/sledgehammer/core/init_framework.php';
+if (file_exists($sledgehammerInitPath) == false) {
+	die('Devutils is missing "sledgehammer/core/". Run `git submodule --init`');
+}
 // Render static files vanuit de Devutils map
 require_once(dirname(dirname(__FILE__)).'/sledgehammer/core/render_public_folders.php');
 
 // Build website
-require_once(dirname(dirname(__FILE__)).'/sledgehammer/core/init_framework.php');
+require_once($sledgehammerInitPath);
 
-
-//dump($AutoLoader->inspectFile(PATH.'application/classes/DevUtilsWebsite.php'));
-//dump($AutoLoader->getInfo('SledgeHammer\DevUtilsWebsite'));
 $website = new SledgeHammer\DevUtilsWebsite($projectPath);
 $website->handleRequest();
 ?>
