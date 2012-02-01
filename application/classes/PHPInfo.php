@@ -9,18 +9,19 @@ class PHPInfo extends Object implements View {
 
 	function getHeaders() {
 		return array(
-			'title' => 'PHP info',
-			'css' => WEBROOT.'css/phpinfo.css',
+			'title' => 'PHP Version '.phpversion(),
 		);
 	}
 
 	function render() {
+		echo '<div id="phpinfo"><h2>PHP Version '.phpversion().'</h2>';
 		ob_start();
 		phpinfo();
 		$phpinfo = ob_get_clean();
 		$pos = strpos($phpinfo, '</table>');
-		echo '<div id="phpinfo"><h2 style="font-size:14pt">PHP Version '.phpversion().'</h2>';
-		echo substr($phpinfo, $pos + 8, -14); // <html> t/m de eerste tabel strippen.
+		$html = substr($phpinfo, $pos + 8, -14); // strip default styling.
+		$html = str_replace('<table ', '<table class="table table-striped table-condensed" ', $html);
+		echo $html;
 	}
 }
 ?>

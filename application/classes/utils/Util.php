@@ -13,7 +13,7 @@ abstract class Util extends Object implements Controller {
 		$title,
 		$paths;
 
-	function __construct($title, $icon = 'util.png') {
+	function __construct($title, $icon = 'icons/util.png') {
 		$this->title = $title;
 		$this->icon = $icon;
 		$this->paths = array(

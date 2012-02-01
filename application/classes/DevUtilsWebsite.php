@@ -4,11 +4,13 @@
  *
  * @package DevUtils
  */
+
 namespace SledgeHammer;
+
 class DevUtilsWebsite extends Website {
 
 	public
-		$project;
+	$project;
 
 	function __construct($projectPath) {
 		if (file_exists($projectPath.'sledgehammer/core/init_framework.php')) {
@@ -32,40 +34,25 @@ class DevUtilsWebsite extends Website {
 		$utilityList = array();
 		foreach ($this->project->modules as $moduleID => $module) {
 			foreach ($module->getUtilities() as $utilFilename => $util) {
-				$utilityList[$moduleID.'/utils/'.$utilFilename] = array('icon' => $iconPrefix.$util->icon, 'label' => $util->title);
+				$utilityList[$moduleID.'/utils/'.$utilFilename] = array('icon' => $util->icon, 'label' => $util->title);
 			}
 		}
-		$utilityList['phpinfo.html'] = array('icon' => $iconPrefix.'php.gif', 'label' => 'PHP Info');
-		// Documentation
-		$documentationList = array(
-			'phpdocs.html' => array('icon' => $iconPrefix.'documentation.png', 'label' => 'API Documentation')
-		);
-		if (file_exists($this->project->path.'docs/')) {
-			$documentationList['files/docs/'] = array('icon' => $iconPrefix.'documents.png', 'label' => 'Documentation');
-		}
-		// Modules
-		$moduleList = array();
-		$sortedModules = $this->project->modules;
-		ksort($sortedModules);
-		foreach ($sortedModules as $name => $module) {
-			if ($name != 'application') {
-				$moduleList[$name.'/'] = array('icon' => WEBROOT.'module_icons/'.$name.'.png', 'label' => $module->name);
-			}
-		}
+		$utilityList['phpinfo.php'] = array('icon' => $iconPrefix.'php.gif', 'label' => 'PHP Info');
+
 		// Unittests
 		$tests = $this->project->getUnitTests();
-		$unittestList['tests/'] = array('icon' => $iconPrefix.'accept.png', 'label' => 'Run TestSuite');
+		$unittestList['tests/'] = array('icon' => 'accept', 'label' => 'Run TestSuite');
 		foreach ($tests as $testfile) {
-			$unittestList['tests/'.$testfile] = array('icon' => $iconPrefix.'test.png', 'label' => substr($testfile, 0, -4));
+			$unittestList['tests/'.$testfile] = array('icon' => 'unittest', 'label' => substr($testfile, 0, -4));
 		}
-		$template = new Template('project.html', array(
-			'utilities' => new ActionList($utilityList),
-			'documentation' => new ActionList($documentationList),
-			'modules' => new ActionList($moduleList),
-			'unittests' => new ActionList($unittestList),
-		), array(
-			'title' => $this->project->name.' project',
-		));
+		$template = new Template('project.php', array(
+					'utilities' => new NavList($utilityList, 'Utilities'),
+//					'documentation' => new NavList($documentationList, 'Documentation'),
+//					'modules' => new NavList($moduleList, 'Modules'),
+					'unittests' => new NavList($unittestList, 'UnitTests'),
+						), array(
+					'title' => $this->project->name.' project',
+				));
 		return $template;
 	}
 
@@ -92,12 +79,10 @@ class DevUtilsWebsite extends Website {
 		return $this->onFolderNotFound();
 	}
 
-
 	function flush_phpdocs() {
 		$count = rmdirs(PATH.'tmp/phpdocs/');
 		return new MessageBox('ok.gif', 'Flushing PhpDocumentor files', $count.' files deleted');
 	}
-
 
 	/**
 	 * Als er geen bestand in de module_icons map staat voor de opgegeven module, geeft dan het standaard icoon weer
@@ -139,74 +124,33 @@ class DevUtilsWebsite extends Website {
 		return $this->onFolderNotFound();
 	}
 
-	function  generateContent() {
+	function generateContent() {
 		if ($this->project) {
 			Breadcrumbs::add($this->project->name.' project', $this->getPath());
 		}
 		return parent::generateContent();
 	}
 
-	/*
-	function login() {
-		if (isset($_SESSION['devutils_login']) &&  $_SESSION['devutils_login'] == 'LOGGED_IN') {
-			return true;
-		}
-		//Input::build('requiredtext', 'username');
-		$Form = new Form(array(), array(
-			new Fieldset('DevUtils Login', array(
-				'username' => new FieldLabel('Username', Input::build('required text', 'username', array('class' => 'firstfocus'))),
-				'password' => new FieldLabel('Password', new Input('password', 'password')),
-				new Input('submit', NULL, array('value' => 'Login', 'style' => 'float:right;margin-top:10px')),
-			), array('style' => 'width:310px'))
-		));
-		$values = $Form->import($error);
-		if ($values) { // Is het formulier succesvol geimporteerd?
-			$credentials = $values[0];
-			if ($credentials['username'] == 'dev' && $credentials['password'] == 'utils') { // Zijn de credentials correct?
-				$_SESSION['devutils_login'] = 'LOGGED_IN';
-				return true;
-			}
-		}
-		$GLOBALS['Document']->javascript(get_public_html().'js/jquery.js');
-		$GLOBALS['Document']->javascript(get_public_html().'js/devutils.js');
-		$GLOBALS['Viewports']['menu'] = new HTML('&nbsp;');
-		$GLOBALS['Viewport'] = $Form; // Toon het inlog formulier
-		return false;
-	}
-
-	private function buildMenu() {
-		$prefix = $this->getPath();
-		$menu = array(
-			'Projects' => array(NULL, 'project.png', 'items' => array()),
-			'PHPInfo' => array($prefix.'phpinfo.html', 'php.gif'),
-		);
-		$projects = $this->get_project_links();
-		foreach ($projects as $url => $project) {
-			$menu['Projects']['items'][$project['label']] = array($url, $project['icon']);
-		}
-		if (count($menu['Projects']['items']) == 0) {
-			unset($menu['Projects']);
-		}
-		return new JSCookMenu($menu, 'hbr');
-	}
-
-	function handlssseFile($filename) {
-		if ($filename == 'rewrite_check.html') { // Voor de rewrite_check.html is geen inloggen niet nodig
-			if (!$this->login()) { // Controleer of er is ingelogd of verwerk de log in procedure
-				return false; // Er is nog niet ingelogd
-			}
-		}
-	}
-
-	function handlsseFolder($folder, $filename) {
-		$Command = new PhpMetaAdmin;
-		$Command->execute();
-	}
-*/
 	protected function wrapContent($content) {
 		$icon = false;
 		$properties = false;
 		if ($this->project) {
+			// Documentation
+			$applicationMenu = array(
+				WEBROOT.'phpdocs.html' => array('icon' => 'icons/documentation.png', 'label' => 'API Documentation')
+			);
+			if (file_exists($this->project->path.'docs/')) {
+				$applicationMenu[WEBROOT.'files/docs/'] = array('icon' => 'book', 'label' => 'Documentation');
+			}
+			// Modules
+			$moduleList = array();
+			$sortedModules = $this->project->modules;
+			ksort($sortedModules);
+			foreach ($sortedModules as $name => $module) {
+				if ($name != 'application') {
+					$moduleList[WEBROOT.$name.'/'] = array('icon' => WEBROOT.'module_icons/'.$name.'.png', 'label' => $module->name);
+				}
+			}
 			if ($this->project->getFavicon()) {
 				$icon = true;
 			}
@@ -215,19 +159,27 @@ class DevUtilsWebsite extends Website {
 				$properties = new DefinitionList($this->project->getProperties());
 			}
 		}
-		$template = new Template('layout.html', array(
-			'icon' => $icon,
-			'properties' => $properties,
-			'breadcrumbs' => new Breadcrumbs,
-			'contents' => $content,
-		), array(
-			'css' => WEBROOT.'css/devutils.css',
-		));
+
+		$template = new Template('layout.php', array(
+					'icon' => $icon,
+					'properties' => $properties,
+					'breadcrumbs' => new Breadcrumbs,
+					'application' => new NavList($applicationMenu, 'Application'),
+					'modules' => new NavList($moduleList, 'Modules'),
+					'contents' => $content,
+						), array(
+					'css' => array(
+						WEBROOT.'mvc/css/bootstrap.css',
+						WEBROOT.'css/devutils.css',
+					),
+				));
 		return $template;
 	}
 
 	function onSessionStart() {
 		return false;
 	}
+
 }
+
 ?>

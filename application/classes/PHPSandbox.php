@@ -4,16 +4,17 @@
  *
  * @package DevUtils
  */
+
 namespace SledgeHammer;
+
 class PHPSandbox extends Object implements View {
 
 	private
-		$php_code,
-
-		$process,
-		$stdin,
-		$stdout,
-		$stderr;
+			$php_code,
+			$process,
+			$stdin,
+			$stdout,
+			$stderr;
 
 	function __construct($php_code) {
 		$this->php_code = $php_code;
@@ -29,7 +30,7 @@ class PHPSandbox extends Object implements View {
 			fwrite($this->stdin, $this->php_code);
 			fclose($this->stdin);
 			// De uitvoer uitlezen en weergeven
-			while(!feof($this->stdout)) {
+			while (!feof($this->stdout)) {
 				echo fgets($this->stdout, 100);
 				flush();
 			}
@@ -39,20 +40,19 @@ class PHPSandbox extends Object implements View {
 			fclose($this->stderr);
 			$return_value = proc_close($this->process);
 			if ($errors) {
-				echo '<div class="errorblock"><h2 style="margin:0">PHP Errors</h2>';
+				echo '<h3>PHP Errors</h2>';
 				if ($return_value !== 0) {
 					echo ' exit() status: '.$return_value;
 				}
-				echo '<pre style="color:red">'.$errors.'</pre>';
-				echo '</div>';
+				echo '<pre class="alert alert-error">', $errors, '</pre>';
 			}
 		}
 	}
 
 	private function start() {
 		$descriptorspec = array(
-			0 => array('pipe', 'r'),  // stdin is a pipe that the child will read from
-			1 => array('pipe', 'w'),  // stdout is a pipe that the child will write to
+			0 => array('pipe', 'r'), // stdin is a pipe that the child will read from
+			1 => array('pipe', 'w'), // stdout is a pipe that the child will write to
 			2 => array('pipe', 'w')
 		);
 
@@ -86,5 +86,7 @@ class PHPSandbox extends Object implements View {
 		}
 		return 'php';
 	}
+
 }
+
 ?>

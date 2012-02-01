@@ -1,6 +1,6 @@
 <?php
 /**
- * De Modules map, toon eigenschappen, toon unittests 
+ * De Modules map, toon eigenschappen, toon unittests
  *
  * @package DevUtils
  */
@@ -26,10 +26,10 @@ class ModuleFolder extends VirtualFolder {
 		}
 
 //		$this->utils_viewport();
-		return new Template('module.html', array(
+		return new Template('module.php', array(
 			'module' => $this->module,
 			'properties' => new DefinitionList($properties),
-			'documentation' => new ActionList($this->getDocumentationList()),
+			'documentation' => new NavList($this->getDocumentationList()),
 		), array(
 			'title' => $this->module->name.' module',
 		));
@@ -67,7 +67,7 @@ class ModuleFolder extends VirtualFolder {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return array
 	 */
 	protected function get_properties() {
@@ -107,7 +107,7 @@ class ModuleFolder extends VirtualFolder {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return Component
 	 */
 	protected function getUnitTestList() {
@@ -121,7 +121,7 @@ class ModuleFolder extends VirtualFolder {
 		foreach($tests as $testfile) {
 			$list['unittests/'.$testfile] = array('icon' => 'test.png', 'label' => $testfile);
 		}
-		return new ActionList($list);
+		return new NavList($list);
 		/*
 		$GLOBALS['Viewport'] = &$GLOBALS['Viewports']['unittests'];
 		$Command = new UnitTests($this->module);

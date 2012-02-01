@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A custom SimpleTest Reporter, that also shows successful passes.
  * @package DevUtils
@@ -7,21 +8,38 @@ class DevUtilsReporter extends HtmlReporter {
 
 	function paintFail($message) {
 		SimpleScorer::paintFail($message);
-        print "<span class=\"fail\">Fail</span> ";
-        print$this->htmlEntities($message) . "<br />\n";
-    }
-
-	function paintPass($message) {
-        parent::paintPass($message);
-        print "<span class=\"pass\">Pass</span> ";
-        print  $this->htmlEntities($message) . "<br />\n";
+		print '<div class="assertion">';
+		print "<span class=\"fail label label-important\">Fail</span> ";
+		print $this->htmlEntities($message);
+		print "</small></div>\n";
 	}
 
-	protected function getCss() {
-		return ".fail { background-color: red; color: white; padding: 0 9px 0 2px; }" .
-               ".pass { background-color: green; color: white; padding: 0 2px; }" .
-               " pre { background-color: lightgray; color: inherit; }";
-    }
+	function paintPass($message) {
+		parent::paintPass($message);
+		print '<div class="assertion">';
+		print "<span class=\"pass label label-success\">Pass</span> ";
+		print $this->htmlEntities($message);
+		print "</small></div>\n";
+	}
+
+	function paintHeader($test) {
+		$this->sendNoCacheHeaders();
+		print '<h1 class="unittest_heading">'.$test.' <span class="label">Running tests</span></h1>';
+		print '<div class="assertions">';
+		flush();
+	}
+
+	function paintFooter($test) {
+		print "</div>\n";
+		$alert_suffix = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "" : " alert-success");
+		print '<div class="unittest_summary alert'.$alert_suffix.'">';
+		print $this->getTestCaseProgress()."/".$this->getTestCaseCount();
+		print " test cases complete:\n";
+		print "<strong>".$this->getPassCount()."</strong> passes, ";
+		print "<strong>".$this->getFailCount()."</strong> fails and ";
+		print "<strong>".$this->getExceptionCount()."</strong> exceptions.";
+		print "</div>\n";
+	}
 
 	private function shortpath($path) {
 		$len = strlen(PATH);
@@ -30,5 +48,7 @@ class DevUtilsReporter extends HtmlReporter {
 		}
 		return $path;
 	}
+
 }
+
 ?>

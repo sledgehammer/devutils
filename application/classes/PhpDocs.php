@@ -56,7 +56,7 @@ class PhpDocs extends Object implements Controller {
 		}
 		$url->query['generate_docs'] = 'splash';
 		// Toon de gegenereerde documentatie
-		return new Template('phpdocs.html', array(
+		return new Template('phpdocs.php', array(
 			'src' => $GLOBALS['VirtualFolder']->getPath(true).'phpdocs/index.html',
 			'age' => $age,
 			'regenerateUrl' => $url

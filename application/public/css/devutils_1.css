@@ -1,0 +1,369 @@
+/**
+ * BackOffice CSS 
+ */
+
+html, body {
+	margin: 0;
+}
+
+form, select {
+	margin: 0;
+}
+
+img {
+	border:0;
+}
+
+img.icon {
+	margin:0;
+	margin-right: 5px;
+	vertical-align: middle;
+}
+
+body, td, th, input, select, textarea {
+	font: 11px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color: #333333;
+}
+h1, h2, h3, h4 {
+	font: bold 11px Arial, sans-serif;
+	color: #303030;
+}
+
+h1 {
+	font-size: 22px;
+	font-weight: normal;
+	margin-top: 8px;
+	margin-bottom: 10px;
+}
+h2 {
+	font-size: 14px;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	margin-bottom: 7px;
+	margin-top: 7px;
+}
+h3 {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	margin: 0px;
+	margin-top: 4px;
+}
+
+a {
+	color: #0000AA;
+	line-height: 15px;
+}
+a:hover {
+	color: #0000DD;
+	line-height: 15px;
+	text-decoration: none;
+}
+
+dl {
+	padding: 0;
+}
+dt {
+	float: left;
+	font-weight: bold;
+	white-space: nowrap;
+	padding: 0 0 5px 0;
+	margin-right: 1em;
+}
+dd {
+	white-space: nowrap;
+	margin-left: 10em;
+	padding-bottom: 5px;
+}
+th {
+	font-weight: bold;
+}
+iframe {
+	border: 0;
+	width: 100%;
+	height: 100%;
+}
+
+/* De basiselementen van backoffice pagina's */
+body, html {
+	height: 100%;
+	background: #c0e1ff url('../images/background.png') repeat-x;
+}
+.titlebar {
+	background: black url('../images/titlebar.png');
+	width:100%;
+	height: 45px;
+	color: white;
+	white-space: nowrap;
+	/*
+	display: table;
+	#position: relative;
+	*/
+}
+
+.titlebar span {
+	padding-top: 8px;
+	padding-left: 20px;
+	font: bold 23px Arial, sans-serif;
+	display: block;
+	/*#position: absolute;
+	_top: 50%;
+	display: table-cell;
+	vertical-align: middle;*/
+}
+
+.titlebar span a {
+	color: white;
+	text-decoration: none;
+}
+.titlebar span a:hover {
+	text-decoration: underline;
+}
+
+.titlebar img {
+	float: right;
+	margin-top:11px;
+}
+
+span.breadcrumbs {
+	color: gray;
+	display: block;
+	font: bold 18px Arial,sans-serif;
+	padding-bottom: 5px;
+}
+span.breadcrumbs a {
+	color: #303030;
+	text-decoration: none;
+}
+span.breadcrumbs a:hover {
+	color: #0000e0;
+	text-decoration: underline;
+}
+
+div.outerpage {
+	padding-top: 16px; 
+}
+div.page {
+	width: 950px;
+	padding: 8px 14px 14px 14px;
+	margin: 0 auto;
+	background: white;
+	opacity: 0.9;
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+}
+
+div.contents {
+	background: #f5f5ff;
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	padding: 2px 12px 12px 12px;
+	position: relative;
+}
+
+.statusbar {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+
+/* Dialogen */
+
+.MessageBoxContent, .DialogBoxContent {
+	margin-left: 75px;
+	padding-left: 10px;
+}
+.DialogBox .answers li{
+	padding-left: 0px;
+	padding-right: 30px;
+	display: inline;
+}
+
+/* Fomulieren */
+
+.label {
+	float: left;
+	width: 150px;
+}
+.label.error {
+	color: red;
+}
+fieldset {
+	background: #f8f8f8;
+	border: 1px solid #c5c5c5;
+}
+fieldset p {
+	margin: 0;
+}
+
+legend {
+	font-weight: bold;
+}
+
+label {
+	margin-left: 3px;
+	margin-right: 7px;
+}
+
+input.error {
+	color: inherit;
+	border-color: red;
+	background-color: #ffffD0;
+}
+textarea.error {
+	color: inherit;
+	border-color: red;
+	background-color: #ffffD0;
+}
+
+select.error {
+	color: inherit;
+	border-color: red;
+	background-color: #ffffD0;
+}
+
+
+/* Actielijst */
+
+ul.actionlist {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+ul.actionlist li {
+	margin: 0 10px 2px 0;
+}
+ul.actionlist li a {
+	text-decoration: none;
+}
+ul.actionlist li a:hover {
+	text-decoration: underline;
+}
+
+ul.actionlist li img.icon{
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+/* Overzichten */
+table.overview {
+	border-bottom: 1px solid #e7ebf7;
+}
+table.overview th {
+	background: #eeeeee url("/images/th.gif");
+	border: 1px solid #bbbbbb;
+	height: 19px;
+	padding: 0 10px 0 10px;
+	text-align: left;
+	white-space: nowrap;
+}
+table.overview td {
+	height: 21px;
+	padding: 0 5px 0 5px;
+	vertical-align: top;
+}
+table.overview tr.row_even {
+	background-color: #e7ebf7;
+}
+
+
+/* Interactive (clickable) overzichten */
+
+table.interactive th:hover {
+	border-color: #5a86bd;
+	background: #7bb2ef url("/images/th_hover.gif");
+	cursor: pointer;
+}
+table.interactive tr:hover {
+	background: #7bb2ef url("/images/tr_hover.gif") repeat-x;
+	cursor: pointer;
+}
+table.overview tfoot td, 	table.overview tfoot tr:hover {
+	height: 26px;
+	font-weight: bold;
+	vertical-align: bottom;
+	text-align: center;
+	background: white;
+	border-top: 1px solid #e7ebf7;
+	cursor: default;
+}
+img.order_by {
+	display: inline;
+	padding-left:6px;
+}
+
+div.summary {
+	background: url("/images/summary.gif") no-repeat 0 0 ;
+	padding-left: 10px;
+}
+div.summary h2{
+	padding: 0;
+	margin: 0;
+	padding-top: 2px;
+	color: #444444;
+}
+div.summary dl {
+	float: left;
+	margin-right: 30px;
+	padding-right: 5px;
+	border-right: 1px solid #dddddd;
+}
+div.summary dt {
+	font-weight: normal;
+	padding-bottom: 3px;
+
+}
+div.summary dd {
+	margin-left: 15em;
+	padding-bottom: 3px;
+}
+
+div.summary span.total {
+	font-weight: bold;
+	border-bottom: 1px solid #dddddd;
+}
+
+
+div.block {
+	background-color: #e7ebf7;
+	background-color:#f7f7f7;
+	padding: 4px;
+	margin-bottom: 10px;
+	border: 1px solid #e0e0e0;
+}
+
+div.block h2 {
+	font-size: 11px;
+	border-bottom: 1px solid white;
+	border-bottom: 1px solid #e0e0e0;
+	text-align: center;
+	margin: 0;
+	padding-bottom: 4px;
+}
+
+
+/* Logboek berichten */
+table.log pre {
+/*	margin: 0 0 10px 5px;*/
+}
+table.log th {
+	text-align: left;
+	font: bold 22px Arial, sans-serif;
+}
+table.log  tr.title {
+	background-color:#f7f7f7;
+}
+table.log  tr.title td {
+	padding: 2px 5px 5px 5px;
+	border: 1px solid #e0e0e0;
+	border-left: 0;
+	border-right: 0;
+	white-space: nowrap;
+}
+/* phpDocs*/
+div.refreshButton {
+	position: absolute;
+	text-align: right;
+	z-index: 100;
+	top: -30px; 
+	right: 0;
+}
+
