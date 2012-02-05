@@ -30,6 +30,11 @@ class DevUtilsWebsite extends Website {
 			return new MessageBox('error', 'Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
 		}
 		$iconPrefix = WEBROOT.'icons/';
+
+		// Properties
+		if ($this->project->application) {
+			$properties = $this->project->getProperties();
+		}
 		// Utilities
 		$utilityList = array();
 		foreach ($this->project->modules as $moduleID => $module) {
@@ -41,15 +46,14 @@ class DevUtilsWebsite extends Website {
 
 		// Unittests
 		$tests = $this->project->getUnitTests();
-		$unittestList['tests/'] = array('icon' => 'accept', 'label' => 'Run TestSuite');
 		foreach ($tests as $testfile) {
 			$unittestList['tests/'.$testfile] = array('icon' => 'unittest', 'label' => substr($testfile, 0, -4));
 		}
 		$template = new Template('project.php', array(
-					'utilities' => new NavList($utilityList, 'Utilities'),
-//					'documentation' => new NavList($documentationList, 'Documentation'),
-//					'modules' => new NavList($moduleList, 'Modules'),
-					'unittests' => new NavList($unittestList, 'UnitTests'),
+					'project' => $this->project->name,
+					'properties' => new DefinitionList($properties),
+					'utilities' => new NavList($utilityList),
+					'unittests' => new NavList($unittestList),
 						), array(
 					'title' => $this->project->name.' project',
 				));
@@ -73,10 +77,9 @@ class DevUtilsWebsite extends Website {
 	function project_icon() {
 		$favicon = $this->project->getFavicon();
 		if ($favicon) {
-			render_file($favicon);
-			exit;
+			return new FileDocument($favicon);
 		}
-		return $this->onFolderNotFound();
+		return new FileDocument(APPLICATION_DIR.'public/icons/project.png');
 	}
 
 	function flush_phpdocs() {
@@ -126,46 +129,41 @@ class DevUtilsWebsite extends Website {
 
 	function generateContent() {
 		if ($this->project) {
-			Breadcrumbs::add($this->project->name.' project', $this->getPath());
+			//$this->project->name.' project'
+			Breadcrumbs::add(array('icon' => 'home', 'label' => 'Home'), $this->getPath());
 		}
 		return parent::generateContent();
 	}
 
 	protected function wrapContent($content) {
-		$icon = false;
-		$properties = false;
-		if ($this->project) {
-			// Documentation
-			$applicationMenu = array(
-				WEBROOT.'phpdocs.html' => array('icon' => 'icons/documentation.png', 'label' => 'API Documentation')
-			);
-			if (file_exists($this->project->path.'docs/')) {
-				$applicationMenu[WEBROOT.'files/docs/'] = array('icon' => 'book', 'label' => 'Documentation');
-			}
-			// Modules
-			$moduleList = array();
-			$sortedModules = $this->project->modules;
-			ksort($sortedModules);
-			foreach ($sortedModules as $name => $module) {
-				if ($name != 'application') {
-					$moduleList[WEBROOT.$name.'/'] = array('icon' => WEBROOT.'module_icons/'.$name.'.png', 'label' => $module->name);
-				}
-			}
-			if ($this->project->getFavicon()) {
-				$icon = true;
-			}
-			// Properties
-			if ($this->project->application) {
-				$properties = new DefinitionList($this->project->getProperties());
+		if (!$this->project) {
+			return $content;
+		}
+
+		$navigation = array(
+			'Application',
+			WEBPATH => array('icon' => WEBPATH.'project_icon.ico', 'label' => $this->project->name),
+		);
+		// Documentation
+		$navigation[WEBROOT.'phpdocs.html'] = array('icon' => 'icons/documentation.png', 'label' => 'API Documentation');
+		if (file_exists($this->project->path.'docs/')) {
+			$applicationMenu[WEBROOT.'files/docs/'] = array('icon' => 'book', 'label' => 'Documentation');
+		}
+		// UnitTests
+		$navigation[WEBROOT.'tests/'] = array('icon' => 'accept', 'label' => 'Run TestSuite');
+		// Modules
+		$navigation[] = 'Modules';
+		$sortedModules = $this->project->modules;
+		ksort($sortedModules);
+		foreach ($sortedModules as $name => $module) {
+			if ($name != 'application') {
+				$navigation[WEBROOT.$name.'/'] = array('icon' => WEBROOT.'module_icons/'.$name.'.png', 'label' => $module->name);
 			}
 		}
 
 		$template = new Template('layout.php', array(
-					'icon' => $icon,
-					'properties' => $properties,
+					'navigation' => new NavList($navigation),
 					'breadcrumbs' => new Breadcrumbs,
-					'application' => new NavList($applicationMenu, 'Application'),
-					'modules' => new NavList($moduleList, 'Modules'),
 					'contents' => $content,
 						), array(
 					'css' => array(

@@ -26,10 +26,9 @@
 			}
 		}
 		if ($('#phpdoc').length) {
-			$('.contents').css('margin', 0).css('width', '+=35');
+			$('.contents').css('margin', 0).css({width: '+=30'});
 			$(window).resize(function () {
-				$('.pageLayout').css('min-height', $(window).height() - 45);
-				$('#phpdoc').height($('.pageLayout').height() - $('#phpdoc').offset().top);
+				$('#phpdoc').height($('.pageLayout').height() - $('#phpdoc').offset().top - 10);
 			});
 			$(window).resize();
 		}

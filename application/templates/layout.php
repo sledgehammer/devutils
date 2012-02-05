@@ -1,23 +1,20 @@
 
 <div class="pageLayout container">
 	<div class="titlebar">
-		<span class="title">DevUtils</span>
+		<a class="title" href="<?php echo WEBPATH; ?>">DevUtils</a>
 	</div>
+	<nav class="menu">
+		<?php render($navigation); ?>
+	</nav>
 	<?php render($breadcrumbs); ?>
-	<div class="pageContents">
-		<div class="menu">
-			<?php render($application); ?>
-			<?php render($modules); ?>
-		</div>
-		<div class="contents">
-			<?php
-			if (is_view($properties)) {
+	<section class="contents">
+		<?php
+		if (is_view($properties)) {
 //			render($properties);
-			}
-			?>
-			<?php render($contents); ?>
-		</div>
-	</div>
+		}
+		?>
+		<?php render($contents); ?>
+	</section>
 </div>
 <?php
 javascript_once(WEBROOT.'core/js/jquery.js', 'jquery');

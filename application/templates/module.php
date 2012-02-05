@@ -1,4 +1,4 @@
-<h1><?php echo $module->name; ?> module</h1>
+<h1><?php echo $module->name; ?> <small>module</small></h1>
 <?php
 render($properties);
 if (is_view($utils)) {

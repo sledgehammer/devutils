@@ -2,17 +2,18 @@
  * General Layout
  */
 
-body {
+html, body {
 	background: #c0e1ff url('../img/background.png') repeat-x;
+	height: 100%;
 }
 
 .pageLayout {
 	position: relative;
-	margin: 15px auto 30px auto;
+	margin: 0 auto;
 	background: white;
-	box-shadow: 1px 1px 10px rgba(0,0,0,.5);
-	border-radius: 10px;
-	width: 1100px;
+	box-shadow: 1px 1px 20px rgba(0,0,0,.4);
+	width: 1172px;
+	min-height: 100%;
 }
 .pageContents {
 	padding: 0px 0 40px 0;
@@ -21,7 +22,6 @@ body {
 	background-image: linear-gradient(left , rgb(255,255,255) 50px, rgb(250,179,0));
 	background-image: -webkit-linear-gradient(left , rgb(255,255,255) 50px, rgb(250,179,0));
 	padding: 6px 15px;
-	border-radius: 10px 10px 0 0;
 }
 .titlebar .title {
 	display: block;
@@ -31,24 +31,29 @@ body {
 	line-height: 40px;
 	height: 40px;
 	background: url('../img/sledgehammer-logo.png') no-repeat;
+	color: #333;
 	padding-left: 48px;
 }
+.titlebar .title:hover {
+	text-decoration: none;
+	text-shadow: 3px 2px 2px rgba(0,0,0, 0.2);
+}
 .pageLayout > .breadcrumb {
-	margin: 0;
+	margin: 0 0 0 200px;
 	border-left: 0px;
 	border-right: 0px;
 	-webkit-border-radius: 0;
 	border-radius: 0;
 }
 .menu {
-	border-right: 1px solid #ddd;
 	float: left;
-	width: 210px;
-	min-height: 100%;
-	padding: 15px 1px;
+	width: 199px;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	padding: 10px 1px;
 }
 .contents {
-	width: 850px;
+	width: 940px; /* 12 span grid */
 	float: left;
 	margin: 15px;
 
