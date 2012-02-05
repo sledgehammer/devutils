@@ -28,7 +28,7 @@ class ModuleFolder extends VirtualFolder {
 //		$this->utils_viewport();
 		return new Template('module.php', array(
 			'module' => $this->module,
-			'properties' => new DefinitionList($properties),
+			'properties' => new DescriptionList($properties, array('class' => 'property-list')),
 			'documentation' => new NavList($this->getDocumentationList()),
 		), array(
 			'title' => $this->module->name.' module',

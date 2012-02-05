@@ -1,5 +1,4 @@
 <h1><?php echo $project ?> <small>project</small></h1>
-
 <div class="row">
 	<div class="span5">
 		<?php render($properties); ?>

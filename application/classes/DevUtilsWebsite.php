@@ -9,8 +9,7 @@ namespace SledgeHammer;
 
 class DevUtilsWebsite extends Website {
 
-	public
-	$project;
+	private $project;
 
 	function __construct($projectPath) {
 		if (file_exists($projectPath.'sledgehammer/core/init_framework.php')) {
@@ -51,7 +50,7 @@ class DevUtilsWebsite extends Website {
 		}
 		$template = new Template('project.php', array(
 					'project' => $this->project->name,
-					'properties' => new DefinitionList($properties),
+					'properties' => new DescriptionList($properties, array('class' => 'property-list')),
 					'utilities' => new NavList($utilityList),
 					'unittests' => new NavList($unittestList),
 						), array(

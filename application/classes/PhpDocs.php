@@ -17,49 +17,30 @@ class PhpDocs extends Object implements Controller {
 		$url = URL::getCurrentURL();
 		$url->query = array();
 		$target_path = PhpDocs::documentation_path($this->object);
-		//getDocument()->title = 'API Documentation - '.$this->object->name;
 		Breadcrumbs::add('API Documenation');
 
-		if (!empty($_GET['generate_docs'])) { // Moet er documentation gegenereerd worden?
-			if ($_GET['generate_docs'] == 'splash') {
-				// Show "please wait" and generate the docs
-				$url->query['generate_docs'] = 'real';
-				return new MessageBox(WEBROOT.'mvc/icons/MessageBox/spinner.gif', 'Generating documentation', 'Please wait... <meta http-equiv="refresh" content="0;URL='.$url.'">');
-			}
-			$result = $this->generate_docs($target_path);
-			if ($result === true) { // Is het genereren misukt?
-				redirect($url); // Toon de documentatie
-			} else {
-				return $result; // Toon de log
-			}
-		}
 		// Controleer of er reeds documentatie gegenereerd is
-	 	if (!file_exists($target_path.'index.html')) { // No generated documentation found?
-			$Dialog = new DialogBox('warning', 'Documentation not generated', 'Do you want to generate the documentation now?', array(
-				'generate' => array('icon' => WEBROOT.'icons/continue.png', 'label'=> 'Generate documentation')
-			));
-			$answer = $Dialog->import($errors);
-			if ($answer == 'generate') {
-				$url->query['generate_docs'] = 'splash';
-				redirect($url);
-				return;
+		$generate = false;
+		$age = null;
+	 	if (value($_GET['refresh']) || !file_exists($target_path.'index.html')) { // No generated documentation found?
+			$generate = $this->buildGenerator($target_path);
+			$url->query['refresh'] = 0;
+		} else {
+			$url->query['refresh'] = 1;
+			$documentation_age = $this->documentation_age() / 3600; // leeftijd in uur
+			if ($documentation_age > 8) {
+				$age = round($documentation_age / 24).' days '.round($documentation_age % 24).' hours';
+			} else {
+				$age = round($documentation_age, 1).' hours';
 			}
-			// Toon dialoog waarmee je de documentatie generator kan starten
-			return $Dialog;
 		}
 
-		$documentation_age = $this->documentation_age() / 3600; // leeftijd in uur
-		if ($documentation_age > 8) {
-			$age = round($documentation_age / 24).' days '.round($documentation_age % 24).' hours';
-		} else {
-			$age = round($documentation_age, 1).' hours';
-		}
-		$url->query['generate_docs'] = 'splash';
 		// Toon de gegenereerde documentatie
 		return new Template('phpdocs.php', array(
-			'src' => $GLOBALS['VirtualFolder']->getPath(true).'phpdocs/index.html',
+			'generate' => $generate,
+			'url' => $url,
 			'age' => $age,
-			'regenerateUrl' => $url
+			'src' => $GLOBALS['VirtualFolder']->getPath(true).'phpdocs/index.html',
 		), array(
 			'title' => 'API Documentation',
 		));
@@ -86,7 +67,7 @@ class PhpDocs extends Object implements Controller {
 		return (time() - $time);
 	}
 
-	function generate_docs($target_path) {
+	private function buildGenerator($target_path) {
 		// module of project instellingen laden
 		$source_path = $this->object->path;
 
@@ -127,8 +108,8 @@ class PhpDocs extends Object implements Controller {
 
 		mkdirs($target_path);
 		file_put_contents($target_path.'dev_utils.ini', $phpdocs_ini);
-dump($phpdocs_ini);
-		// PhpDocumentor draaien
+
+		// prepare PhpDocumentor builder script
 		$url = URL::getCurrentURL();
 		$url->path = WEBPATH.'phpdocumentor/docbuilder/builder.php';
 		$url->query = array(
@@ -136,12 +117,7 @@ dump($phpdocs_ini);
 			'dataform' => 'true',
 			'setting_useconfig' => $target_path.'dev_utils'
 		);
-		$phpdocs_output = file_get_contents($url);
-		if (file_exists($target_path.'index.html') && strpos($phpdocs_output, '<h1>Operation Completed!!</h1>')) {
-			return true;
-		} else {
-			return new HTML('<a href="'.$url.'">Retry</a><br /><br />'.$phpdocs_output, array('title' => 'Generating dcumentation - phpDocumentor'));
-		}
+		return new PHPFrame($url);
 	}
 }
 ?>

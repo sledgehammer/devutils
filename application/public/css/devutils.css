@@ -24,7 +24,6 @@ html, body {
 	padding: 6px 15px;
 }
 .titlebar .title {
-	display: block;
 	font-size: 30px;
 	font-weight: bolder;
 	text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
@@ -120,4 +119,26 @@ html, body {
 	position: absolute;
 	top: 12px;
 	right: 20px;
+}
+
+/*dl {
+	padding: 0;
+}
+dt {
+	float: left;
+	font-weight: bold;
+	white-space: nowrap;
+	padding: 0 0 5px 0;
+	margin-right: 1em;
+}
+dd {
+	white-space: nowrap;
+	margin-left: 10em;
+	padding-bottom: 5px;
+}*/
+.property-list dt {
+	float: left;
+}
+.property-list dd {
+	margin-left: 120px;
 }

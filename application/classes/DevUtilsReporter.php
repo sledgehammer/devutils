@@ -12,6 +12,7 @@ class DevUtilsReporter extends HtmlReporter {
 		print "<span class=\"fail label label-important\">Fail</span> ";
 		print $this->htmlEntities($message);
 		print "</small></div>\n";
+		flush();
 	}
 
 	function paintPass($message) {
@@ -20,6 +21,7 @@ class DevUtilsReporter extends HtmlReporter {
 		print "<span class=\"pass label label-success\">Pass</span> ";
 		print $this->htmlEntities($message);
 		print "</small></div>\n";
+		flush();
 	}
 
 	function paintHeader($test) {

@@ -2,6 +2,9 @@
 /**
  * Een script in een eigen thread/process laten draaien
  *
+ * @todo Implement stream_select() to prevent blocking on 2048 bytes on the stderr
+ * @link https://bugs.php.net/bug.php?id=60120
+ *
  * @package DevUtils
  */
 

@@ -1,8 +1,8 @@
 
 <div class="pageLayout container">
-	<div class="titlebar">
+	<header class="titlebar">
 		<a class="title" href="<?php echo WEBPATH; ?>">DevUtils</a>
-	</div>
+	</header>
 	<nav class="menu">
 		<?php render($navigation); ?>
 	</nav>
