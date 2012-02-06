@@ -31,9 +31,8 @@ class DevUtilsWebsite extends Website {
 		$iconPrefix = WEBROOT.'icons/';
 
 		// Properties
-		if ($this->project->application) {
-			$properties = $this->project->getProperties();
-		}
+		$properties = $this->project->getProperties();
+
 		// Utilities
 		$utilityList = array();
 		foreach ($this->project->modules as $moduleID => $module) {
