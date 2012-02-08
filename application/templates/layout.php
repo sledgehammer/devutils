@@ -1,19 +1,19 @@
-
+<?php
+/**
+ * The DevUtils Layout
+ */
+namespace SledgeHammer;
+?>
 <div class="pageLayout container">
 	<header class="titlebar">
 		<a class="title" href="<?php echo WEBPATH; ?>">DevUtils</a>
 	</header>
 	<nav class="menu">
-		<?php render($navigation); ?>
+	<?php render($navigation); ?>
 	</nav>
-	<?php render($breadcrumbs); ?>
+		<?php render($breadcrumbs); ?>
 	<section class="contents">
-		<?php
-		if (is_view($properties)) {
-//			render($properties);
-		}
-		?>
-		<?php render($contents); ?>
+<?php render($contents); ?>
 	</section>
 </div>
 <?php

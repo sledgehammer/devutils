@@ -26,7 +26,7 @@ class DevUtilsWebsite extends Website {
 			return new HTML('<h1>Error loading "/rewrite_check.html"</h1>&quot;AllowOverride All&quot; is required in your httpd.conf for this &lt;Directory&gt;<hr />');
 		}
 		if (!$this->project) {
-			return new MessageBox('error', 'Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
+			return MessageBox::error('Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
 		}
 		$iconPrefix = WEBROOT.'icons/';
 
@@ -78,11 +78,6 @@ class DevUtilsWebsite extends Website {
 			return new FileDocument($favicon);
 		}
 		return new FileDocument(APPLICATION_DIR.'public/icons/project.png');
-	}
-
-	function flush_phpdocs() {
-		$count = rmdirs(PATH.'tmp/phpdocs/');
-		return new MessageBox('ok.gif', 'Flushing PhpDocumentor files', $count.' files deleted');
 	}
 
 	/**
