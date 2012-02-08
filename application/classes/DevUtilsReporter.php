@@ -6,23 +6,51 @@
  */
 class DevUtilsReporter extends HtmlReporter {
 
+	function paintPass($message) {
+		SimpleScorer::paintPass($message);
+		print '<div class="assertion">';
+		print "<span class=\"pass label label-success\">Pass</span> ";
+		print $this->htmlEntities($message);
+		print "</div>\n";
+		flush();
+	}
+
 	function paintFail($message) {
 		SimpleScorer::paintFail($message);
 		print '<div class="assertion">';
 		print "<span class=\"fail label label-important\">Fail</span> ";
 		print $this->htmlEntities($message);
-		print "</small></div>\n";
+		print "</div>\n";
 		flush();
 	}
 
-	function paintPass($message) {
-		parent::paintPass($message);
+	function paintError($message) {
+        SimpleScorer::paintError($message);
 		print '<div class="assertion">';
-		print "<span class=\"pass label label-success\">Pass</span> ";
-		print $this->htmlEntities($message);
-		print "</small></div>\n";
-		flush();
-	}
+        print "<span class=\"fail label label-important\">Error</span> ";
+        $breadcrumb = $this->getTestList();
+        array_shift($breadcrumb);
+        print implode(" -&gt; ", $breadcrumb);
+        print " -&gt; <strong>" . $this->htmlEntities($message) . "</strong>";
+		print "</div>\n";
+
+    }
+
+	function paintException($exception) {
+		print '<div class="assertion">';
+        SimpleScorer::paintException($exception);
+        print "<span class=\"fail label label-important\">Exception</span> ";
+        $breadcrumb = $this->getTestList();
+        array_shift($breadcrumb);
+        print implode(" -&gt; ", $breadcrumb);
+        $message = 'Unexpected exception of type [' . get_class($exception) .
+                '] with message ['. $exception->getMessage() .
+                '] in ['. $exception->getFile() .
+                ' line ' . $exception->getLine() . ']';
+        print " -&gt; <strong>" . $this->htmlEntities($message) . "</strong>";
+		print "</div>\n";
+
+    }
 
 	function paintHeader($test) {
 		$this->sendNoCacheHeaders();
