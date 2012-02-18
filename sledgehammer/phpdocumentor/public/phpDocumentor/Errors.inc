@@ -31,7 +31,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2001-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: Errors.inc,v 1.18 2008/02/24 02:35:44 ashnazg Exp $
+ * @version    CVS: $Id: Errors.inc 253641 2008-02-24 02:35:44Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -738,7 +738,7 @@ $GLOBALS['phpDocumentor_error_descrip'] =
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2001-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @todo       CS cleanup - change package to PhpDocumentor
@@ -835,7 +835,7 @@ class RecordWarning
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2001-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @todo       CS cleanup - change package to PhpDocumentor
@@ -885,7 +885,7 @@ class RecordError extends RecordWarning
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2001-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @todo       CS cleanup - change package to PhpDocumentor

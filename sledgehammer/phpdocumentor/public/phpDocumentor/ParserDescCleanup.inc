@@ -34,7 +34,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2006 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: ParserDescCleanup.inc,v 1.13 2007/12/13 02:56:45 ashnazg Exp $
+ * @version    CVS: $Id: ParserDescCleanup.inc 286923 2009-08-08 06:00:39Z ashnazg $
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @see        Parser, WordParser
@@ -576,8 +576,10 @@ class parserDescParser extends Parser
             {
                 $this->addText($word);
                 $this->wp->backupPos($word.$word);
-            } else
-            $this->wp->backupPos($word);
+            } else {
+                $this->addText('<<');
+                $this->wp->backupPos($word);
+            }
             return;
         }
         $this->addText('<'.str_replace('>>','>',$word));

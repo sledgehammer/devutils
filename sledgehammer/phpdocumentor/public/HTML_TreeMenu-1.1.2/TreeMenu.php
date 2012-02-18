@@ -33,7 +33,7 @@
 // |         Harald Radi <harald.radi@nme.at>                              |
 // +-----------------------------------------------------------------------+
 //
-// $Id: TreeMenu.php,v 1.1 2005/10/17 18:36:53 jeichorn Exp $
+// $Id: TreeMenu.php 198623 2005-10-17 18:37:50Z jeichorn $
 
 /**
 * @package HTML_TreeMenu

@@ -6,7 +6,7 @@ class bug_489398
 	/**
 	* Checking the single quote var case
 	*/
-	var $test_01 = '$Id: bug-489398.php,v 1.1 2005/10/17 18:36:51 jeichorn Exp $';
+	var $test_01 = '$Id: bug-489398.php 198623 2005-10-17 18:37:50Z jeichorn $';
 
 	/**
 	* checking the double quote var case

@@ -30,7 +30,7 @@
  * @author    Greg Beaver <cellog@php.net>
  * @copyright 2001-2007 Gregory Beaver
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   CVS: $Id: Classes.inc,v 1.11 2007/10/10 01:18:25 ashnazg Exp $
+ * @version   CVS: $Id: Classes.inc 243933 2007-10-10 01:18:25Z ashnazg $
  * @filesource
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
@@ -61,7 +61,7 @@
  * @author    Greg Beaver <cellog@php.net>
  * @copyright 2001-2007 Gregory Beaver
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   Release: 1.4.2
+ * @version   Release: 1.4.4
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
  * @since     1.0rc1

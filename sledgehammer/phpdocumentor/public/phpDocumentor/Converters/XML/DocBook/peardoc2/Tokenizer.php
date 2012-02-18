@@ -32,7 +32,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2004-2006 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: Tokenizer.php,v 1.5 2007/06/22 14:58:30 ashnazg Exp $
+ * @version    CVS: $Id: Tokenizer.php 289596 2009-10-12 21:08:13Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -449,7 +449,7 @@ class phpDocumentor_XML_Beautifier_Tokenizer extends XML_Beautifier_Tokenizer
         switch ($event) {
             case PHPDOC_XMLTOKEN_EVENT_COMMENT :
 //                echo "comment: $this->_curthing\n";
-                $this->$method(false, $this->_curthing);
+                $this->$method($this->_curthing);
             break;
             case PHPDOC_XMLTOKEN_EVENT_OPENTAG :
 //                echo "open tag: $this->_tag\n";

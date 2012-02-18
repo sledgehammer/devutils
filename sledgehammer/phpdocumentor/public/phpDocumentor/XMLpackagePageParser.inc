@@ -31,7 +31,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: XMLpackagePageParser.inc,v 1.14 2007/11/14 01:31:24 ashnazg Exp $
+ * @version    CVS: $Id: XMLpackagePageParser.inc 246143 2007-11-14 01:31:24Z ashnazg $
  * @tutorial   tutorials.pkg
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -89,7 +89,7 @@ define('PHPDOCUMENTOR_PDP_STATE_ENTITY', 704);
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2

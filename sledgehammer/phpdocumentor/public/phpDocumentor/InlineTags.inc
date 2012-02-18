@@ -31,7 +31,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: InlineTags.inc,v 1.8 2008/03/28 01:24:13 ashnazg Exp $
+ * @version    CVS: $Id: InlineTags.inc 286921 2009-08-08 05:01:24Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -48,7 +48,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -129,7 +129,7 @@ class parserInlineTag extends parserBase
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -266,7 +266,7 @@ class parserLinkInlineTag extends parserInlineTag
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -304,7 +304,7 @@ class parserTutorialInlineTag extends parserLinkInlineTag
         $descrip = false;
         if (strpos($this->value, ',') === false) {
             if (strpos(trim($this->value), ' ')) {
-                $v     = split(' ', trim($this->value));
+                $v     = explode(' ', trim($this->value));
                 $value = $c->getTutorialLink($v[0]);
                 array_shift($v);
                 $descrip = join($v, ' ');
@@ -312,12 +312,12 @@ class parserTutorialInlineTag extends parserLinkInlineTag
                 $value = $c->getTutorialLink($this->value);
             }
         } else {
-            $vals    = split(',', $this->value);
+            $vals    = explode(',', $this->value);
             $descrip = array();
             foreach ($vals as $val) {
                 $val = trim($val);
                 if (strpos($val, ' ')) {
-                    $v       = split(' ', $val);
+                    $v       = explode(' ', $val);
                     $value[] = $c->getTutorialLink($v[0]);
                     array_shift($v);
                     $descrip[] = join($v, ' ');
@@ -365,7 +365,7 @@ class parserTutorialInlineTag extends parserLinkInlineTag
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -555,7 +555,7 @@ class parserSourceInlineTag extends parserInlineTag
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -777,7 +777,7 @@ class parserExampleInlineTag extends parserSourceInlineTag
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -823,7 +823,7 @@ class parserInheritdocInlineTag extends parserInlineTag
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -911,7 +911,7 @@ class parserIdInlineTag extends parserInlineTag
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor

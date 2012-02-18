@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2007/09/26 02:57:11 ashnazg Exp $
+$Id: README 317024 2011-09-19 21:09:16Z ashnazg $
 
 ################################################################################
 				phpDocumentor
@@ -48,9 +48,9 @@ If you need more detailed help, check out INSTALL.
 Release Notes
 ################################################################################
 
-Release notes for the newest version are in Release-1.4.2.
+Release notes for the newest version are in Release-1.4.4.
 
-1.4.2 is out, a stable release.
+1.4.4 is out, a stable release.
 
 To learn how to write PHPDoc-style documentation, run phpDocumentor on itself, 
 with ./phpdoc -c makedocs.  Before you do, modify users/makedocs.ini to contain 
@@ -74,7 +74,7 @@ PEAR:               http://pear.php.net/package/PhpDocumentor
 For a list of people who have helped work on this project please read the 
 Authors file.
 
-phpDocumentor 1.4.2 is released under the LGPL version 2.1, text is in
+phpDocumentor 1.4.4 is released under the LGPL version 2.1, text is in
 LICENSE.
 
 ################################################################################
@@ -187,7 +187,7 @@ Thanks to Florian Clever for the newest set of win32 patches... they seem to hav
 ################################################################################
 ################################################################################
 If you have any questions please try our mailing list at 
-phpdocu-general@sourceforge.net.
+phpdocu-general@lists.sourceforge.net.
 
 joshua eichorn jeichorn@phpdoc.org
 gregory beaver cellog@php.net

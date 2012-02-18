@@ -30,7 +30,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2006 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version    CVS: $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @see        Parser, WordParser
@@ -44,7 +44,7 @@
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserElement extends parserBase
 {
@@ -196,7 +196,7 @@ class parserElement extends parserBase
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserInclude extends parserElement
 {
@@ -212,7 +212,7 @@ class parserInclude extends parserElement
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserGlobal extends parserElement
 {
@@ -316,7 +316,7 @@ class parserGlobal extends parserElement
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserFunction extends parserElement
 {
@@ -642,7 +642,7 @@ class parserFunction extends parserElement
             if (isset($param[2]))
             {
                 $link = $converter->getLink('object ' . $param[2]);
-                if ($link) {
+				if ($link && $link != 'object ' . $param[2]) {
                     $link = $converter->returnSee($link, $param[2], true);
                     $b['type'] = $link;
                 } else {
@@ -677,7 +677,7 @@ class parserFunction extends parserElement
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserClass extends parserElement
 {
@@ -1410,7 +1410,7 @@ class parserClass extends parserElement
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserVar extends parserElement
 {
@@ -1623,7 +1623,7 @@ class parserConst extends parserElement
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserMethod extends parserFunction
 {
@@ -1978,7 +1978,7 @@ class parserMethod extends parserFunction
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserDefine extends parserElement
 {
@@ -2022,7 +2022,7 @@ class parserDefine extends parserElement
  * @subpackage ParserElements
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserElements.inc,v 1.20 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: ParserElements.inc 289555 2009-10-12 03:52:03Z ashnazg $
  */
 class parserPackagePage extends parserStringWithInlineTags
 {

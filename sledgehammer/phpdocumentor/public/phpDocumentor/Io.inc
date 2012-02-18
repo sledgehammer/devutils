@@ -33,7 +33,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2000-2006 Joshua Eichorn, Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: Io.inc,v 1.18 2007/12/08 01:31:50 ashnazg Exp $
+ * @version    CVS: $Id: Io.inc 286921 2009-08-08 05:01:24Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -44,7 +44,7 @@
  *
  * @author    Joshua Eichorn <jeichorn@phpdoc.org>
  * @author     Gregory Beaver <cellog@php.net>
- * @version    $Id: Io.inc,v 1.18 2007/12/08 01:31:50 ashnazg Exp $
+ * @version    $Id: Io.inc 286921 2009-08-08 05:01:24Z ashnazg $
  * @package     phpDocumentor
  */
 class Io 
@@ -453,8 +453,8 @@ class Io
             {
                 if (dirname($path) != $masterPath)
                 {
-                    $mp = split(PATH_DELIMITER,$masterPath);
-                    $np = split(PATH_DELIMITER,str_replace('\\','/',dirname($path)));
+                    $mp = explode(PATH_DELIMITER, $masterPath);
+                    $np = explode(PATH_DELIMITER, str_replace('\\', '/', dirname($path)));
                     if (count($np) < count($mp))
                     {
                         $masterPath = join($np, PATH_DELIMITER);

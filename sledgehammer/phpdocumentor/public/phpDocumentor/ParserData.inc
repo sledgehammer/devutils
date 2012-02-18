@@ -31,7 +31,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: ParserData.inc,v 1.9 2008/02/26 12:15:56 ashnazg Exp $
+ * @version    CVS: $Id: ParserData.inc 253814 2008-02-26 12:15:56Z ashnazg $
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.0rc1
@@ -48,7 +48,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -353,7 +353,7 @@ class parserPage
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -699,7 +699,7 @@ class parserData
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -766,7 +766,7 @@ class parserBase
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor

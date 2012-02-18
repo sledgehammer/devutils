@@ -44,7 +44,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: PackagePageElements.inc,v 1.6 2008/02/24 04:27:54 ashnazg Exp $
+ * @version    CVS: $Id: PackagePageElements.inc 253643 2008-02-24 04:27:54Z ashnazg $
  * @tutorial   tutorials.pkg
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -62,7 +62,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @tutorial   tutorials.pkg
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -110,7 +110,7 @@ class parserCData extends parserStringWithInlineTags
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @tutorial   tutorials.pkg
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -468,7 +468,7 @@ class parserXMLDocBookTag extends parserStringWithInlineTags
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @tutorial   tutorials.pkg
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor

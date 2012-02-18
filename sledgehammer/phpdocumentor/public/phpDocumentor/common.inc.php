@@ -30,7 +30,7 @@
  * @author    Greg Beaver <cellog@php.net>
  * @copyright 2001-2008 Gregory Beaver
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   CVS: $Id: common.inc.php,v 1.15 2008/02/24 02:35:44 ashnazg Exp $
+ * @version   CVS: $Id: common.inc.php 288074 2009-09-05 02:16:26Z ashnazg $
  * @filesource
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
@@ -46,7 +46,7 @@ if ('@PEAR-DIR@' != '@'.'PEAR-DIR@') {
     /** @ignore */
     define("PHPDOCUMENTOR_VER", "@VER@");
 } else {
-    define("PHPDOCUMENTOR_VER", "1.4.1");
+    define("PHPDOCUMENTOR_VER", "1.4.3");
 }
 
 /* phpDocumentor URL */
@@ -303,7 +303,10 @@ function fancy_debug($s,$v)
  */
 function phpDocumentor_get_class($object)
 {
-    return strtolower(get_class($object));
+    if (is_object($object)) {
+        return strtolower(get_class($object));
+    }
+    return false;
 }
 
 ?>

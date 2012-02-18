@@ -42,7 +42,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2003-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: TutorialHighlightParser.inc,v 1.7 2007/11/14 01:57:04 ashnazg Exp $
+ * @version    CVS: $Id: TutorialHighlightParser.inc 246148 2007-11-14 01:57:04Z ashnazg $
  * @tutorial   tags.example.pkg, tags.filesource.pkg
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -60,7 +60,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2003-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @todo       CS cleanup - change package to PhpDocumentor

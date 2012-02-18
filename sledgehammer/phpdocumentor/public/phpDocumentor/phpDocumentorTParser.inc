@@ -31,7 +31,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: phpDocumentorTParser.inc,v 1.30 2008/02/24 02:35:44 ashnazg Exp $
+ * @version    CVS: $Id: phpDocumentorTParser.inc 286921 2009-08-08 05:01:24Z ashnazg $
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -47,7 +47,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @todo       CS cleanup - change package to PhpDocumentor
@@ -1882,7 +1882,7 @@ class phpDocumentorTParser extends Parser
                 }
             } else {
                 $save      = $value[$i];
-                $value[$i] = split("[\t ]", str_replace("\t", '    ', $value[$i]));
+                $value[$i] = preg_split("/[\t ]/", str_replace("\t", '    ', $value[$i]));
                 $word      = trim(array_shift($value[$i]));
                 $val       = join(' ', $value[$i]);
                 if (trim($word) == 'internal') {

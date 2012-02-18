@@ -29,7 +29,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2001-2006 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: Converter.inc,v 1.39 2007/12/19 02:16:49 ashnazg Exp $
+ * @version    CVS: $Id: Converter.inc 291278 2009-11-24 17:43:20Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -69,7 +69,7 @@ include_once("phpDocumentor/Smarty-2.6.0/libs/Smarty.class.php");
  * @abstract
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: Converter.inc,v 1.39 2007/12/19 02:16:49 ashnazg Exp $
+ * @version $Id: Converter.inc 291278 2009-11-24 17:43:20Z ashnazg $
  */
 class Converter
 {
@@ -1991,7 +1991,11 @@ class Converter
                 foreach($tutorial['child'] as $a => $b)
                 {
                     $btut = $b['tutorial'];
-                    $res['tutorial'] = $this->tutorials[$btut->package][$btut->subpackage][$btut->tutorial_type][$btut->name];
+                    $res = array(
+                        'tutorial' => $this->tutorials
+                            [$btut->package][$btut->subpackage]
+                            [$btut->tutorial_type][$btut->name]
+                    );
                     if (isset($b['child']))
                     {
                          $tempres = Converter::getTutorialTree($b);
@@ -2667,7 +2671,7 @@ class Converter
             if (isset($pageel->docblock) && phpDocumentor_get_class($pageel->docblock) == 'parserdocblock')
             {
                 $a = $pageel->docblock->getKeyword('todo');
-                if ($a)
+                if ($a && !empty($a->value[0]))
                 {
                     $this->addTodoLink($this->addLink($element),$a);
                 }
@@ -2680,7 +2684,7 @@ class Converter
             if (!$this->parseprivate && ($a == 'private'))
                 return;
             $a = $element->docblock->getKeyword('todo');
-            if ($a)
+            if ($a && !empty($a->value[0]))
             {
                 if ($element->type != 'include') {
                     $this->addTodoLink($this->addLink($element),$a);
@@ -4133,30 +4137,38 @@ class Converter
 
         if ($this->hasSourceCode($element->getPath()))
         $additions["slink"] = $this->getSourceAnchor($element->getPath(),$element->getLineNumber(),$element->getLineNumber(),true);
-        $this->class_data->append('methods',array_merge(
-                                             array('sdesc' => $docblock['sdesc'],
-                                                   'desc' => $docblock['desc'],
-                                                   'static' => $docblock['static'],
-                                                   'abstract' => $docblock['abstract'],
-                                                   'tags' => $docblock['tags'],
-                                                   'api_tags' => $docblock['api_tags'],
-                                                   'see_tags' => $docblock['see_tags'],
-                                                   'info_tags_sorted' => $docblock['info_tags_sorted'],
-                                                   'info_tags' => $docblock['info_tags'],
-                                                   'utags' => $docblock['utags'],
-                                                   'constructor' => $element->isConstructor,
-                                                   'access' => $acc,
-                                                   'function_name'     => $fname,
-                                                   'function_return'    => $returntype,
-                                                   'function_call'     => $element->getFunctionCall(),
-                                                   'ifunction_call'     => $element->getIntricateFunctionCall($this, $param_i),
-                                                   'descmethod'    => $this->getFormattedDescMethods($element),
-                                                   'method_overrides'    => $this->getFormattedOverrides($element),
-                                                   'method_implements'    => $this->getFormattedMethodImplements($element),
-                                                   'line_number' => $element->getLineNumber(),
-                                                   'id' => $this->getId($element),
-                                                   'params' => $params),
-                                             $additions));
+        if (isset($this->class_data)) {
+            $this->class_data->append(
+            	'methods',
+                array_merge(
+                    array(
+                    	'sdesc' => $docblock['sdesc'],
+                        'desc' => $docblock['desc'],
+                        'static' => $docblock['static'],
+                        'abstract' => $docblock['abstract'],
+                        'tags' => $docblock['tags'],
+                        'api_tags' => $docblock['api_tags'],
+                        'see_tags' => $docblock['see_tags'],
+                        'info_tags_sorted' => $docblock['info_tags_sorted'],
+                        'info_tags' => $docblock['info_tags'],
+                        'utags' => $docblock['utags'],
+                        'constructor' => $element->isConstructor,
+                        'access' => $acc,
+                        'function_name'     => $fname,
+                        'function_return'    => $returntype,
+                        'function_call'     => $element->getFunctionCall(),
+                        'ifunction_call'     => $element->getIntricateFunctionCall($this, $param_i),
+                        'descmethod'    => $this->getFormattedDescMethods($element),
+                        'method_overrides'    => $this->getFormattedOverrides($element),
+                        'method_implements'    => $this->getFormattedMethodImplements($element),
+                        'line_number' => $element->getLineNumber(),
+                        'id' => $this->getId($element),
+                        'params' => $params
+                    ),
+                    $additions
+                )
+            );
+        }
     }
 
     /**
@@ -4182,25 +4194,33 @@ class Converter
         }
         if ($this->hasSourceCode($element->getPath()))
         $additions["slink"] = $this->getSourceAnchor($element->getPath(),$element->getLineNumber(),$element->getLineNumber(),true);
-        $this->class_data->append('vars',array_merge(
-                                          array('sdesc' => $docblock['sdesc'],
-                                                'desc' => $docblock['desc'],
-                                                'static' => $docblock['static'],
-                                                'abstract' => $docblock['abstract'],
-                                                'utags' => $docblock['utags'],
-                                                'tags' => $docblock['tags'],
-                                                'api_tags' => $docblock['api_tags'],
-                                                'info_tags' => $docblock['info_tags'],
-                                                'var_name' => $element->getName(),
-                                                'has_default' => strlen($element->getValue()),
-                                                'var_default' => $this->postProcess($element->getValue()),
-                                                'var_type' => $b,
-                                                'access' => $acc,
-                                                'line_number' => $element->getLineNumber(),
-                                                'descvar'    => $this->getFormattedDescVars($element),
-                                                'var_overrides' => $this->getFormattedOverrides($element),
-                                                'id' => $this->getId($element)),
-                                          $additions));
+        if (isset($this->class_data)) {
+            $this->class_data->append(
+            	'vars',
+                array_merge(
+                    array(
+                    	'sdesc' => $docblock['sdesc'],
+                        'desc' => $docblock['desc'],
+                        'static' => $docblock['static'],
+                        'abstract' => $docblock['abstract'],
+                        'utags' => $docblock['utags'],
+                        'tags' => $docblock['tags'],
+                        'api_tags' => $docblock['api_tags'],
+                        'info_tags' => $docblock['info_tags'],
+                        'var_name' => $element->getName(),
+                        'has_default' => strlen($element->getValue()),
+                        'var_default' => $this->postProcess($element->getValue()),
+                        'var_type' => $b,
+                        'access' => $acc,
+                        'line_number' => $element->getLineNumber(),
+                        'descvar'    => $this->getFormattedDescVars($element),
+                        'var_overrides' => $this->getFormattedOverrides($element),
+                        'id' => $this->getId($element)
+                    ),
+                    $additions
+                )
+            );
+        }
     }
 
     /**
@@ -4221,21 +4241,29 @@ class Converter
 
         if ($this->hasSourceCode($element->getPath()))
         $additions["slink"] = $this->getSourceAnchor($element->getPath(),$element->getLineNumber(),$element->getLineNumber(),true);
-        $this->class_data->append('consts',array_merge(
-                                          array('sdesc' => $docblock['sdesc'],
-                                                'desc' => $docblock['desc'],
-                                                'access' => $docblock['access'],
-                                                'abstract' => $docblock['abstract'],
-                                                'utags' => $docblock['utags'],
-                                                'tags' => $docblock['tags'],
-                                                'api_tags' => $docblock['api_tags'],
-                                                'info_tags' => $docblock['info_tags'],
-                                                'const_name' => $element->getName(),
-                                                'const_value' => $this->postProcess($element->getValue()),
-                                                'access' => $acc,
-                                                'line_number' => $element->getLineNumber(),
-                                                'id' => $this->getId($element)),
-                                          $additions));
+        if (isset($this->class_data)) {
+            $this->class_data->append(
+            	'consts',
+                 array_merge(
+                    array(
+                    	'sdesc' => $docblock['sdesc'],
+                        'desc' => $docblock['desc'],
+                        'access' => $docblock['access'],
+                        'abstract' => $docblock['abstract'],
+                        'utags' => $docblock['utags'],
+                        'tags' => $docblock['tags'],
+                        'api_tags' => $docblock['api_tags'],
+                        'info_tags' => $docblock['info_tags'],
+                        'const_name' => $element->getName(),
+                        'const_value' => $this->postProcess($element->getValue()),
+                        'access' => $acc,
+                        'line_number' => $element->getLineNumber(),
+                        'id' => $this->getId($element)
+                    ),
+                    $additions
+                )
+            );
+        }
     }
 
     /**
@@ -5059,6 +5087,7 @@ class Converter
         $templ->config_dir = realpath($this->smarty_dir . PATH_DELIMITER . 'configs');
         $templ->assign("date",date("r",time()));
         $templ->assign("maintitle",$this->title);
+        $templ->assign('default_package',$GLOBALS['phpDocumentor_DefaultPackageName']);
         $templ->assign("package",$this->package);
         $templ->assign("phpdocversion",PHPDOCUMENTOR_VER);
         $templ->assign("phpdocwebsite",PHPDOCUMENTOR_WEBSITE);
@@ -5143,7 +5172,9 @@ class Converter
      */
     function setTemplateDir($dir)
     {
-        if ('@DATA-DIR@' != '@'.'DATA-DIR@') {
+        if (isset($GLOBALS['_phpDocumentor_template_base'])) {
+            $templateBase = str_replace('\\', '/', $GLOBALS['_phpDocumentor_template_base']);
+        } else if ('@DATA-DIR@' != '@'.'DATA-DIR@') {
             $templateBase = str_replace('\\', '/', '@DATA-DIR@/PhpDocumentor/phpDocumentor');
         } else {
             $templateBase = str_replace('\\','/',$GLOBALS['_phpDocumentor_install_dir']) . '/phpDocumentor';

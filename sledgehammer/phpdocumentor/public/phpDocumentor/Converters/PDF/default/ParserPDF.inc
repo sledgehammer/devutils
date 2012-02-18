@@ -31,7 +31,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2006 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: ParserPDF.inc,v 1.5 2007/06/22 14:58:30 ashnazg Exp $
+ * @version    CVS: $Id: ParserPDF.inc 238276 2007-06-22 14:58:30Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor

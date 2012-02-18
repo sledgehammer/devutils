@@ -31,7 +31,7 @@
  * @author     Joshua Eichorn <jeichorn@phpdoc.org>
  * @copyright  2000-2007 Joshua Eichorn
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: WordParser.inc,v 1.5 2007/11/14 01:37:03 ashnazg Exp $
+ * @version    CVS: $Id: WordParser.inc 246145 2007-11-14 01:37:03Z ashnazg $
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      0.1
@@ -47,7 +47,7 @@
  * @author     Joshua Eichorn <jeichorn@phpdoc.org>
  * @copyright  2000-2007 Joshua Eichorn
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @see        Parser

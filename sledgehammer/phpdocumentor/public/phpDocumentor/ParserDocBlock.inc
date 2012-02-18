@@ -30,7 +30,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2006 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: ParserDocBlock.inc,v 1.12 2007/04/19 20:20:57 ashnazg Exp $
+ * @version    CVS: $Id: ParserDocBlock.inc 287886 2009-08-30 05:31:05Z ashnazg $
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @see        Parser, WordParser
@@ -42,7 +42,7 @@
  * @subpackage ParserDocBlock
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserDocBlock.inc,v 1.12 2007/04/19 20:20:57 ashnazg Exp $
+ * @version $Id: ParserDocBlock.inc 287886 2009-08-30 05:31:05Z ashnazg $
  */
 class parserDesc extends parserStringWithInlineTags
 {
@@ -124,7 +124,7 @@ class parserDesc extends parserStringWithInlineTags
  * @subpackage ParserDocBlock
  * @author Greg Beaver <cellog@php.net>
  * @since 1.0rc1
- * @version $Id: ParserDocBlock.inc,v 1.12 2007/04/19 20:20:57 ashnazg Exp $
+ * @version $Id: ParserDocBlock.inc 287886 2009-08-30 05:31:05Z ashnazg $
  */
 class parserDocBlock
 {
@@ -589,7 +589,9 @@ class parserDocBlock
         global $_phpDocumentor_setting;
         if (phpDocumentor_setup::checkIgnoreTag($tag->keyword)) return;
         $value = $tag->value;
-        if (is_array($value)) $value = $value[0];
+        if (is_array($value)) {
+            $value = empty($value[0]) ? '' : $value[0];
+        }
         if ($tag->keyword == 'uses')
         {
             $this->addUses($value, $tag->_description);

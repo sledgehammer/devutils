@@ -15,7 +15,7 @@
  * @subpackage UnitTesting
  * @author   Chuck Burgess <ashnazg@php.net>
  * @license  http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version  CVS: $Id: AllTests.php,v 1.4 2007/09/30 01:41:46 ashnazg Exp $
+ * @version  CVS: $Id: AllTests.php 243201 2007-09-30 01:41:46Z ashnazg $
  * @link     http://pear.php.net/PhpDocumentor
  * @since    1.4.0a2
  * @todo     CS cleanup - change package to PhpDocumentor

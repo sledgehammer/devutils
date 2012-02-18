@@ -31,7 +31,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: phpDocumentorTWordParser.inc,v 1.8 2007/11/16 11:53:06 ashnazg Exp $
+ * @version    CVS: $Id: phpDocumentorTWordParser.inc 287887 2009-08-30 06:10:55Z ashnazg $
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -49,7 +49,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -78,7 +78,9 @@ class phpDocumentorTWordParser extends WordParser
         T_DOC_COMMENT,
         T_OPEN_TAG,
         T_CLOSE_TAG,
-        T_INLINE_HTML);
+        T_INLINE_HTML,
+        T_START_HEREDOC,
+    );
     /**
      * @var array
      */

@@ -46,7 +46,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: DescHTML.inc,v 1.5 2007/11/17 03:07:00 ashnazg Exp $
+ * @version    CVS: $Id: DescHTML.inc 246329 2007-11-17 03:07:00Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -64,7 +64,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -117,7 +117,7 @@ class parserCode extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -151,7 +151,7 @@ class parserPre extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -184,7 +184,7 @@ class parserB extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -217,7 +217,7 @@ class parserI extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -250,7 +250,7 @@ class parserDescVar extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -283,7 +283,7 @@ class parserSamp extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -316,7 +316,7 @@ class parserKbd extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -349,7 +349,7 @@ class parserBr extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2007 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2

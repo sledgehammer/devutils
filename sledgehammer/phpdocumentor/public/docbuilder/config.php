@@ -31,7 +31,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2003-2006 Andrew Eddie, Greg Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: config.php,v 1.6 2007/04/19 20:20:56 ashnazg Exp $
+ * @version    CVS: $Id: config.php 234145 2007-04-19 20:20:57Z ashnazg $
  * @filesource
  * @see phpdoc.php
  */
@@ -613,8 +613,8 @@ var screenShots = new Array();
 		<!-- Created: Tue Jun 26 18:52:40 MEST 2001 -->
 		<!-- hhmts start -->
 		<pre>
-		Last modified: $Date: 2007/04/19 20:20:56 $
-		Revision: $Revision: 1.6 $
+		Last modified: $Date: 2007-04-19 15:20:57 -0500 (Thu, 19 Apr 2007) $
+		Revision: $Revision: 234145 $
 		</pre>
 	</div>
 	<div class="tab-page" id="tab_links">

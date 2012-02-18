@@ -1,5 +1,5 @@
 <?php
-// $Id: bug-561101.php,v 1.1 2005/10/17 18:36:51 jeichorn Exp $
+// $Id: bug-561101.php 198623 2005-10-17 18:37:50Z jeichorn $
 
 /**
 * Class ClubBase
@@ -9,7 +9,7 @@
 *
 * @link      http://www.swr3clubde
 * @package   tests SWR3.online-Edition
-* @version   $Revision: 1.1 $ ($Date: 2005/10/17 18:36:51 $),
+* @version   $Revision: 198623 $ ($Date: 2005-10-17 13:37:50 -0500 (Mon, 17 Oct 2005) $),
 * @copyright Copyright (c) 2001 SWR3.online. All rights reserved.
 * @author    Karsten Kraus <kk@swr3.de>
 * @access    private

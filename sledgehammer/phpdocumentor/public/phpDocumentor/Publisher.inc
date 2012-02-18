@@ -31,7 +31,7 @@
  * @author    Joshua Eichorn <jeichorn@phpdoc.org>
  * @copyright 2000-2007 Kellin, Joshua Eichorn
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   CVS: $Id: Publisher.inc,v 1.4 2007/10/11 03:30:34 ashnazg Exp $
+ * @version   CVS: $Id: Publisher.inc 244033 2007-10-11 03:30:34Z ashnazg $
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
  * @since     0.1
@@ -46,7 +46,7 @@
  * @author    Joshua Eichorn <jeichorn@phpdoc.org>
  * @copyright 2000-2007 Kellin, Joshua Eichorn
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   Release: 1.4.2
+ * @version   Release: 1.4.4
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
  * @todo      CS cleanup - change package to PhpDocumentor

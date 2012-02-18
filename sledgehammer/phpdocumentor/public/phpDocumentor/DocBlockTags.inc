@@ -32,7 +32,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: DocBlockTags.inc,v 1.13 2008/02/24 02:35:44 ashnazg Exp $
+ * @version    CVS: $Id: DocBlockTags.inc 287889 2009-08-30 07:27:39Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -52,7 +52,7 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.0rc1
@@ -193,7 +193,7 @@ class parserTag extends parserStringWithInlineTags
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.name.pkg
@@ -243,7 +243,7 @@ class parserNameTag extends parserTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.access.pkg
@@ -330,7 +330,7 @@ class parserAccessTag extends parserTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.return.pkg
@@ -439,7 +439,7 @@ class parserReturnTag extends parserTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.property.pkg
@@ -482,7 +482,7 @@ class parserPropertyTag extends parserReturnTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.property.pkg
@@ -508,7 +508,7 @@ class parserPropertyReadTag extends parserPropertyTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.property.pkg
@@ -534,7 +534,7 @@ class parserPropertyWriteTag extends parserPropertyTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.method.pkg
@@ -565,7 +565,7 @@ class parserMethodTag extends parserPropertyTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.var.pkg
@@ -596,7 +596,7 @@ class parserVarTag extends parserReturnTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.param.pkg
@@ -621,7 +621,7 @@ class parserParamTag extends parserVarTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.staticvar.pkg
@@ -646,7 +646,7 @@ class parserStaticvarTag extends parserParamTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.0rc1
@@ -666,14 +666,16 @@ class parserLinkTag extends parserTag
      * sets up the link tag
      *
      * @param string $link URL to link to
+     *                     (might also contain the URL's
+     *                     description text)
      */
     function parserLinkTag($link)
     {
         $start = $val = $link->getString();
         if (strpos($val, ' ')) {
-            $start = array_shift($val = explode(' ', $val));
-
-            $val = join($val, ' ');
+            $val   = explode(' ', $val);
+            $start = array_shift($val);
+            $val   = join($val, ' ');
         }
         $a = new parserLinkInlineTag($start, $val);
         $b = new parserStringWithInlineTags;
@@ -691,7 +693,7 @@ class parserLinkTag extends parserTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.0rc1
@@ -777,7 +779,7 @@ class parserSeeTag extends parserLinkTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.license.pkg
@@ -825,7 +827,7 @@ class parserLicenseTag extends parserLinkTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -920,7 +922,7 @@ class parserUsesTag extends parserSeeTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -981,7 +983,7 @@ class parserUsedByTag extends parserUsesTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -1048,7 +1050,7 @@ class parserTutorialTag extends parserSeeTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
@@ -1168,7 +1170,7 @@ class parserFileSourceTag extends parserTag
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @tutorial   tags.example.pkg

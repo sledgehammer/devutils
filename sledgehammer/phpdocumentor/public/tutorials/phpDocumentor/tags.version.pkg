@@ -32,7 +32,7 @@
    <![CDATA[
 /**
  * example of @version tag with CVS tag
- * @version $Id: tags.version.pkg,v 1.2 2006/04/29 04:08:27 cellog Exp $;
+ * @version $Id: tags.version.pkg,v 1.2 2006-04-29 04:08:27 cellog Exp $;
  */
 function datafunction()
 {

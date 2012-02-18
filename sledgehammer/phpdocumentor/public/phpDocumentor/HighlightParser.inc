@@ -41,7 +41,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: HighlightParser.inc,v 1.16 2008/02/24 02:35:44 ashnazg Exp $
+ * @version    CVS: $Id: HighlightParser.inc 253641 2008-02-24 02:35:44Z ashnazg $
  * @filesource
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
@@ -59,7 +59,7 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2.0beta3
@@ -216,7 +216,7 @@ class phpDocumentor_HighlightWordParser extends phpDocumentorTWordParser
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2008 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    Release: 1.4.2
+ * @version    Release: 1.4.4
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2.0beta3

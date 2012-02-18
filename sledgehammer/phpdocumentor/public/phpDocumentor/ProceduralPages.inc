@@ -32,7 +32,7 @@
  * @author    Gregory Beaver <cellog@php.net>
  * @copyright 2002-2008 Gregory Beaver
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   CVS: $Id: ProceduralPages.inc,v 1.9 2008/02/24 02:35:44 ashnazg Exp $
+ * @version   CVS: $Id: ProceduralPages.inc 253641 2008-02-24 02:35:44Z ashnazg $
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
  * @since     1.1
@@ -49,7 +49,7 @@
  * @author    Greg Beaver <cellog@php.net>
  * @copyright 2002-2008 Gregory Beaver
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   Release: 1.4.2
+ * @version   Release: 1.4.4
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
  * @since     1.1

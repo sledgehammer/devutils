@@ -30,7 +30,7 @@
  * @author    Joshua Eichorn <jeichorn@phpdoc.org>
  * @copyright 2000-2007 Joshua Eichorn
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   CVS: $Id: EventStack.inc,v 1.4 2007/10/10 02:27:28 ashnazg Exp $
+ * @version   CVS: $Id: EventStack.inc 243937 2007-10-10 02:27:42Z ashnazg $
  * @filesource
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
@@ -44,7 +44,7 @@
  * @package  phpDocumentor
  * @author   Joshua Eichorn <jeichorn@phpdoc.org>
  * @license  http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version  Release: 1.4.2
+ * @version  Release: 1.4.4
  * @link     http://www.phpdoc.org
  * @link     http://pear.php.net/PhpDocumentor
  * @todo     CS cleanup - change package to PhpDocumentor

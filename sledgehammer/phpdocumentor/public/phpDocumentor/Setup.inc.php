@@ -29,12 +29,11 @@
  * @author     Gregory Beaver <cellog@php.net>
  * @copyright  2002-2006 Gregory Beaver
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version    CVS: $Id: Setup.inc.php,v 1.28 2008/03/30 23:48:51 ashnazg Exp $
+ * @version    CVS: $Id: Setup.inc.php 319351 2011-11-16 17:35:30Z ashnazg $
  * @link       http://www.phpdoc.org
  * @link       http://pear.php.net/PhpDocumentor
  * @since      1.2
  */
-error_reporting(E_ALL);
 
 /** ensure top-level PhpDocumentor dir is in include path */
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(dirname(__FILE__)));
@@ -201,12 +200,19 @@ class phpDocumentor_setup
         $this->parseIni();
         $this->setMemoryLimit();
 
-        if (tokenizer_ext)
-        {
+        /*
+         * NOTE:  
+         * It is possible for the tokenizer extension to be loaded,
+         * but actually be broken in the OS, and therefore not working...
+         * the conditional below will NOT recognize this scenario.
+         * You can separately run the {@link tokenizer_test.php} to
+         * verify that the tokenizer library is working correctly
+         * from the OS perspective.
+         */
+        if (tokenizer_ext) {
             phpDocumentor_out("using tokenizer Parser\n");
             $this->parse = new phpDocumentorTParser;
-        } else
-        {
+        } else {
             phpDocumentor_out("No Tokenizer support detected, so using default (slower) Parser..." . PHP_EOL);
 
             if (version_compare(phpversion(), '4.3.0', '<')) {
@@ -214,6 +220,8 @@ class phpDocumentor_setup
             } else {
                 phpDocumentor_out("    for faster parsing, recompile PHP without --disable-tokenizer." . PHP_EOL );
             }
+            
+            phpDocumentor_out("WARNING:  this Parser is only PHP4-capable... it cannot parse PHP5 code." . PHP_EOL);
 
             $this->parse = new Parser;
         }
@@ -367,7 +375,8 @@ class phpDocumentor_setup
         // Setup the different classes
         if (isset($_phpDocumentor_setting['templatebase']))
         {
-            $this->render->setTemplateBase(trim($_phpDocumentor_setting['templatebase']));
+            $GLOBALS['_phpDocumentor_template_base'] = trim($_phpDocumentor_setting['templatebase']); 
+            $this->render->setTemplateBase($GLOBALS['_phpDocumentor_template_base']);
         }
         if (isset($_phpDocumentor_setting['target']) && !empty($_phpDocumentor_setting['target']))
         {
@@ -967,5 +976,23 @@ function checkForBugCondition($php_version, $php_bug_number = 'none', $pear_bug_
     {
         addErrorDie(PDERROR_DANGEROUS_PHP_BUG_EXISTS, $php_version, $php_bug_number, $pear_bug_number);
     }
+}
+
+/*
+ * Workaround for PHP Bug #49647 ("DOMUserData does not exist")
+ * DOMUserData class was prototyped in ext/dom/node.c but never implemented...
+ * it was removed in PHP 5.2.12 and 5.3.1
+ */
+if (extension_loaded('dom')
+    && (
+        version_compare(PHP_VERSION, '5.2.12', 'lt')
+        || version_compare(PHP_VERSION, '5.3.0', 'eq')
+    )
+) {
+    /**
+     * @package phpDocumentor
+     * @ignore
+     */
+    class DOMUserData {}
 }
 ?>

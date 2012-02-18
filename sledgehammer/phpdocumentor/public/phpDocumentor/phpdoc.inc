@@ -31,7 +31,7 @@
  * @author    Gregory Beaver <cellog@php.net>
  * @copyright 2000-2007 Joshua Eichorn, Gregory Beaver
  * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version   CVS: $Id: phpdoc.inc,v 1.4 2007/10/10 01:18:25 ashnazg Exp $
+ * @version   CVS: $Id: phpdoc.inc 243933 2007-10-10 01:18:25Z ashnazg $
  * @link      http://www.phpdoc.org
  * @link      http://pear.php.net/PhpDocumentor
  * @since     0.1
