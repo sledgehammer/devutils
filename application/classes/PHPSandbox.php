@@ -32,14 +32,24 @@ class PHPSandbox extends Object implements View {
 			// De phpcode naar het php proces sturen
 			fwrite($this->stdin, $this->php_code);
 			fclose($this->stdin);
+			$errors = '';
 			// De uitvoer uitlezen en weergeven
 			while (!feof($this->stdout)) {
-				echo fgets($this->stdout, 100);
-				flush();
+				$read = array($this->stdout, $this->stdout);
+				if (stream_select($read, $write, $except, 30)) {
+					foreach ($read as $stream) {
+						if ($stream === $this->stdout) {
+							echo fgets($this->stdout, 100);
+							flush();
+						} else {
+							$errors .= fgets($this->stderr, 100);
+						}
+					}
+				}
 			}
 			fclose($this->stdout);
 			// De uitvoer van het error kanaal uitlezen ern weergeven
-			$errors = stream_get_contents($this->stderr);
+			$errors .= stream_get_contents($this->stderr);
 			fclose($this->stderr);
 			$return_value = proc_close($this->process);
 			if ($errors) {

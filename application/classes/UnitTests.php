@@ -76,6 +76,7 @@ class UnitTests extends VirtualFolder {
 				$source .= "));\n";
 			}
 		}
+		$source .= "require_once('" . $this->project->path . "sledgehammer/core/tests/TestCase.SimpleTest.inc');\n";
 		$source .= "require_once('" . PATH . "application/classes/DevUtilsReporter.php');\n";
 		$source .= "\$testSuite = new TestSuite('$title');\n";
 		foreach ($tests as $testfile) {
