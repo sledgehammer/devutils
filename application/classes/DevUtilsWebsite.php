@@ -63,13 +63,10 @@ class DevUtilsWebsite extends Website {
 		return new PHPInfo;
 	}
 
-	function rewrite_check() {
-		die('Apache Rewrite module is enabled');
 	}
 
-	function phpdocs() {
-		$command = new PhpDocs($this->project);
-		return $command->generateContent();
+	function rewrite_check() {
+		die('Apache Rewrite module is enabled');
 	}
 
 	function project_icon() {
@@ -104,12 +101,9 @@ class DevUtilsWebsite extends Website {
 		return $folder->generateContent();
 	}
 
-	function phpdocs_folder($filename) {
-		$path = PhpDocs::documentation_path($this->project);
-		if ($filename === false) {
-			$filename = substr(rawurldecode($_SERVER['REQUEST_URI']), strlen($this->getPath(true)));
-		}
-		return new FileDocument($path.$filename);
+	function phpdocs_folder() {
+		$folder = new PhpDocs($this->project);
+		return $folder->generateContent();
 	}
 
 	function dynamicFoldername($folder) {
@@ -138,7 +132,7 @@ class DevUtilsWebsite extends Website {
 			WEBPATH => array('icon' => WEBPATH.'project_icon.ico', 'label' => $this->project->name),
 		);
 		// Documentation
-		$navigation[WEBROOT.'phpdocs.html'] = array('icon' => 'icons/documentation.png', 'label' => 'API Documentation');
+		$navigation[WEBROOT.'phpdocs/'] = array('icon' => 'icons/documentation.png', 'label' => 'API Documentation');
 		if (file_exists($this->project->path.'docs/')) {
 			$applicationMenu[WEBROOT.'files/docs/'] = array('icon' => 'book', 'label' => 'Documentation');
 		}

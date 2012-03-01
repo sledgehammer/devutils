@@ -43,14 +43,12 @@ class Module extends Object {
 		return $info;
 	}
 
-	/**
-	 */
 	function getUtilities() {
 		Util::$module = $this;
 		$path = $this->path.'utils/';
 		if (file_exists($path)) {
 			if (file_exists($path.'classes')) {
-				$GLOBALS['AutoLoader']->importFolder($path.'classes/');
+				Framework::$autoLoader->importFolder($path.'classes/');
 			}
 
 			return include($path.'getUtils.php');
@@ -76,7 +74,7 @@ class Module extends Object {
 				}
 			}
 		}
-		ksort($tests); // Sorteer de tests alfabetisch 
+		ksort($tests); // Sorteer de tests alfabetisch
 		return $tests;
 	}
 }

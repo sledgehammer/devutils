@@ -1,8 +1,10 @@
 <?php
 /**
+ * Always show errors
  * @package DevUtils
  */
- $GLOBALS['ErrorHandler']->html = true;
- $GLOBALS['ErrorHandler']->email = false;
+namespace SledgeHammer;
+Framework::$errorHandler->html = true;
+Framework::$errorHandler->email = false;
 
 ?>

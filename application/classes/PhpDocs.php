@@ -4,19 +4,22 @@
  * @package DevUtils
  */
 namespace SledgeHammer;
-class PhpDocs extends Object implements Controller {
+class PhpDocs extends VirtualFolder {
 
-	private
-		$object; // Module of Project
+	/**
+	 * @var Module|Project
+	 */
+	private	$object;
 
 	function __construct($object) {
+		parent::__construct();
 		$this->object = $object;
 	}
 
-	function  generateContent() {
+	function index() {
 		$url = URL::getCurrentURL();
 		$url->query = array();
-		$target_path = PhpDocs::documentation_path($this->object);
+		$target_path = $this->documentationPath($this->object);
 		Breadcrumbs::add('API Documenation');
 
 		// Controleer of er reeds documentatie gegenereerd is
@@ -27,7 +30,7 @@ class PhpDocs extends Object implements Controller {
 			$url->query['refresh'] = 0;
 		} else {
 			$url->query['refresh'] = 1;
-			$documentation_age = $this->documentation_age() / 3600; // leeftijd in uur
+			$documentation_age = $this->documentationAge() / 3600; // leeftijd in uur
 			if ($documentation_age > 8) {
 				$age = round($documentation_age / 24).' days '.round($documentation_age % 24).' hours';
 			} else {
@@ -40,10 +43,29 @@ class PhpDocs extends Object implements Controller {
 			'generate' => $generate,
 			'url' => $url,
 			'age' => $age,
-			'src' => $GLOBALS['VirtualFolder']->getPath(true).'phpdocs/index.html',
+			'src' => $this->getPath().'overview.html',
 		), array(
 			'title' => 'API Documentation',
 		));
+	}
+
+	function overview() {
+		return $this->staticFile('index.html');
+	}
+	function dynamicFilename($filename) {
+		return $this->staticFile($filename);
+	}
+	function dynamicFoldername($folder, $filename = null) {
+		if ($filename !== false) {
+			return $this->staticFile($folder.'/'.$filename);
+		}
+		$path = substr(rawurldecode($_SERVER['REQUEST_URI']), strlen($this->getPath()));
+		return $this->staticFile($path);
+
+	}
+
+	private function staticFile($path) {
+		return new FileDocument($this->documentationPath().$path);
 	}
 
 	/**
@@ -51,15 +73,15 @@ class PhpDocs extends Object implements Controller {
 	 *
 	 * @param Module|Project $object
 	 */
-	static function documentation_path($object) {
-		return TMP_DIR.'phpdocs/'.$object->identifier.'/';
+	private function documentationPath() {
+		return TMP_DIR.'phpdocs/'.$this->object->identifier.'/';
 	}
 
 	/**
 	 * @return int het aantal seconden dat de documentatie oud is
 	 */
-	function documentation_age() {
-		$target_path = PhpDocs::documentation_path($this->object);
+	private function documentationAge() {
+		$target_path = $this->documentationPath($this->object);
 		if (!file_exists($target_path.'index.html')) {
 			return true;
 		}

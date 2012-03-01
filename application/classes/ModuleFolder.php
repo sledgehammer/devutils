@@ -42,17 +42,9 @@ class ModuleFolder extends VirtualFolder {
 		return parent::generateContent();
 	}
 
-	function phpdocs() {
-		$command = new PhpDocs($this->module);
-		return $command->generateContent();
-	}
-
-	function phpdocs_folder($filename) {
-		$path = PhpDocs::documentation_path($this->module);
-		if ($filename === false) {
-			$filename = substr(rawurldecode($_SERVER['REQUEST_URI']), strlen($this->getPath(true)));
-		}
-		return new FileDocument($path.$filename);
+	function phpdocs_folder() {
+		$folder = new PhpDocs($this->module);
+		return $folder->generateContent();
 	}
 
 	function files_folder() {
@@ -96,7 +88,7 @@ class ModuleFolder extends VirtualFolder {
 	protected function getDocumentationList() {
 		$iconPrefix = WEBROOT.'icons/';
 		$actions = array(
-			'phpdocs.html' => array('icon' => $iconPrefix.'documentation.png', 'label' => 'API Documentation'),
+			'phpdocs/' => array('icon' => $iconPrefix.'documentation.png', 'label' => 'API Documentation'),
 		);
 		if (file_exists($this->module->path.'docs/')) {
 			$actions['files/docs/'] = array('icon' => $iconPrefix.'documents.png', 'label' => 'Documentation');
