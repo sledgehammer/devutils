@@ -65,13 +65,13 @@ class UnitTests extends VirtualFolder {
 	private function generateTestSuite($title, $tests) {
 		$source = "<?php\n";
 		$source .= "require_once('" . $this->project->path . "sledgehammer/core/init_framework.php');\n";
-		$source .= "\$GLOBALS['AutoLoader']->importModule(array(\n";
+		$source .= "\SledgeHammer\Framework::\$autoLoader->importModule(array(\n";
 		$source .= "\t'name'=> 'DevUtils/SimpleTest',\n";
 		$source .= "\t'path'=> '" . addslashes(MODULES_DIR) . "simpletest'\n";
 		$source .= "));\n";
 		foreach ($this->project->modules as $module) {
 			if (is_dir($module->path . 'tests')) {
-				$source .= "\$GLOBALS['AutoLoader']->importFolder('" . addslashes($module->path . 'tests') . "', array(\n";
+				$source .= "\SledgeHammer\Framework::\$autoLoader->importFolder('" . addslashes($module->path . 'tests') . "', array(\n";
 				$source .= "\t'mandatory_definition' => false,\n";
 				$source .= "));\n";
 			}
