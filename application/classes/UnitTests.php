@@ -64,25 +64,19 @@ class UnitTests extends VirtualFolder {
 
 	private function generateTestSuite($title, $tests) {
 		$source = "<?php\n";
-		$source .= "require_once('" . $this->project->path . "sledgehammer/core/init_framework.php');\n";
-		$source .= "\SledgeHammer\Framework::\$autoLoader->importModule(array(\n";
-		$source .= "\t'name'=> 'DevUtils/SimpleTest',\n";
-		$source .= "\t'path'=> '" . addslashes(MODULES_DIR) . "simpletest'\n";
-		$source .= "));\n";
-		foreach ($this->project->modules as $module) {
-			if (is_dir($module->path . 'tests')) {
-				$source .= "\SledgeHammer\Framework::\$autoLoader->importFolder('" . addslashes($module->path . 'tests') . "', array(\n";
-				$source .= "\t'mandatory_definition' => false,\n";
-				$source .= "));\n";
-			}
+		$source .= "require_once('" . $this->project->path . "sledgehammer/core/init_tests.php');\n";
+		$source .= "\SledgeHammer\Framework::\$autoLoader->standalone = false;\n";
+		$source .= "require_once('PHPUnit/Autoload.php');\n";
+		$source .= "require_once('" . PATH . "application/classes/DevUtilsPHPUnitPrinter.php');\n";
+		$source .= "\$GLOBALS['title'] = '".$title."';\n";
+		$source .= "\$_SERVER['argv'] = array(\n";
+		$source .= "\t'--printer', 'DevUtilsPHPUnitPrinter',\n";
+		$source .= "\t'--strict',\n";
+		foreach ($tests as $i => $testfile) {
+			$source .= "\t'UnitTest', '" . addslashes($testfile) . "',\n";
 		}
-		$source .= "require_once('" . $this->project->path . "sledgehammer/core/tests/TestCase.SimpleTest.inc');\n";
-		$source .= "require_once('" . PATH . "application/classes/DevUtilsReporter.php');\n";
-		$source .= "\$testSuite = new TestSuite('$title');\n";
-		foreach ($tests as $testfile) {
-			$source .= "\$testSuite->addFile('" . addslashes($testfile) . "');\n";
-		}
-		$source .= "\$testSuite->run(new DevUtilsReporter());\n";
+		$source .= ");\n";
+		$source .= "PHPUnit_TextUI_Command::main(false);\n";
 		$source .= "echo '<center>';\n";
 		$source .= "SledgeHammer\statusbar();\n";
 		$source .= "echo '</center>';\n";
