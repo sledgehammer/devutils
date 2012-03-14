@@ -22,7 +22,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		echo '<div class="assertion">';
 		echo "<span class=\"fail label label-important\">Error</span> ";
 		echo '<b>', $this->translateException($e), '</b>: ', HTML::escape($e->getMessage()), '<br />';
-		echo $this->trace($test, $e, 'contains an error');
+		$this->trace($test, $e, 'contains an error');
 		echo "</div>\n";
 		flush();
 	}
@@ -39,7 +39,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		} else {
 			echo HTML::escape($e->getMessage());
 		}
-		echo $this->trace($test, $e, 'failed');
+		echo '<br />';
+		$this->trace($test, $e, 'failed');
 		echo "</div>\n";
 		flush();
 	}
@@ -47,7 +48,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		echo '<div class="assertion">';
 		echo "<span class=\"incomplete label\">Incomplete</span> ";
-		echo  HTML::escape($e->getMessage()), '<br />';
+		echo HTML::escape($e->getMessage()), '<br />';
 		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() was incomplete<br />';
 		echo '</div>';
 	}
@@ -57,8 +58,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 
 		echo '<div class="assertion">';
 		echo "<span class=\"skipped label label-info\">Skipped</span> ";
-		echo  HTML::escape($e->getMessage()), '<br />';
-		echo $this->trace($test, $e, 'was skipped');
+		echo HTML::escape($e->getMessage()), '<br />';
+		$this->trace($test, $e, 'was skipped');
 		echo "</div>\n";
 		flush();
 	}
@@ -107,11 +108,16 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() '.$suffix.'<br />';
 		$errorHandlerPath = SledgeHammer\Framework::$autoLoader->getFilename('SledgeHammer\ErrorHandler');
 		$backtrace = $e->getTrace();
-		foreach ($backtrace as $call) {
+		foreach ($backtrace as $index => $call) {
 			if (empty($call['line'])) {
 				continue;
 			}
-			if (isset($call['class']) && (substr($call['class'], 0, 8) === 'PHPUnit_' ||  in_array($call['class'], array('ReflectionMethod', 'SledgeHammer\ErrorHandler')))) {
+			if (isset($call['class']) && $call['class'] === 'PHPUnit_Framework_Assert') {
+				$file = $backtrace[$index + 1]['file'];
+				$line = $backtrace[$index + 1]['line'];
+				break;
+			}
+			if (isset($call['class']) && (substr($call['class'], 0, 8) === 'PHPUnit_' || in_array($call['class'], array('ReflectionMethod', 'SledgeHammer\ErrorHandler')))) {
 				continue;
 			}
 			if (isset($call['file']) && $call['file'] === $errorHandlerPath) {
