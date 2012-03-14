@@ -1,4 +1,7 @@
 <?php
+
+use SledgeHammer\HTML;
+
 /**
  * A PHPUnit_Util_Printer for rendering PHPUnit results in html.
  * (Also shows successful passes)
@@ -7,48 +10,58 @@
  */
 class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Framework_TestListener {
 
-	private
-		$failCount = 0,
-		$exceptionCount = 0,
-		$passCount = 0,
-		$pass;
+	static $failCount = 0;
+	static $exceptionCount = 0;
+	static $passCount = 0;
+	static $skippedCount = 0;
+	private $pass;
 
 	public function addError(PHPUnit_Framework_Test $test, Exception $e, $time) {
-		$this->exceptionCount++;
+		self::$exceptionCount++;
 		$this->pass = false;
 		echo '<div class="assertion">';
 		echo "<span class=\"fail label label-important\">Error</span> ";
-		echo htmlentities($e->getMessage());
+		echo '<b>', $this->translateException($e), '</b>: ', HTML::escape($e->getMessage()), '<br />';
+		echo $this->trace($test, $e, 'contains an error');
 		echo "</div>\n";
 		flush();
 	}
 
-
 	public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time) {
-		$this->failCount++;
+		self::$failCount++;
 		$this->pass = false;
-//		$trace = $this->_getStackTrace($message);
-		$testName = get_class($test) . '(' . $test->getName() . ')';
 
 		echo '<div class="assertion">';
 		echo "<span class=\"fail label label-important\">Fail</span> ";
-		echo $this->htmlentities($e->getMessage());
-		echo '<br />In '.$testName;
-//		echo $trace;
+		$type = get_class($e);
+		if ($type === 'PHPUnit_Framework_OutputError') {
+			echo $e->getMessage();
+		} else {
+			echo HTML::escape($e->getMessage());
+		}
+		echo $this->trace($test, $e, 'failed');
 		echo "</div>\n";
 		flush();
 	}
 
 	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
-
+		echo '<div class="assertion">';
+		echo "<span class=\"incomplete label\">Incomplete</span> ";
+		echo  HTML::escape($e->getMessage()), '<br />';
+		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() was incomplete<br />';
+		echo '</div>';
 	}
 
 	public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
+		self::$skippedCount++;
 
+		echo '<div class="assertion">';
+		echo "<span class=\"skipped label label-info\">Skipped</span> ";
+		echo  HTML::escape($e->getMessage()), '<br />';
+		echo $this->trace($test, $e, 'was skipped');
+		echo "</div>\n";
+		flush();
 	}
-
-
-
 
 	public function startTest(PHPUnit_Framework_Test $test) {
 		$this->pass = true;
@@ -56,43 +69,77 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 
 	public function endTest(PHPUnit_Framework_Test $test, $time) {
 		if ($this->pass) {
-			$this->passCount++;
+			self::$passCount++;
 			echo '<div class="assertion">';
 			echo "<span class=\"pass label label-success\">Pass</span> ";
-			echo $this->htmlentities($test->getName());
+			echo get_class($test), '->', $test->getName(), '() is successful';
+
 			echo "</div>\n";
 			flush();
 		}
 	}
 
 	public function startTestSuite(PHPUnit_Framework_TestSuite $suite) {
-		$title = $suite->getName();
-		if (isset($GLOBALS['title'])) {
-			$title = $GLOBALS['title'];
+		static $first = true;
+		if ($first) {
+			$first = false;
+		} else {
+			echo '<h3 class="testsuite-heading">'.$suite->getName().'</h3>';
 		}
-		echo '<h2 class="unittest_heading">'.$title.' <span class="label">Running tests</span></h2>';
 		echo '<div class="assertions">';
-		flush();
 	}
 
 	public function endTestSuite(PHPUnit_Framework_TestSuite $suite) {
 		echo "</div>\n";
-		$alert_suffix = ($this->failCount + $this->exceptionCount > 0 ? "" : " alert-success");
+		flush();
+	}
+
+	static function summary() {
+		$alert_suffix = (self::$failCount + self::$exceptionCount > 0 ? "" : " alert-success");
 		echo '<div class="unittest_summary alert'.$alert_suffix.'">';
-		echo $suite->count();
-		echo " test cases:\n";
-		echo "<strong>".$this->passCount."</strong> passes, ";
-		echo "<strong>".$this->failCount."</strong> fails and ";
-		echo "<strong>".$this->exceptionCount."</strong> exceptions.";
+		echo "<strong>".self::$passCount."</strong> passes, ";
+		echo "<strong>".self::$failCount."</strong> fails and ";
+		echo "<strong>".self::$exceptionCount."</strong> exceptions.";
 		echo "</div>\n";
 	}
 
-	private function htmlentities($string) {
-		if (preg_match('/^This test printed output:/', $string)) {
-			return $string;
+	private function trace(PHPUnit_Framework_Test $test, Exception $e, $suffix = '') {
+		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() '.$suffix.'<br />';
+		$errorHandlerPath = SledgeHammer\Framework::$autoLoader->getFilename('SledgeHammer\ErrorHandler');
+		$backtrace = $e->getTrace();
+		foreach ($backtrace as $call) {
+			if (empty($call['line'])) {
+				continue;
+			}
+			if (isset($call['class']) && (substr($call['class'], 0, 8) === 'PHPUnit_' ||  in_array($call['class'], array('ReflectionMethod', 'SledgeHammer\ErrorHandler')))) {
+				continue;
+			}
+			if (isset($call['file']) && $call['file'] === $errorHandlerPath) {
+				continue;
+			}
+			$file = $call['file'];
+			$line = $call['line'];
+			break;
 		}
-		return htmlentities($string, ENT_NOQUOTES, \SledgeHammer\Framework::$charset);
+		echo '<b>', HTML::escape(get_class($e)), '</b>  thrown in <b>', $file, '</b> on line <b>'.$line, '</b>';
 	}
+
+	private function translateException(Exception $e) {
+		$class = get_class($e);
+		$name = $class;
+		if ($e instanceof PHPUnit_Framework_Error) {
+			if ($class === 'PHPUnit_Framework_Error') {
+				$name = 'Error';
+			} else {
+				$name = substr($class, 24);
+			}
+		}
+		if ($name !== $class) {
+			return '<span title="'.HTML::escape($class).'">'.$name.'</span>';
+		}
+		return $class;
+	}
+
 }
 
 ?>
