@@ -105,28 +105,31 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	}
 
 	private function trace(PHPUnit_Framework_Test $test, Exception $e, $suffix = '') {
-		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() '.$suffix.'<br />';
-		$errorHandlerPath = SledgeHammer\Framework::$autoLoader->getFilename('SledgeHammer\ErrorHandler');
-		$backtrace = $e->getTrace();
-		foreach ($backtrace as $index => $call) {
-			if (empty($call['line'])) {
-				continue;
-			}
-			if (isset($call['class']) && $call['class'] === 'PHPUnit_Framework_Assert') {
-				$file = $backtrace[$index + 1]['file'];
-				$line = $backtrace[$index + 1]['line'];
+		$file = $e->getFile();
+		$line = $e->getLine();
+		if (substr(get_class($e), 0, 8) === 'PHPUnit_') {
+			$phpunitPath = 'PHPUnit'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR;
+			$proxyFiles = array(
+				SledgeHammer\Framework::$autoLoader->getFilename('SledgeHammer\Object'),
+				SledgeHammer\Framework::$autoLoader->getFilename('SledgeHammer\ErrorHandler'),
+			);
+			$backtrace = $e->getTrace();
+			foreach ($backtrace as $index => $call) {
+				if (empty($call['line'])) {
+					continue;
+				}
+				if (strpos($call['file'], $phpunitPath)) {
+					continue;
+				}
+				if (in_array($call['file'], $proxyFiles)) {
+					continue;
+				}
+				$file = $call['file'];
+				$line = $call['line'];
 				break;
 			}
-			if (isset($call['class']) && (substr($call['class'], 0, 8) === 'PHPUnit_' || in_array($call['class'], array('ReflectionMethod', 'SledgeHammer\ErrorHandler')))) {
-				continue;
-			}
-			if (isset($call['file']) && $call['file'] === $errorHandlerPath) {
-				continue;
-			}
-			$file = $call['file'];
-			$line = $call['line'];
-			break;
 		}
+		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() '.$suffix.'<br />';
 		echo '<b>', HTML::escape(get_class($e)), '</b>  thrown in <b>', $file, '</b> on line <b>'.$line, '</b>';
 	}
 
