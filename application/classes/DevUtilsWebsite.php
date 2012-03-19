@@ -1,12 +1,10 @@
 <?php
+namespace SledgeHammer;
 /**
  * The DevUtils Application FrontController
  *
  * @package DevUtils
  */
-
-namespace SledgeHammer;
-
 class DevUtilsWebsite extends Website {
 
 	private $project;
@@ -23,7 +21,7 @@ class DevUtilsWebsite extends Website {
 		$url->path = $this->getPath().'rewrite-check.html';
 		$contents = file_get_contents($url);
 		if ($contents != 'Apache Rewrite module is enabled') { // Is het openen van de rewrite_check.html mislukt?
-			return new HTML('<h1>Error loading "/rewrite_check.html"</h1>&quot;AllowOverride All&quot; is required in your httpd.conf for this &lt;Directory&gt;<hr />');
+			return new HTML('<h1>Error loading "/rewrite-check.html"</h1>&quot;AllowOverride All&quot; is required in your httpd.conf for this &lt;Directory&gt;<hr />');
 		}
 		if (!$this->project) {
 			return MessageBox::error('Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
@@ -63,8 +61,6 @@ class DevUtilsWebsite extends Website {
 		return new PHPInfo;
 	}
 
-	}
-
 	function rewrite_check() {
 		die('Apache Rewrite module is enabled');
 	}
@@ -101,6 +97,16 @@ class DevUtilsWebsite extends Website {
 		return $folder->generateContent();
 	}
 
+	function phpunit_folder($filename) {
+		$url = URL::getCurrentURL();
+		$folders = $url->getFolders();
+		$module = $this->project->modules[$folders[$this->depth + 1]];
+
+		$command = '/usr/local/bin/phpunit --strict --bootstrap '.escapeshellarg($this->project->modules['core']->path.'init_tests.php').' '.escapeshellarg(($module->path)."tests/".$url->getFilename());
+		$source = '<?php echo "<pre>"; passthru("'.$command.'"); echo "</pre>";';
+		return new ViewHeaders(new PHPSandbox($source), array('title' => 'PHPUnit'));
+	}
+
 	function phpdocs_folder() {
 		$folder = new PhpDocs($this->project);
 		return $folder->generateContent();
@@ -114,6 +120,17 @@ class DevUtilsWebsite extends Website {
 		return $this->onFolderNotFound();
 	}
 
+	function generateDocument() {
+		$webpath = preg_replace('/\/.+$/', '', substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)));
+		$skipLogin = in_array($webpath, array('project_icon.ico', 'rewrite-check.html', 'module_icons'));
+		if ($skipLogin === false && $this->login() == false) {
+			$doc = new HTMLDocument();
+			$doc->content = new HttpError(401);
+			return $doc;
+		}
+		return parent::generateDocument();
+	}
+
 	function generateContent() {
 		if ($this->project) {
 			//$this->project->name.' project'
@@ -122,7 +139,7 @@ class DevUtilsWebsite extends Website {
 		return parent::generateContent();
 	}
 
-	protected function wrapContent($content) {
+	function wrapContent($content) {
 		if (!$this->project) {
 			return $content;
 		}
@@ -163,6 +180,25 @@ class DevUtilsWebsite extends Website {
 
 	function onSessionStart() {
 		return false;
+	}
+
+	private function login() {
+		$auth = new HttpAuthentication('SledgeHammer DevUtils');
+		$credentials = $auth->import($error);
+		if ($credentials) {
+			$whoami = suexec($credentials['username'], $credentials['password'], 'whoami');
+			if ($whoami !== false) {
+				return true;
+			}
+			$auth->reset();
+		}
+		return false;
+	}
+
+	static function suexec($command) {
+		$auth = new HttpAuthentication(null);
+		$credentials = $auth->import($errorMessage);
+		return suexec($credentials['username'], $credentials['password'], $command);
 	}
 
 }
