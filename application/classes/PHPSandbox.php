@@ -11,22 +11,7 @@ class PHPSandbox extends Object implements View {
 	 * @var string PHP source code
 	 */
 	private $code;
-	/**
-	 * @var resource proc_open() Resouce
-	 */
-	private $process;
-	/**
-	 * @var resource The input stream of the php process (write)
-	 */
-	private $stdin;
-	/**
-	 * @var resource The output stream of the php process (read)
-	 */
-	private $stdout;
-	/**
-	 * @var resource The errro stream of the php process (read)
-	 */
-	private $stderr;
+
 
 	/**
 	 *
@@ -43,44 +28,44 @@ class PHPSandbox extends Object implements View {
 			2 => array('pipe', 'w')  // stderr
 		);
 
-		$this->process = proc_open('php', $descriptorspec, $pipes, NULL, NULL);
 
-		if ($this->process === false) {
+		/* @var $process resource */
+		$process = proc_open('php', $descriptorspec, $pipes, NULL, NULL);
+
+		if ($process === false) {
 			warning('Failed to run php in a separate process');
 			return;
 		}
-		// $pipes now looks like this:
-		// 0 => writeable handle connected to child stdin
-		// 1 => readable handle connected to child stdout
-		// 2 => readable handle connected to child stderr
-
-		$this->stdin = $pipes[0];
-		$this->stdout = $pipes[1];
-		$this->stderr = $pipes[2];
+		/* @var $stdin resource The input stream of the php process (write) */
+		$stdin = $pipes[0];
+		/* @var $stdout resource The output stream of the php process (read) */
+		$stdout = $pipes[1];
+		/* @var $stderr resource The error stream of the php process (read) */
+		$stderr = $pipes[2];
 
 		// De phpcode naar het php proces sturen
-		fwrite($this->stdin, $this->code);
-		fclose($this->stdin);
+		fwrite($stdin, $this->code);
+		fclose($stdin);
 		$errors = '';
 		// De uitvoer uitlezen en weergeven
-		while (!feof($this->stdout)) {
-			$read = array($this->stdout, $this->stdout);
+		while (!feof($stdout)) {
+			$read = array($stdout, $stderr);
 			if (stream_select($read, $write, $except, 30)) {
 				foreach ($read as $stream) {
-					if ($stream === $this->stdout) {
-						echo fgets($this->stdout, 100);
+					if ($stream === $stdout) {
+						echo fgets($stdout, 100);
 						flush();
 					} else {
-						$errors .= fgets($this->stderr, 100);
+						$errors .= fgets($stderr, 100);
 					}
 				}
 			}
 		}
-		fclose($this->stdout);
+		fclose($stdout);
 		// De uitvoer van het error kanaal uitlezen ern weergeven
-		$errors .= stream_get_contents($this->stderr);
-		fclose($this->stderr);
-		$return_value = proc_close($this->process);
+		$errors .= stream_get_contents($stderr);
+		fclose($stderr);
+		$return_value = proc_close($process);
 		if ($errors) {
 			echo '<h3>PHP Errors</h2>';
 			if ($return_value !== 0) {
