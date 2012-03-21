@@ -8,6 +8,8 @@ namespace SledgeHammer;
 class DevUtilsWebsite extends Website {
 
 	private $project;
+	private static $username;
+	private static $password;
 
 	function __construct($projectPath) {
 		if (file_exists($projectPath.'sledgehammer/core/init_framework.php')) {
@@ -17,12 +19,6 @@ class DevUtilsWebsite extends Website {
 	}
 
 	function index() {
-		$url = URL::getCurrentURL();
-		$url->path = $this->getPath().'rewrite-check.html';
-		$contents = file_get_contents($url);
-		if ($contents != 'Apache Rewrite module is enabled') { // Is het openen van de rewrite_check.html mislukt?
-			return new HTML('<h1>Error loading "/rewrite-check.html"</h1>&quot;AllowOverride All&quot; is required in your httpd.conf for this &lt;Directory&gt;<hr />');
-		}
 		if (!$this->project) {
 			return MessageBox::error('Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
 		}
@@ -121,9 +117,7 @@ class DevUtilsWebsite extends Website {
 	}
 
 	function generateDocument() {
-		$webpath = preg_replace('/\/.+$/', '', substr($_SERVER['REQUEST_URI'], strlen(WEBPATH)));
-		$skipLogin = in_array($webpath, array('project_icon.ico', 'rewrite-check.html', 'module_icons'));
-		if ($skipLogin === false && $this->login() == false) {
+		if ($this->login() == false) {
 			$doc = new HTMLDocument();
 			$doc->content = new HttpError(401);
 			return $doc;
@@ -183,24 +177,26 @@ class DevUtilsWebsite extends Website {
 	}
 
 	private function login() {
-		$auth = new HttpAuthentication('SledgeHammer DevUtils');
-		$credentials = $auth->import($error);
+		$auth = new HttpAuthentication('DevUtils', function ($username, $password) {
+			su_exec($username, $password, 'true', $retval);
+			return ($retval === 0);
+		});
+		$credentials = $auth->authenticate();
 		if ($credentials) {
-			$whoami = suexec($credentials['username'], $credentials['password'], 'whoami');
-			if ($whoami !== false) {
-				return true;
-			}
-			$auth->reset();
+			self::$username = $credentials['username'];
+			self::$password = $credentials['password'];
+			return true;
 		}
 		return false;
 	}
 
-	static function suexec($command) {
-		$auth = new HttpAuthentication(null);
-		$credentials = $auth->import($errorMessage);
-		return suexec($credentials['username'], $credentials['password'], $command);
+	static function suExec($command, &$retval = null) {
+		return su_exec(self::$username, self::$password, $command, $retval);
 	}
 
+	static function sudo($command) {
+		return sudo(self::$username, self::$password, $command);
+	}
 }
 
 ?>

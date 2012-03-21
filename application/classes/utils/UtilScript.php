@@ -20,15 +20,22 @@ class UtilScript extends Util {
 	}
 
 	function generateContent() {
-		$php = '<h2>Running '.$this->script.'</h2>';
-		$php .= '<?php echo "<pre class=\"utilscript well\">"; ';
+		return $this;
+	}
+
+	function render() {
+		echo  '<h2>Running '.$this->script.'</h2>';
+		echo '<pre class=\"utilscript well\">';
+		$arguments = array(
+			escapeshellarg($this->paths['utils'].$this->script)
+		);
 		if ($this->arguments !== false) {
-			$argv = $this->arguments;
-			array_unshift($argv, 'UtilScript_PHPSandbox');
-			$php .=  '$argv = unserialize("'.addslashes(serialize($argv))."\");\n".'$argc = '.count($argv).";\n";
+			foreach ($this->arguments as $argument) {
+				$arguments[] = escapeshellarg($argument);
+			}
 		}
-		$php .= 'include("'.$this->paths['utils'].$this->script.'"); echo "\\n</pre>"; ?>';
-		return new PHPSandbox($php);
+		DevUtilsWebsite::sudo('php '.implode(' ', $arguments));
+		echo '</pre>';
 	}
 }
 ?>
