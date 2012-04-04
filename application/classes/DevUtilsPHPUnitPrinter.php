@@ -85,7 +85,19 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		if ($first) {
 			$first = false;
 		} else {
-			echo '<h3 class="testsuite-heading">'.$suite->getName().'</h3>';
+			$url = false;
+			$filename = \SledgeHammer\Framework::$autoLoader->getFilename($suite->getName());
+			if  (substr($filename, 0, strlen(\SledgeHammer\MODULES_DIR)) === \SledgeHammer\MODULES_DIR) {
+				$filename = substr($filename, strlen(SledgeHammer\MODULES_DIR));
+				if (preg_match('@^(?<module>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
+					$url = DEVUTILS_WEBPATH.'tests/'.$matches['module'].'/'.$matches['file'];
+				}
+			}
+			if ($url) {
+				echo '<h3 class="testsuite-heading"><a href="'.$url.'">'.$suite->getName().'</a></h3>';
+			} else {
+				echo '<h3 class="testsuite-heading">'.$suite->getName().'</h3>';
+			}
 		}
 		echo '<div class="assertions">';
 	}

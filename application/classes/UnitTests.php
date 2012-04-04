@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Genereert een SimpleTest TestSuites
+ * Genereert een PHPUnit TestSuites
  *
  * @package DevUtils
  */
@@ -20,11 +20,6 @@ class UnitTests extends VirtualFolder {
 
 	function index() {
 		$tests = $this->project->getUnitTests();
-//		foreach ($tests as $filename) {
-//			$module = dirname($filename);
-//			$filename = basename($filename);
-//			$files[] = $this->project->modules[$module]->path . 'tests' . DIRECTORY_SEPARATOR . $filename;
-//		}
 		return $this->build($this->project->name . ' TestSuite', $this->project->path);
 	}
 
@@ -37,11 +32,7 @@ class UnitTests extends VirtualFolder {
 			Breadcrumbs::add($filename_without_extention);
 			return $this->build($filename_without_extention, $module->path . 'tests' . DIRECTORY_SEPARATOR . $filename);
 		} else {
-//			$tests = $module->getUnitTests();
-//			foreach ($tests as $filename) {
-//				$files[] = $module->path . 'tests' . DIRECTORY_SEPARATOR . $filename;
-//			}
-			return $this->build('UnitTests - ' . $module->name, $module->path);
+			return $this->build('UnitTests - ' . $module->name, $module->path.'tests');
 		}
 	}
 
@@ -52,7 +43,6 @@ class UnitTests extends VirtualFolder {
 
 	private function build($title, $tests) {
 		$source = $this->generateTestSuite($title, $tests);
-//		return new ComponentHeaders(new PHPSandbox($url), array('title' => $title));
 		$filename = md5(serialize($tests)) . '.php';
 		$tmpFile = TMP_DIR . 'UnitTests/' . $filename;
 		mkdirs(dirname($tmpFile));
@@ -65,6 +55,7 @@ class UnitTests extends VirtualFolder {
 	private function generateTestSuite($title, $path) {
 		$source = "<h1 class=\"unittest_heading\">".HTML::escape($title)." <span class=\"label\">Running tests</span></h1>\n";
 		$source .= "<?php\n";
+		$source .= "define('DEVUTILS_WEBPATH', '".WEBPATH."');\n";
 		$source .= "require_once('" . $this->project->path . "sledgehammer/core/init_tests.php');\n";
 		$source .= "restore_error_handler();";
 		$source .= "\SledgeHammer\Framework::\$autoLoader->standalone = false;\n";
@@ -76,9 +67,6 @@ class UnitTests extends VirtualFolder {
 		$source .= "\t'--strict',\n";
 		$source .= "\t'--debug',\n";
 		$source .= "\t'" . addslashes($path) . "',\n";
-//		foreach ($tests as $i => $testfile) {
-//			$source .= "\t'UnitTest', '" . addslashes($testfile) . "',\n";
-//		}
 		$source .= ");\n";
 		$source .= "PHPUnit_TextUI_Command::main(false);\n";
 		$source .= "\DevUtilsPHPUnitPrinter::summary();\n";
