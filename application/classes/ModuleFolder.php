@@ -11,7 +11,7 @@ class ModuleFolder extends VirtualFolder {
 	 * @var Module $Module Een Module OF een Project object
 	 */
 	protected
-		$module;
+	$module;
 
 	function __construct($module) {
 		parent::__construct();
@@ -21,18 +21,27 @@ class ModuleFolder extends VirtualFolder {
 	function index() {
 		$properties = $this->module->getProperties();
 		if (isset($properties['Owner_email'])) {
-			$properties['Owner'] = htmlentities($properties['Owner']). ' &lt;<a href="mailto:'.$properties['Owner_email'].'">'.$properties['Owner_email'].'</a>&gt;';
+			$properties['Owner'] = htmlentities($properties['Owner']).' &lt;<a href="mailto:'.$properties['Owner_email'].'">'.$properties['Owner_email'].'</a>&gt;';
 			unset($properties['Owner_email']);
 		}
-
-//		$this->utils_viewport();
+		$utilityList = array();
+		foreach ($this->module->getUtilities() as $utilFilename => $util) {
+			$utilityList['utils/'.$utilFilename] = array('icon' => $util->icon, 'label' => $util->title);
+		}
+		if ($utilityList) {
+			$utilities = new NavList($utilityList);
+		} else {
+			$utilities = false;
+		}
 		return new Template('module.php', array(
-			'module' => $this->module,
-			'properties' => new DescriptionList($properties, array('class' => 'property-list')),
-			'documentation' => new NavList($this->getDocumentationList()),
-		), array(
-			'title' => $this->module->name.' module',
-		));
+					'module' => $this->module,
+					'properties' => new DescriptionList($properties, array('class' => 'property-list')),
+					'documentation' => $this->getDocumentationList(),
+					'utilities' => $utilities,
+					'unittests' => $this->getUnitTestList(),
+						), array(
+					'title' => $this->module->name.' module',
+				));
 	}
 
 	function generateContent() {
@@ -65,7 +74,7 @@ class ModuleFolder extends VirtualFolder {
 	protected function get_properties() {
 		$module = $this->module;
 		$properties = array(
-			'Owner' => htmlentities($module->owner). ' &lt;<a href="mailto:'.$module->owner_email.'">'.$module->owner_email.'</a>&gt;',
+			'Owner' => htmlentities($module->owner).' &lt;<a href="mailto:'.$module->owner_email.'">'.$module->owner_email.'</a>&gt;',
 			'Version' => $module->get_version(),
 			'Revision' => $module->get_revision(),
 		);
@@ -77,48 +86,44 @@ class ModuleFolder extends VirtualFolder {
 		}
 		return $properties;
 	}
-/*
-	protected function utils_viewport() {
-		$actions = UtilsHook::get_action_list_array($this->module);
-		if (count($actions) > 0) {
-			$GLOBALS['Viewports']['utils'] =  new ActionList($actions);
-		}
-	}
-*/
+
 	protected function getDocumentationList() {
 		$iconPrefix = WEBROOT.'icons/';
 		$actions = array(
 			'phpdocs/' => array('icon' => $iconPrefix.'documentation.png', 'label' => 'API Documentation'),
 		);
 		if (file_exists($this->module->path.'docs/')) {
-			$actions['files/docs/'] = array('icon' => $iconPrefix.'documents.png', 'label' => 'Documentation');
+			$actions['files/docs/'] = array('icon' =>  $iconPrefix.'documentation.png', 'label' => 'Documentation folder');
 		}
-
 		//'files/' => array('icon' => 'mime/folder.png', 'label' => 'Files'),
-		return $actions;
+		return new NavList($actions);
 	}
 
 	/**
 	 *
-	 * @return Component
+	 * @return View
 	 */
 	protected function getUnitTestList() {
 		$tests = $this->module->getUnitTests();
 		if (count($tests) == 0) {
-			return false;
+			return new HTML('<span class="muted">No tests found</span>');
 		}
+		$iconPrefix = WEBROOT.'icons/';
 		$list = array(
-			'unittests/' => array('icon' => 'accept.png', 'label' => 'Run all UnitTests'),
+			WEBROOT.'tests/'.$this->module->identifier.'/' => array('icon' => 'play', 'label' => 'Run all'),
 		);
-		foreach($tests as $testfile) {
-			$list['unittests/'.$testfile] = array('icon' => 'test.png', 'label' => $testfile);
+		foreach ($tests as $testfile) {
+			if (text($testfile)->endsWith('Test.php')) {
+				$label = substr($testfile, 0, -8);
+			} else {
+				$label = substr($testfile, 0, -4);
+			}
+			$list[WEBROOT.'tests/'.$this->module->identifier.'/'.$testfile] = array('icon'=> $iconPrefix.'test.png', 'label' => $label);
 		}
+
 		return new NavList($list);
-		/*
-		$GLOBALS['Viewport'] = &$GLOBALS['Viewports']['unittests'];
-		$Command = new UnitTests($this->module);
-		$Command->build_overview('unittests/');
-		*/
 	}
+
 }
+
 ?>

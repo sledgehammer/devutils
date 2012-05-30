@@ -37,9 +37,15 @@ class DevUtilsWebsite extends Website {
 		$utilityList['phpinfo.php'] = array('icon' => $iconPrefix.'php.gif', 'label' => 'PHP Info');
 
 		// Unittests
-		$tests = $this->project->getUnitTests();
-		foreach ($tests as $testfile) {
-			$unittestList['tests/'.$testfile] = array('icon' => 'unittest', 'label' => substr($testfile, 0, -4));
+		foreach ($this->project->modules as $identifier => $module) {
+			foreach ($module->getUnitTests() as $testfile) {
+				if (text($testfile)->endsWith('Test.php')) {
+					$label = substr($testfile, 0, -8);
+				} else {
+					$label = substr($testfile, 0, -4);
+				}
+				$unittestList['tests/'.$identifier.'/'.$testfile] = array('icon'=> $iconPrefix.'test.png', 'label' => ucfirst($identifier).' - '.$label);
+			}
 		}
 		$template = new Template('project.php', array(
 					'project' => $this->project->name,
@@ -145,10 +151,11 @@ class DevUtilsWebsite extends Website {
 		// Documentation
 		$navigation[WEBROOT.'phpdocs/'] = array('icon' => 'icons/documentation.png', 'label' => 'API Documentation');
 		if (file_exists($this->project->path.'docs/')) {
-			$applicationMenu[WEBROOT.'files/docs/'] = array('icon' => 'book', 'label' => 'Documentation');
+			$navigation[WEBROOT.'files/docs/'] = array('icon' => 'icons/documentation.png', 'label' => 'Documentation folder');
 		}
 		// UnitTests
-		$navigation[WEBROOT.'tests/'] = array('icon' => 'accept', 'label' => 'Run TestSuite');
+		$navigation[WEBROOT.'tests/'] = array('icon' => WEBROOT.'icons/test.png', 'label' => 'Run TestSuite');
+
 		// Modules
 		$navigation[] = 'Modules';
 		$sortedModules = $this->project->modules;
@@ -158,17 +165,16 @@ class DevUtilsWebsite extends Website {
 				$navigation[WEBROOT.$name.'/'] = array('icon' => WEBROOT.'module_icons/'.$name.'.png', 'label' => $module->name);
 			}
 		}
-
 		$template = new Template('layout.php', array(
-					'navigation' => new NavList($navigation),
-					'breadcrumbs' => new Breadcrumbs,
-					'contents' => $content,
-						), array(
-					'css' => array(
-						WEBROOT.'mvc/css/bootstrap.css',
-						WEBROOT.'css/devutils.css',
-					),
-				));
+				'navigation' => new NavList($navigation),
+				'breadcrumbs' => new Breadcrumbs,
+				'contents' => $content,
+			), array(
+				'css' => array(
+					WEBROOT.'mvc/css/bootstrap.css',
+					WEBROOT.'css/devutils.css',
+				),
+			));
 		return $template;
 	}
 

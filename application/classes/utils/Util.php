@@ -7,7 +7,7 @@
 namespace SledgeHammer;
 abstract class Util extends Object implements Controller {
 
-	public static	$module;
+	public static $module;
 	public
 		$icon = 'util.png',
 		$title,

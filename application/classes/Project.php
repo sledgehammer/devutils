@@ -7,7 +7,7 @@
 namespace SledgeHammer;
 class Project extends Object {
 
-	public 
+	public
 		$identifier,
 		$name,
 		$path,
