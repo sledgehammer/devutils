@@ -6,22 +6,23 @@
 	$(document).ready(function () {
 
 		/**
-		 * Update UnitTest header after tests have run.
+		 * Update UnitTest indicator after the tests have run.
 		 */
-		if ($('.unittest_heading').length > 0) {
-			$('.unittest_heading .label').remove();
-			if ($('.unittest_summary').length == 0) {
-				$('.unittest_heading').append(' <span class="label label-important">Crashed</span>');
+		var $indicator = $('[data-unittest=indicator]');
+		if ($indicator.length > 0) {
+			if ($('.unittest-summary').length == 0) {
+				$indicator.text('Crashed').addClass('label-important');
 			} else {
-				if ($('.unittest_summary').hasClass('alert-success')) {
-					$('.unittest_heading').append(' <span class="label label-success">Passed</span>');
+				if ($('.unittest-summary').hasClass('alert-success')) {
+					$indicator.text('Passed').addClass('label-success');
 				} else {
-					$('.unittest_heading').append(' <span class="label label-important">Failed</span>');
-					$('.assertion:has(.fail)').first().addClass('alert').addClass('alert-error').attr('id', 'first_failed_assertion').css({
+					$indicator.text('Failed').addClass('label-important');
+					var $firstFailure = $('.unittest-assertion:has([data-unittest=fail])').first();
+					$firstFailure.addClass('alert alert-error').css({
 						marginTop: '15px',
 						fontSize: '13px'
 					});
-					window.location.hash = '#first_failed_assertion';
+					window.scrollTo(0, $firstFailure.offset().top - 30);
 				}
 			}
 		}

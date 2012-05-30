@@ -1,10 +1,12 @@
 <?php
 /**
- * Geeft een gestylede versie van de phpinfo() weer.
- *
+ * PHPInfo
  * @package DevUtils
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Geeft een gestylede versie van de phpinfo() weer.
+ */
 class PHPInfo extends Object implements View {
 
 	function getHeaders() {
@@ -14,7 +16,7 @@ class PHPInfo extends Object implements View {
 	}
 
 	function render() {
-		echo '<div id="phpinfo"><h2>PHP Version '.phpversion().'</h2>';
+		echo '<div class="phpinfo"><h2>PHP Version '.phpversion().'</h2>';
 		ob_start();
 		phpinfo();
 		$phpinfo = ob_get_clean();

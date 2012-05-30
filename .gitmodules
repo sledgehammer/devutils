@@ -1,12 +1,9 @@
 [submodule "sledgehammer/core"]
 	path = sledgehammer/core
-	url = git://github.com/bfanger/sledgehammer_core.git
+	url = git://github.com/sledgehammer/core.git
 [submodule "sledgehammer/mvc"]
 	path = sledgehammer/mvc
-	url = git://github.com/bfanger/sledgehammer_mvc.git
-[submodule "sledgehammer/webcomponents"]
-	path = sledgehammer/webcomponents
-	url = git://github.com/bfanger/sledgehammer_webcomponents.git
-[submodule "sledgehammer/forms"]
-	path = sledgehammer/forms
-	url = git://github.com/bfanger/sledgehammer_forms.git
+	url = git://github.com/sledgehammer/mvc.git
+[submodule "sledgehammer/bootstrap"]
+	path = sledgehammer/bootstrap
+	url = git://github.com/sledgehammer/bootstrap.git

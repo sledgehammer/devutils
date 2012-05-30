@@ -1,10 +1,12 @@
 <?php
 /**
- * Een sledgehammer project.
- *
+ * Project
  * @package DevUtils
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Een sledgehammer project/applicatie.
+ */
 class Project extends Object {
 
 	public
@@ -45,8 +47,8 @@ class Project extends Object {
 		if ($this->application) {
 			$info = $this->application->getProperties();
 		}
-		$info['Path'] = $this->path;
 		$info['Environment'] = ENVIRONMENT;
+		$info['Path'] = $this->path;
 		return $info;
 	}
 

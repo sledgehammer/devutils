@@ -1,7 +1,7 @@
 Development Utilities
 ----------------------
 
-DevUtils is een SledgeHammer inspectie systeem.
+DevUtils is een Sledgehammer inspectie systeem.
 
 * Run UnitTests
 * Run Utils

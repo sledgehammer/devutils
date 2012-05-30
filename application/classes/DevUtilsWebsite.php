@@ -1,19 +1,28 @@
 <?php
-namespace SledgeHammer;
+/**
+ * DevUtilsWebsite
+ * @package DevUtils
+ */
+namespace Sledgehammer;
 /**
  * The DevUtils Application FrontController
- *
- * @package DevUtils
  */
 class DevUtilsWebsite extends Website {
 
 	private $project;
 	private static $username;
 	private static $password;
+	/**
+	 *
+	 * @var Breadcrumbs
+	 */
+	private $breadcrumbs;
 
 	function __construct($projectPath) {
+		$this->breadcrumbs = new Breadcrumbs();
 		if (file_exists($projectPath.'sledgehammer/core/init_framework.php')) {
 			$this->project = new Project($projectPath);
+			$this->addCrumb(array('icon' => 'home', 'label' => 'Home'), $this->getPath());
 		}
 		parent::__construct();
 	}
@@ -49,9 +58,9 @@ class DevUtilsWebsite extends Website {
 		}
 		$template = new Template('project.php', array(
 					'project' => $this->project->name,
-					'properties' => new DescriptionList($properties, array('class' => 'property-list')),
-					'utilities' => new NavList($utilityList),
-					'unittests' => new NavList($unittestList),
+					'properties' => new DescriptionList($properties, array('class' => 'dl-horizontal')),
+					'utilities' => new Nav($utilityList, array('nav' => 'list')),
+					'unittests' => new Nav($unittestList, array('nav' => 'list')),
 						), array(
 					'title' => $this->project->name.' project',
 				));
@@ -59,7 +68,7 @@ class DevUtilsWebsite extends Website {
 	}
 
 	function phpinfo() {
-		Breadcrumbs::add('PHP Info');
+		$this->addCrumb('PHP Info');
 		return new PHPInfo;
 	}
 
@@ -89,7 +98,7 @@ class DevUtilsWebsite extends Website {
 	}
 
 	function files_folder() {
-		Breadcrumbs::add('Files', $this->getPath(true));
+		$this->addCrumb('Files', $this->getPath(true));
 		$command = new FileBrowser($this->project->path, array('show_fullpath' => true, 'show_hidden_files' => true));
 		return $command->generateContent();
 	}
@@ -131,14 +140,6 @@ class DevUtilsWebsite extends Website {
 		return parent::generateDocument();
 	}
 
-	function generateContent() {
-		if ($this->project) {
-			//$this->project->name.' project'
-			Breadcrumbs::add(array('icon' => 'home', 'label' => 'Home'), $this->getPath());
-		}
-		return parent::generateContent();
-	}
-
 	function wrapContent($content) {
 		if (!$this->project) {
 			return $content;
@@ -166,12 +167,12 @@ class DevUtilsWebsite extends Website {
 			}
 		}
 		$template = new Template('layout.php', array(
-				'navigation' => new NavList($navigation),
-				'breadcrumbs' => new Breadcrumbs,
+				'navigation' => new Nav($navigation, array('nav' => 'list')),
+				'breadcrumbs' => $this->breadcrumbs,
 				'contents' => $content,
 			), array(
 				'css' => array(
-					WEBROOT.'mvc/css/bootstrap.css',
+					WEBROOT.'bootstrap/css/bootstrap.css',
 					WEBROOT.'css/devutils.css',
 				),
 			));
@@ -180,6 +181,10 @@ class DevUtilsWebsite extends Website {
 
 	function onSessionStart() {
 		return false;
+	}
+
+	function addCrumb($crumb, $url = null) {
+		$this->breadcrumbs->add($crumb, $url);
 	}
 
 	private function login() {

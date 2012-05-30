@@ -1,9 +1,12 @@
 <?php
 /**
- *
+ * PhpDocs
  * @package DevUtils
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Generate and show API documentation.
+ */
 class PhpDocs extends VirtualFolder {
 
 	/**
@@ -20,7 +23,7 @@ class PhpDocs extends VirtualFolder {
 		$url = URL::getCurrentURL();
 		$url->query = array();
 		$target_path = $this->documentationPath($this->object);
-		Breadcrumbs::add('API Documenation');
+		$this->addCrumb('API Documenation');
 
 		// Controleer of er reeds documentatie gegenereerd is
 		$generate = false;
@@ -98,13 +101,13 @@ class PhpDocs extends VirtualFolder {
 		$type = get_class($this->object);
 		switch ($type) {
 
-			case 'SledgeHammer\Module':
+			case 'Sledgehammer\Module':
 				$directories[] = $source_path.'classes';
 				$files[] = $source_path.'init.php';
 				$files[] = $source_path.'functions.php';
 				break;
 
-			case 'SledgeHammer\Project':
+			case 'Sledgehammer\Project':
 				$directories[] = $source_path.'application/classes';
 				$files[] = $source_path.'application/init.php';
 				$files[] = $source_path.'application/functions.php';

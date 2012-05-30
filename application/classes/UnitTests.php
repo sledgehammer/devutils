@@ -1,17 +1,15 @@
 <?php
-
 /**
- * Genereert een PHPUnit TestSuites
- *
+ * UnitTests
  * @package DevUtils
  */
-
-namespace SledgeHammer;
-
+namespace Sledgehammer;
+/**
+ * Genereert een PHPUnit TestSuites
+ */
 class UnitTests extends VirtualFolder {
 
-	private
-	$project;
+	private $project;
 
 	function __construct($project) {
 		parent::__construct();
@@ -26,10 +24,10 @@ class UnitTests extends VirtualFolder {
 	function dynamicFoldername($folder, $filename = null) {
 		$files = array();
 		$module = $this->project->modules[$folder];
-		Breadcrumbs::add($module->name . ' module', $this->getPath(true));
+		$this->addCrumb($module->name . ' module', $this->getPath(true));
 		if ($filename != 'index.html') { // Gaat het om een enkele unittest
 			file_extension($filename, $filename_without_extention);
-			Breadcrumbs::add($filename_without_extention);
+			$this->addCrumb($filename_without_extention, false);
 			return $this->build($filename_without_extention, $module->path . 'tests' . DIRECTORY_SEPARATOR . $filename);
 		} else {
 			return $this->build('UnitTests - ' . $module->name, $module->path.'tests');
@@ -37,7 +35,7 @@ class UnitTests extends VirtualFolder {
 	}
 
 	function generateContent() {
-		Breadcrumbs::add('TestSuite', $this->getPath());
+		$this->addCrumb('TestSuite', $this->getPath());
 		return parent::generateContent();
 	}
 
@@ -53,12 +51,12 @@ class UnitTests extends VirtualFolder {
 	}
 
 	private function generateTestSuite($title, $path) {
-		$source = "<h1 class=\"unittest_heading\">".HTML::escape($title)." <span class=\"label\">Running tests</span></h1>\n";
+		$source = "<h1 class=\"unittest-heading\">".HTML::escape($title)." <span class=\"label\" data-unittest=\"indicator\">Running tests</span></h1>\n";
 		$source .= "<?php\n";
 		$source .= "define('DEVUTILS_WEBPATH', '".WEBPATH."');\n";
 		$source .= "require_once('" . $this->project->path . "sledgehammer/core/init_tests.php');\n";
 		$source .= "restore_error_handler();";
-		$source .= "\SledgeHammer\Framework::\$autoLoader->standalone = false;\n";
+		$source .= "\Sledgehammer\Framework::\$autoLoader->standalone = false;\n";
 		$source .= "require_once('PHPUnit/Autoload.php');\n";
 		$source .= "require_once('" . PATH . "application/classes/DevUtilsPHPUnitPrinter.php');\n";
 		$source .= "\$GLOBALS['title'] = '".$title."';\n";
@@ -71,7 +69,7 @@ class UnitTests extends VirtualFolder {
 		$source .= "PHPUnit_TextUI_Command::main(false);\n";
 		$source .= "\DevUtilsPHPUnitPrinter::summary();\n";
 		$source .= "echo '<center>';\n";
-		$source .= "SledgeHammer\statusbar();\n";
+		$source .= "Sledgehammer\statusbar();\n";
 		$source .= "echo '</center>';\n";
 		$source .= '?>';
 		return $source;

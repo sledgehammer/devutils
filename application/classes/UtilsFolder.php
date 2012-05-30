@@ -1,14 +1,15 @@
 <?php
 /**
- * Genereert een SimpleTest TestSuites
- *
+ * UtilsFolder
  * @package DevUtils
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Genereert een SimpleTest TestSuites
+ */
 class UtilsFolder extends VirtualFolder {
 
-	private
-		$module;
+	private $module;
 
 	function __construct($module) {
 		parent::__construct();
@@ -19,7 +20,7 @@ class UtilsFolder extends VirtualFolder {
 	function dynamicFilename($filename) {
 		$utils = $this->module->getUtilities();
 		$util = $utils[$filename];
-		Breadcrumbs::add($util->title);
+		$this->addCrumb($util->title, false);
 		//getDocument()->title = $util->title;
 		Util::$module = $this->module;
 		$component = $util->generateContent();

@@ -54,6 +54,6 @@ require_once(dirname(dirname(__FILE__)).'/sledgehammer/core/render_public_folder
 // Build website
 require_once($sledgehammerInitPath);
 
-$website = new SledgeHammer\DevUtilsWebsite($projectPath);
+$website = new Sledgehammer\DevUtilsWebsite($projectPath);
 $website->handleRequest();
 ?>

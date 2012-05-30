@@ -1,12 +1,12 @@
 <?php
-
-use SledgeHammer\HTML;
-
+/**
+ * DevUtilsPHPUnitPrinter
+ * @package DevUtils
+ */
+use Sledgehammer\HTML;
 /**
  * A PHPUnit_Util_Printer for rendering PHPUnit results in html.
  * (Also shows successful passes)
- *
- * @package DevUtils
  */
 class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Framework_TestListener {
 
@@ -19,8 +19,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	public function addError(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		self::$exceptionCount++;
 		$this->pass = false;
-		echo '<div class="assertion">';
-		echo "<span class=\"fail label label-important\">Error</span> ";
+		echo '<div class="unittest-assertion">';
+		echo "<span class=\"label label-important\" data-unittest=\"fail\">Error</span> ";
 		echo '<b>', $this->translateException($e), '</b>: ', HTML::escape($e->getMessage()), '<br />';
 		$this->trace($test, $e, 'contains an error');
 		echo "</div>\n";
@@ -31,8 +31,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		self::$failCount++;
 		$this->pass = false;
 
-		echo '<div class="assertion">';
-		echo "<span class=\"fail label label-important\">Fail</span> ";
+		echo '<div class="unittest-assertion">';
+		echo "<span class=\"label label-important\" data-unittest=\"fail\">Fail</span> ";
 		$type = get_class($e);
 		if ($type === 'PHPUnit_Framework_OutputError') {
 			echo $e->getMessage();
@@ -46,8 +46,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	}
 
 	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
-		echo '<div class="assertion">';
-		echo "<span class=\"incomplete label\">Incomplete</span> ";
+		echo '<div class="unittest-assertion">';
+		echo "<span class=\"label\" data-unittest=\"incomplete\">Incomplete</span> ";
 		echo HTML::escape($e->getMessage()), '<br />';
 		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() was incomplete<br />';
 		echo '</div>';
@@ -56,8 +56,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		self::$skippedCount++;
 
-		echo '<div class="assertion">';
-		echo "<span class=\"skipped label label-info\">Skipped</span> ";
+		echo '<div class="unittest-assertion">';
+		echo "<span class=\"label label-info\"  data-unittest=\"skipped\">Skipped</span> ";
 		echo HTML::escape($e->getMessage()), '<br />';
 		$this->trace($test, $e, 'was skipped');
 		echo "</div>\n";
@@ -71,8 +71,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	public function endTest(PHPUnit_Framework_Test $test, $time) {
 		if ($this->pass) {
 			self::$passCount++;
-			echo '<div class="assertion">';
-			echo "<span class=\"pass label label-success\">Pass</span> ";
+			echo '<div class="unittest-assertion">';
+			echo "<span class=\"label label-success\" data-unittest=\"pass\">Pass</span> ";
 			echo get_class($test), '->', $test->getName(), '() is successful';
 
 			echo "</div>\n";
@@ -81,25 +81,25 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	}
 
 	public function startTestSuite(PHPUnit_Framework_TestSuite $suite) {
+		echo '<div class="unittest">';
 		static $first = true;
 		if ($first) {
 			$first = false;
 		} else {
 			$url = false;
-			$filename = \SledgeHammer\Framework::$autoLoader->getFilename($suite->getName());
-			if  (substr($filename, 0, strlen(\SledgeHammer\MODULES_DIR)) === \SledgeHammer\MODULES_DIR) {
-				$filename = substr($filename, strlen(SledgeHammer\MODULES_DIR));
+			$filename = \Sledgehammer\Framework::$autoLoader->getFilename($suite->getName());
+			if (substr($filename, 0, strlen(\Sledgehammer\MODULES_DIR)) === \Sledgehammer\MODULES_DIR) {
+				$filename = substr($filename, strlen(Sledgehammer\MODULES_DIR));
 				if (preg_match('@^(?<module>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
 					$url = DEVUTILS_WEBPATH.'tests/'.$matches['module'].'/'.$matches['file'];
 				}
 			}
 			if ($url) {
-				echo '<h3 class="testsuite-heading"><a href="'.$url.'">'.$suite->getName().'</a></h3>';
+				echo '<h3><a href="'.$url.'">'.$suite->getName().'</a></h3>';
 			} else {
-				echo '<h3 class="testsuite-heading">'.$suite->getName().'</h3>';
+				echo '<h3>'.$suite->getName().'</h3>';
 			}
 		}
-		echo '<div class="assertions">';
 	}
 
 	public function endTestSuite(PHPUnit_Framework_TestSuite $suite) {
@@ -109,7 +109,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 
 	static function summary() {
 		$alert_suffix = (self::$failCount + self::$exceptionCount > 0 ? "" : " alert-success");
-		echo '<div class="unittest_summary alert'.$alert_suffix.'">';
+		echo '<div class="unittest-summary alert'.$alert_suffix.'">';
 		echo "<strong>".self::$passCount."</strong> passes, ";
 		echo "<strong>".self::$failCount."</strong> fails and ";
 		echo "<strong>".self::$exceptionCount."</strong> exceptions.";
@@ -122,8 +122,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		if (substr(get_class($e), 0, 8) === 'PHPUnit_') {
 			$phpunitPath = 'PHPUnit'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR;
 			$proxyFiles = array(
-				SledgeHammer\Framework::$autoLoader->getFilename('SledgeHammer\Object'),
-				SledgeHammer\Framework::$autoLoader->getFilename('SledgeHammer\ErrorHandler'),
+				Sledgehammer\Framework::$autoLoader->getFilename('Sledgehammer\Object'),
+				Sledgehammer\Framework::$autoLoader->getFilename('Sledgehammer\ErrorHandler'),
 			);
 			$backtrace = $e->getTrace();
 			foreach ($backtrace as $index => $call) {

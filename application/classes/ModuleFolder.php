@@ -1,10 +1,12 @@
 <?php
 /**
- * De Modules map, toon eigenschappen, toon unittests
- *
+ * ModuleFolder
  * @package DevUtils
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * De Modules map, toon eigenschappen, toon unittests
+ */
 class ModuleFolder extends VirtualFolder {
 
 	/**
@@ -29,13 +31,13 @@ class ModuleFolder extends VirtualFolder {
 			$utilityList['utils/'.$utilFilename] = array('icon' => $util->icon, 'label' => $util->title);
 		}
 		if ($utilityList) {
-			$utilities = new NavList($utilityList);
+			$utilities = new Nav($utilityList, array('nav' => 'list'));
 		} else {
 			$utilities = false;
 		}
 		return new Template('module.php', array(
 					'module' => $this->module,
-					'properties' => new DescriptionList($properties, array('class' => 'property-list')),
+					'properties' => new DescriptionList($properties, array('class' => 'dl-horizontal')),
 					'documentation' => $this->getDocumentationList(),
 					'utilities' => $utilities,
 					'unittests' => $this->getUnitTestList(),
@@ -47,7 +49,7 @@ class ModuleFolder extends VirtualFolder {
 	function generateContent() {
 		$name = $this->module->name.' module';
 		// getDocument()->title = $name;
-		Breadcrumbs::add($name, $this->getPath());
+		$this->addCrumb($name, $this->getPath());
 		return parent::generateContent();
 	}
 
@@ -57,7 +59,7 @@ class ModuleFolder extends VirtualFolder {
 	}
 
 	function files_folder() {
-		Breadcrumbs::add('Files', $this->getPath(true));
+		$this->addCrumb('Files', $this->getPath(true));
 		$command = new FileBrowser($this->module->path, array('show_fullpath' => true, 'show_hidden_files' => true));
 		return $command->generateContent();
 	}
@@ -96,7 +98,7 @@ class ModuleFolder extends VirtualFolder {
 			$actions['files/docs/'] = array('icon' =>  $iconPrefix.'documentation.png', 'label' => 'Documentation folder');
 		}
 		//'files/' => array('icon' => 'mime/folder.png', 'label' => 'Files'),
-		return new NavList($actions);
+		return new Nav($actions, array('nav' => 'list'));
 	}
 
 	/**
@@ -121,7 +123,7 @@ class ModuleFolder extends VirtualFolder {
 			$list[WEBROOT.'tests/'.$this->module->identifier.'/'.$testfile] = array('icon'=> $iconPrefix.'test.png', 'label' => $label);
 		}
 
-		return new NavList($list);
+		return new Nav($list, array('nav' => 'list'));
 	}
 
 }

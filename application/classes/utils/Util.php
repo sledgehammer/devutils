@@ -4,7 +4,7 @@
  *
  * @package DevUtils
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
 abstract class Util extends Object implements Controller {
 
 	public static $module;

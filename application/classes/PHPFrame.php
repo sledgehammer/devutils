@@ -1,14 +1,17 @@
 <?php
 /**
- * PHPFrame, een Component dat een url inlaad en direct laat zien.
+ * PHPFrame
+ * @package DevUtils
+ */
+namespace Sledgehammer;
+/**
+ * Een View dat een url inlaad en direct laat zien.
  *
  * Een soort iframe principe, maar dan wordt de html direct in document gezet.
  */
-namespace SledgeHammer;
 class PHPFrame extends Object implements View {
 
-	private
-		$url;
+	private $url;
 
 	/**
 	 *

@@ -3,7 +3,7 @@
  * Always show errors
  * @package DevUtils
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
 Framework::$errorHandler->html = true;
 Framework::$errorHandler->email = false;
 

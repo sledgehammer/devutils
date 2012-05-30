@@ -1,9 +1,12 @@
 <?php
 /**
- * Een Module binnen een Project
+ * Module
  * @package DevUtils
  */
-namespace SledgeHammer;
+namespace Sledgehammer;
+/**
+ * Een Module binnen een Project
+ */
 class Module extends Object {
 
 	public
