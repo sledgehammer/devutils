@@ -53,8 +53,8 @@ class UnitTests extends VirtualFolder {
 	private function generateTestSuite($title, $path) {
 		$source = "<h1 class=\"unittest-heading\">".HTML::escape($title)." <span class=\"label\" data-unittest=\"indicator\">Running tests</span></h1>\n";
 		$source .= "<?php\n";
-		$source .= "define('DEVUTILS_WEBPATH', '".WEBPATH."');\n";
-		$source .= "require_once('" . $this->project->path . "sledgehammer/core/init_tests.php');\n";
+		$source .= "const DEVUTILS_WEBPATH = '".WEBPATH."';\n";
+		$source .= "require_once('" . $this->project->path . "sledgehammer/core/phpunit_bootstrap.php');\n";
 		$source .= "restore_error_handler();";
 		$source .= "\Sledgehammer\Framework::\$autoLoader->standalone = false;\n";
 		$source .= "require_once('PHPUnit/Autoload.php');\n";

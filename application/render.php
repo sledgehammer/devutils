@@ -8,7 +8,7 @@ $projectPath = dirname($_SERVER['SCRIPT_FILENAME']);
 $found = false;
 // Doorzoek alle hoger gelegen mappen naar een sledgehammer enabled project.
 while (strlen($projectPath) > 4) {
-	if (file_exists($projectPath.'sledgehammer/core/init_framework.php')) {
+	if (file_exists($projectPath.'sledgehammer/core/bootstrap.php')) {
 		if (realpath($projectPath) != realpath(dirname(dirname(__FILE__)))) { // Is dit NIET de sledgehammer map binnen deze devutils?
 			$found = true; // De map is gevonden
 			break;
@@ -44,7 +44,7 @@ if ($found) {
 	$projectPath = '.';
 }
 
-$sledgehammerInitPath = dirname(dirname(__FILE__)).'/sledgehammer/core/init_framework.php';
+$sledgehammerInitPath = dirname(dirname(__FILE__)).'/sledgehammer/core/bootstrap.php';
 if (file_exists($sledgehammerInitPath) == false) {
 	die('Devutils is missing "sledgehammer/core/". Run `git submodule --init`');
 }
