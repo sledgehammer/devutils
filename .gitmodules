@@ -4,6 +4,3 @@
 [submodule "sledgehammer/mvc"]
 	path = sledgehammer/mvc
 	url = git://github.com/sledgehammer/mvc.git
-[submodule "sledgehammer/bootstrap"]
-	path = sledgehammer/bootstrap
-	url = git://github.com/sledgehammer/bootstrap.git

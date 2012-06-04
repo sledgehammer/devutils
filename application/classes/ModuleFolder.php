@@ -31,7 +31,7 @@ class ModuleFolder extends VirtualFolder {
 			$utilityList['utils/'.$utilFilename] = array('icon' => $util->icon, 'label' => $util->title);
 		}
 		if ($utilityList) {
-			$utilities = new Nav($utilityList, array('nav' => 'list'));
+			$utilities = new Nav($utilityList, array('class' => 'nav nav-list'));
 		} else {
 			$utilities = false;
 		}
@@ -98,7 +98,7 @@ class ModuleFolder extends VirtualFolder {
 			$actions['files/docs/'] = array('icon' =>  $iconPrefix.'documentation.png', 'label' => 'Documentation folder');
 		}
 		//'files/' => array('icon' => 'mime/folder.png', 'label' => 'Files'),
-		return new Nav($actions, array('nav' => 'list'));
+		return new Nav($actions, array('class' => 'nav nav-list'));
 	}
 
 	/**
@@ -123,7 +123,7 @@ class ModuleFolder extends VirtualFolder {
 			$list[WEBROOT.'tests/'.$this->module->identifier.'/'.$testfile] = array('icon'=> $iconPrefix.'test.png', 'label' => $label);
 		}
 
-		return new Nav($list, array('nav' => 'list'));
+		return new Nav($list, array('class' => 'nav nav-list'));
 	}
 
 }

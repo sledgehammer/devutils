@@ -59,8 +59,8 @@ class DevUtilsWebsite extends Website {
 		$template = new Template('project.php', array(
 					'project' => $this->project->name,
 					'properties' => new DescriptionList($properties, array('class' => 'dl-horizontal')),
-					'utilities' => new Nav($utilityList, array('nav' => 'list')),
-					'unittests' => new Nav($unittestList, array('nav' => 'list')),
+					'utilities' => new Nav($utilityList, array('class' => 'nav nav-list')),
+					'unittests' => new Nav($unittestList, array('class' => 'nav nav-list')),
 						), array(
 					'title' => $this->project->name.' project',
 				));
@@ -167,12 +167,12 @@ class DevUtilsWebsite extends Website {
 			}
 		}
 		$template = new Template('layout.php', array(
-				'navigation' => new Nav($navigation, array('nav' => 'list')),
+				'navigation' => new Nav($navigation, array('class' => 'nav nav-list')),
 				'breadcrumbs' => $this->breadcrumbs,
 				'contents' => $content,
 			), array(
 				'css' => array(
-					WEBROOT.'bootstrap/css/bootstrap.css',
+					WEBROOT.'mvc/css/bootstrap.css',
 					WEBROOT.'css/devutils.css',
 				),
 			));
