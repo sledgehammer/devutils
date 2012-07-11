@@ -29,7 +29,7 @@ class DevUtilsWebsite extends Website {
 
 	function index() {
 		if (!$this->project) {
-			return MessageBox::error('Geen project gevonden', 'Controleer de stappen in "devutils/docs/installatie.txt"');
+			return new ViewHeaders(Alert::error('<h3>No projects detected</h3>See "devutils/docs/installation.txt" for more info'), array('title' => 'Error', 'css' => WEBROOT.'mvc/css/bootstrap.css'));
 		}
 		$iconPrefix = WEBROOT.'icons/';
 

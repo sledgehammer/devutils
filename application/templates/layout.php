@@ -12,9 +12,10 @@ namespace Sledgehammer;
 		<?php render($navigation); ?>
 	</nav>
 	<?php render($breadcrumbs); ?>
-	<section class="contents">
+	<section class="contents clearfix">
 		<?php render($contents); ?>
 	</section>
+	<div class="statusbar-placeholder"></div>
 </div>
 <?php
 javascript_once(WEBROOT.'core/js/jquery.js', 'jquery');

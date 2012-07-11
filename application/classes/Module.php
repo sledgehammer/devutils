@@ -59,22 +59,28 @@ class Module extends Object {
 		return array();
 	}
 
-	function getUnitTests() {
+	function getUnitTests($path = null) {
 		$tests = array();
-		$path = $this->path.'tests/';
-		if (!file_exists($path)) {
-			return $tests;
+		if (is_dir($this->path.'tests/')) {
+			$basepath = $this->path.'tests/';
+		} else {
+			$basepath = $this->path;
+		}
+		if ($path === null) {
+			$path = $basepath;
 		}
 		$dir = new \DirectoryIterator($path);
 		foreach ($dir as $entry) {
-			if (!$entry->isFile()) {
+			if ($entry->isDot()) {
 				continue;
 			}
-			$filename = $entry->getFilename();
-			if (substr($filename, -4) == '.php' && strpos(file_get_contents($entry->getPathname()), 'function test')) {
-				if ($filename != 'DatabaseTestCase.php') {
-					$tests[] = $filename;
-				}
+			if ($entry->isDir()) {
+				$tests = array_merge($tests, $this->getUnitTests($entry->getPathname()));
+				continue;
+			}
+			$filename = $entry->getPathname();
+			if (substr($filename, -8) == 'Test.php' && strpos(file_get_contents($filename), 'function test')) {
+				$tests[] = substr($filename, strlen($basepath));
 			}
 		}
 		ksort($tests); // Sorteer de tests alfabetisch

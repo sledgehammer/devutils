@@ -29,7 +29,7 @@
 		if ($('#phpdoc').length) {
 			$('.contents').css('margin', 0).css({width: '+=30'});
 			$(window).resize(function () {
-				$('#phpdoc').height($('.pageLayout').height() - $('#phpdoc').offset().top - 10);
+				$('#phpdoc').height($('.pageLayout').height() - $('#phpdoc').offset().top - 30);
 			});
 			$(window).resize();
 		}
