@@ -15,6 +15,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	static $passCount = 0;
 	static $skippedCount = 0;
 	private $pass;
+	private static $firstError = true;
 
 	public function addError(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		self::$exceptionCount++;
@@ -117,6 +118,12 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	}
 
 	private function trace(PHPUnit_Framework_Test $test, Exception $e, $suffix = '') {
+		if (self::$firstError && ($e instanceof PHPUnit_Framework_SkippedTestError) === false) {
+			echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() '.$suffix.'<br />';
+			report_exception($e);
+			self::$firstError = false;
+			return;
+		}
 		$file = $e->getFile();
 		$line = $e->getLine();
 		if (substr(get_class($e), 0, 8) === 'PHPUnit_') {
