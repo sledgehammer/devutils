@@ -22,7 +22,7 @@ class DevUtilsWebsite extends Website {
 		$this->breadcrumbs = new Breadcrumbs();
 		if (file_exists($projectPath.'sledgehammer/core/init_framework.php')) {
 			$this->project = new Project($projectPath);
-			$this->addCrumb(array('icon' => 'home', 'label' => 'Home'), $this->getPath());
+			$this->addCrumb(array('icon' => '!home', 'label' => 'Home'), $this->getPath());
 		}
 		parent::__construct();
 	}
@@ -53,6 +53,7 @@ class DevUtilsWebsite extends Website {
 				} else {
 					$label = substr($testfile, 0, -4);
 				}
+				$label = basename($label);
 				$unittestList['tests/'.$identifier.'/'.$testfile] = array('icon'=> $iconPrefix.'test.png', 'label' => ucfirst($identifier).' - '.$label);
 			}
 		}
@@ -144,9 +145,7 @@ class DevUtilsWebsite extends Website {
 		if (!$this->project) {
 			return $content;
 		}
-
 		$navigation = array(
-			'Application',
 			WEBPATH => array('icon' => WEBPATH.'project_icon.ico', 'label' => $this->project->name),
 		);
 		// Documentation

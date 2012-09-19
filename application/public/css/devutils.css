@@ -15,7 +15,7 @@ h1 a, h2 a, h3 a {
 	margin: 0 auto;
 	background: white;
 	box-shadow: 1px 1px 20px rgba(0,0,0,.4);
-	width: 1172px;
+	width: 1162px;
 	min-height: 100%;
 }
 .pageContents {
@@ -24,7 +24,7 @@ h1 a, h2 a, h3 a {
 .titlebar {
 	background-image: linear-gradient(left , rgb(255,255,255) 50px, rgb(250,179,0));
 	background-image: -webkit-linear-gradient(left , rgb(255,255,255) 50px, rgb(250,179,0));
-	padding: 6px 15px;
+	padding: 2px 15px;
 }
 .titlebar .titlebar-title {
 	font-size: 30px;
@@ -42,21 +42,36 @@ h1 a, h2 a, h3 a {
 .pageLayout > .menu {
 	float: left;
 	width: 199px;
-	border-top: 1px solid #ddd;
 	border-right: 1px solid #ddd;
 	padding: 10px 1px;
 }
 .pageLayout > .breadcrumb {
-	margin: 0 0 0 200px;
+	margin: 0 0 0 202px;
 	border-left: 0px;
 	border-right: 0px;
 	-webkit-border-radius: 0;
 	border-radius: 0;
+
+	padding: 4px 15px;
+
+	background-color: #555;
+	background-image: -moz-linear-gradient(top, #666, #444);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#666), to(#444));
+	background-image: -webkit-linear-gradient(top, #666, #444);
+	background-image: -o-linear-gradient(top, #666, #444);
+	background-image: linear-gradient(to bottom, #666, #444);
+	background-repeat: repeat-x;
+}
+.pageLayout > .breadcrumb li {
+	text-shadow: -1px -1px 1px black;
+}
+.pageLayout > .breadcrumb li a {
+	color: #ddd;
 }
 .pageLayout > .contents {
 	width: 940px; /* 12 span grid */
 	float: left;
-	margin: 15px;
+	margin: 3px 0px 15px 20px;
 }
 
 /**
@@ -90,9 +105,17 @@ img.icon {
 .unittest-heading {
 	vertical-align: bottom;
 }
-.unittest .unittest-assertion {
-	font-size: smaller;
+.unittest h3 {
+	margin-bottom: 0px;
 }
+.unittest .unittest-assertion {
+	font-size: 11px;
+}
+.unittest .unittest-assertion .label {
+	text-transform: uppercase;
+	font-size: 9px;
+}
+
 .utilscript {
 	margin: 15px 0;
 }
