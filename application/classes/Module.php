@@ -27,9 +27,8 @@ class Module extends Object {
 		if ($identifier == 'application') {
 			$this->name = 'Application';
 		} else {
-			// Laad de module.ini of application.ini
-			$this->info = parse_ini_file($path.'module.ini');
-			$this->name = $this->info['name'];
+			$this->info = Json::decode(file_get_contents($path.'composer.json'), true);
+			$this->name = ucfirst(basename($this->info['name']));
 			if (isset($this->info['icon'])) {
 				$this->icon = $this->info['icon'];
 			}

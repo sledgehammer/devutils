@@ -1,0 +1,8 @@
+{
+	"name": "PhpDocumentor",
+	"version": "1.4.3",
+	"website": "http://www.phpdoc.org/",
+	"require": {
+		"sledgehammer/core": "*"
+	}
+}
