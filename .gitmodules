@@ -1,6 +1,0 @@
-[submodule "sledgehammer/core"]
-	path = sledgehammer/core
-	url = git://github.com/sledgehammer/core.git
-[submodule "sledgehammer/mvc"]
-	path = sledgehammer/mvc
-	url = git://github.com/sledgehammer/mvc.git

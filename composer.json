@@ -1,0 +1,8 @@
+{
+    "name": "sledgehammer/devutils",
+    "description": "A Sledgehammer Introspection & diagnostics tool",
+    "require": {
+        "sledgehammer/core": "*",
+        "sledgehammer/mvc": "*"
+    }
+}
