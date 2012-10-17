@@ -1,11 +1,11 @@
 <?php
 /**
  * PHPSandbox
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
  * Run phpcode in a separate process.
+ * @package DevUtils
  */
 class PHPSandbox extends Object implements View {
 

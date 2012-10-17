@@ -1,13 +1,13 @@
 <?php
 /**
  * PHPFrame
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
  * Een View dat een url inlaad en direct laat zien.
  *
  * Een soort iframe principe, maar dan wordt de html direct in document gezet.
+ * @package DevUtils
  */
 class PHPFrame extends Object implements View {
 

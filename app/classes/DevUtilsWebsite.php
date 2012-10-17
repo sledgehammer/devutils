@@ -1,11 +1,11 @@
 <?php
 /**
  * DevUtilsWebsite
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
  * The DevUtils Application FrontController
+ * @package DevUtils
  */
 class DevUtilsWebsite extends Website {
 
@@ -134,7 +134,7 @@ class DevUtilsWebsite extends Website {
 
 	function generateDocument() {
 		if ($this->login() == false) {
-			$doc = new HTMLDocument();
+			$doc = new HtmlDocument();
 			$doc->content = new HttpError(401);
 			return $doc;
 		}

@@ -1,12 +1,12 @@
 <?php
 /**
  * DevUtilsPHPUnitPrinter
- * @package DevUtils
  */
-use Sledgehammer\HTML;
+use Sledgehammer\Html;
 /**
  * A PHPUnit_Util_Printer for rendering PHPUnit results in html.
  * (Also shows successful passes)
+ * @package DevUtils
  */
 class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Framework_TestListener {
 
@@ -22,7 +22,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		$this->pass = false;
 		echo '<div class="unittest-assertion">';
 		echo "<span class=\"label label-important\" data-unittest=\"fail\">Error</span> ";
-		echo '<b>', $this->translateException($e), '</b>: ', HTML::escape($e->getMessage()), '<br />';
+		echo '<b>', $this->translateException($e), '</b>: ', Html::escape($e->getMessage()), '<br />';
 		$this->trace($test, $e, 'contains an error');
 		echo "</div>\n";
 		flush();
@@ -40,12 +40,15 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 				echo $e->getMessage();
 				break;
 			case 'PHPUnit_Framework_ExpectationFailedException':
-				echo $e->getMessage(), '<pre>';
-				echo $e->getComparisonFailure()->getDiff();
-				echo '</pre>';
+				echo $e->getMessage();
+				if ($e->getComparisonFailure() !== null) {
+					echo '<pre>';
+					echo $e->getComparisonFailure()->getDiff();
+					echo '</pre>';
+				}
 				break;
 			default:
-				echo HTML::escape($e->getMessage());
+				echo Html::escape($e->getMessage());
 				break;
 		}
 		echo '<br />';
@@ -57,7 +60,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		echo '<div class="unittest-assertion">';
 		echo "<span class=\"label\" data-unittest=\"incomplete\">Incomplete</span> ";
-		echo HTML::escape($e->getMessage()), '<br />';
+		echo Html::escape($e->getMessage()), '<br />';
 		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() was incomplete<br />';
 		echo '</div>';
 	}
@@ -67,7 +70,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 
 		echo '<div class="unittest-assertion">';
 		echo "<span class=\"label label-info\"  data-unittest=\"skipped\">Skipped</span> ";
-		echo HTML::escape($e->getMessage()), '<br />';
+		echo Html::escape($e->getMessage()), '<br />';
 		$this->trace($test, $e, 'was skipped');
 		echo "</div>\n";
 		flush();
@@ -157,7 +160,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 			}
 		}
 		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() '.$suffix.'<br />';
-		echo '<b>', HTML::escape(get_class($e)), '</b>  thrown in <b>', $file, '</b> on line <b>'.$line, '</b>';
+		echo '<b>', Html::escape(get_class($e)), '</b>  thrown in <b>', $file, '</b> on line <b>'.$line, '</b>';
 	}
 
 	private function translateException(Exception $e) {
@@ -171,7 +174,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 			}
 		}
 		if ($name !== $class) {
-			return '<span title="'.HTML::escape($class).'">'.$name.'</span>';
+			return '<span title="'.Html::escape($class).'">'.$name.'</span>';
 		}
 		return $class;
 	}

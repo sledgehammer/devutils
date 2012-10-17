@@ -1,11 +1,11 @@
 <?php
 /**
  * UtilsFolder
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
- * Genereert een SimpleTest TestSuites
+ * Run utilities from inside a module folder.
+ * @package DevUtils
  */
 class UtilsFolder extends VirtualFolder {
 
@@ -21,7 +21,6 @@ class UtilsFolder extends VirtualFolder {
 		$utils = $this->module->getUtilities();
 		$util = $utils[$filename];
 		$this->addCrumb($util->title, false);
-		//getDocument()->title = $util->title;
 		Util::$module = $this->module;
 		$component = $util->generateContent();
 		if (is_valid_view($component)) {

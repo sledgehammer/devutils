@@ -1,11 +1,11 @@
 <?php
 /**
  * PHPInfo
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
- * Geeft een gestylede versie van de phpinfo() weer.
+ * phpinfo() with TwBootstrap styling
+ * @package DevUtils
  */
 class PHPInfo extends Object implements View {
 

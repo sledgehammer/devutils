@@ -1,11 +1,11 @@
 <?php
 /**
  * UnitTests
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
- * Genereert een PHPUnit TestSuites
+ * Configure and run PHPUnit unittests.
+ * @package DevUtils
  */
 class UnitTests extends VirtualFolder {
 
@@ -58,7 +58,7 @@ class UnitTests extends VirtualFolder {
 	}
 
 	private function generateTestSuite($title, $path) {
-		$source = "<h1 class=\"unittest-heading\">".HTML::escape($title)." <span class=\"label\" data-unittest=\"indicator\">Running tests</span></h1>\n";
+		$source = "<h1 class=\"unittest-heading\">".Html::escape($title)." <span class=\"label\" data-unittest=\"indicator\">Running tests</span></h1>\n";
 		$source .= "<?php\n";
 		$source .= "const DEVUTILS_WEBPATH = '".WEBPATH."';\n";
 		$source .= "\$GLOBALS['title'] = '".$title."';\n";

@@ -1,11 +1,11 @@
 <?php
 /**
  * PhpDocs
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
  * Generate and show API documentation.
+ * @package DevUtils
  */
 class PhpDocs extends VirtualFolder {
 

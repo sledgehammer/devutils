@@ -1,11 +1,11 @@
 <?php
 /**
  * Module
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
  * Een Module binnen een Project
+ * @package DevUtils
  */
 class Module extends Object {
 

@@ -1,11 +1,11 @@
 <?php
 /**
  * ModuleFolder
- * @package DevUtils
  */
 namespace Sledgehammer;
 /**
  * De Modules map, toon eigenschappen, toon unittests
+ * @package DevUtils
  */
 class ModuleFolder extends VirtualFolder {
 
@@ -108,7 +108,7 @@ class ModuleFolder extends VirtualFolder {
 	protected function getUnitTestList() {
 		$tests = $this->module->getUnitTests();
 		if (count($tests) == 0) {
-			return new HTML('<span class="muted">No tests found</span>');
+			return new Html('<span class="muted">No tests found</span>');
 		}
 		$iconPrefix = WEBROOT.'icons/';
 		$list = array(
