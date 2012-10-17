@@ -42,9 +42,10 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 			case 'PHPUnit_Framework_ExpectationFailedException':
 				echo $e->getMessage();
 				if ($e->getComparisonFailure() !== null) {
-					echo '<pre>';
-					echo $e->getComparisonFailure()->getDiff();
-					echo '</pre>';
+					$diff = $e->getComparisonFailure()->getDiff();
+					if ($diff !== '') {
+						echo '<pre>', $diff, '</pre>';
+					}
 				}
 				break;
 			default:
@@ -99,7 +100,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 			$first = false;
 		} else {
 			$url = false;
-			$filename = \Sledgehammer\Framework::$autoLoader->getFilename($suite->getName());
+			$filename = \Sledgehammer\Framework::$autoloader->getFilename($suite->getName());
 			if (substr($filename, 0, strlen(\Sledgehammer\MODULES_DIR)) === \Sledgehammer\MODULES_DIR) {
 				$filename = substr($filename, strlen(Sledgehammer\MODULES_DIR));
 				if (preg_match('@^(?<module>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
@@ -140,8 +141,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		if (substr(get_class($e), 0, 8) === 'PHPUnit_') {
 			$phpunitPath = 'PHPUnit'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR;
 			$proxyFiles = array(
-				Sledgehammer\Framework::$autoLoader->getFilename('Sledgehammer\Object'),
-				Sledgehammer\Framework::$autoLoader->getFilename('Sledgehammer\ErrorHandler'),
+				Sledgehammer\Framework::$autoloader->getFilename('Sledgehammer\Object'),
+				Sledgehammer\Framework::$autoloader->getFilename('Sledgehammer\ErrorHandler'),
 			);
 			$backtrace = $e->getTrace();
 			foreach ($backtrace as $index => $call) {

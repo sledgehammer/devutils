@@ -68,9 +68,8 @@ class UnitTests extends VirtualFolder {
 		$source .= "\t'--debug',\n";
 		$source .= "\t'".addslashes($path)."',\n";
 		$source .= ");\n";
-		$source .= "require_once('".$this->project->modules['core']->path."phpunit_bootstrap.php');\n";
-		$source .= "\Sledgehammer\Framework::\$autoLoader->standalone = false;\n";
 		$source .= "require_once('".PATH."phpunit/vendor/autoload.php');\n";
+		$source .= "require_once('".$this->project->modules['core']->path."phpunit_bootstrap.php');\n";
 		$source .= "require_once('".__DIR__."/DevUtilsPHPUnitPrinter.php');\n";
 		$source .= "PHPUnit_TextUI_Command::main(false);\n";
 		$source .= "\DevUtilsPHPUnitPrinter::summary();\n";

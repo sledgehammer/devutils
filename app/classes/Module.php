@@ -50,7 +50,7 @@ class Module extends Object {
 		$path = $this->path.'utils/';
 		if (file_exists($path)) {
 			if (file_exists($path.'classes')) {
-				Framework::$autoLoader->importFolder($path.'classes/');
+				Framework::$autoloader->importFolder($path.'classes/');
 			}
 
 			return include($path.'getUtils.php');
