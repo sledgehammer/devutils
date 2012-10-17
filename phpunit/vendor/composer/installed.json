@@ -283,17 +283,17 @@
     },
     {
         "name": "phpunit/php-code-coverage",
-        "version": "1.2.3",
-        "version_normalized": "1.2.3.0",
+        "version": "1.2.6",
+        "version_normalized": "1.2.6.0",
         "source": {
             "type": "git",
             "url": "git://github.com/sebastianbergmann/php-code-coverage.git",
-            "reference": "1.2.3"
+            "reference": "1.2.6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/sebastianbergmann/php-code-coverage/zipball/1.2.3",
-            "reference": "1.2.3",
+            "url": "https://github.com/sebastianbergmann/php-code-coverage/zipball/1.2.6",
+            "reference": "1.2.6",
             "shasum": ""
         },
         "require": {
@@ -304,11 +304,9 @@
         },
         "suggest": {
             "ext-dom": "*",
-            "ext-reflection": "*",
-            "ext-spl": "*",
             "ext-xdebug": ">=2.0.5"
         },
-        "time": "2012-10-05 00:00:00",
+        "time": "2012-10-16 22:34:13",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -330,7 +328,7 @@
             }
         ],
         "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information.",
-        "homepage": "http://www.phpunit.de/",
+        "homepage": "https://github.com/sebastianbergmann/php-code-coverage",
         "keywords": [
             "testing",
             "coverage",
@@ -339,17 +337,17 @@
     },
     {
         "name": "phpunit/phpunit",
-        "version": "3.7.7",
-        "version_normalized": "3.7.7.0",
+        "version": "3.7.8",
+        "version_normalized": "3.7.8.0",
         "source": {
             "type": "git",
             "url": "git://github.com/sebastianbergmann/phpunit.git",
-            "reference": "3.7.7"
+            "reference": "3.7.8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/sebastianbergmann/phpunit/zipball/3.7.7",
-            "reference": "3.7.7",
+            "url": "https://github.com/sebastianbergmann/phpunit/zipball/3.7.8",
+            "reference": "3.7.8",
             "shasum": ""
         },
         "require": {
@@ -371,7 +369,7 @@
             "ext-simplexml": "*",
             "ext-tokenizer": "*"
         },
-        "time": "2012-10-09 09:55:49",
+        "time": "2012-10-16 22:37:08",
         "bin": [
             "composer/bin/phpunit"
         ],
