@@ -1,16 +1,24 @@
 <?php
 /**
  * DebugR
- *
- * @link http://debugr.net/
  */
 namespace Sledgehammer;
 /**
- * DebugR
+ * DebugR, send additional debugging information via HTTP heders.
+ * @link http://debugr.net/
+ *
+ * @package Core
  */
 class DebugR extends Object {
 
 	static $increments = array();
+
+	/**
+	 * Monitor the number of bytes sent, to prevent sending more than 240KiB in DebugR headers. (Leaving 16KiB for normal headers)
+	 * @link http://stackoverflow.com/questions/3326210/can-http-headers-be-too-big-for-browsers
+	 * @var int
+	 */
+	static $bytesSent;
 
 	/**
 	 * Callback for sending a HTTP header.
@@ -57,7 +65,33 @@ class DebugR extends Object {
 		$dump = new Dump($variable, $backtrace);
 		ob_start();
 		$dump->render();
-		return self::send('html', ob_get_clean());
+		return self::html(ob_get_clean());
+	}
+
+	/**
+	 * Send html prefixed with a DebugR header showning the request.
+	 * @param string $html
+	 */
+	static function html($html) {
+		$style = array(
+			'display: inline-block',
+			'padding: 8px 15px',
+			'background-color: #7a3964',
+			'background-image: -webkit-linear-gradient(-80deg,#7a3964,#2c1440)',
+			'background-image: -moz-linear-gradient(-80deg,#7a3964,#2c1440)',
+			'color: #fff',
+			'font: bold 12px/1.25 \'Helvetica Neue\', Helvetica, sans-serif',
+			'margin: 10px 5px -5px 5px',
+			'border-radius: 4px',
+			// reset styling
+			'text-shadow: 0 -1px 0 black',
+			'-webkit-font-smoothing: antialiased',
+			'font-smoothing: antialiased',
+			'text-align: left',
+			'overflow-x: auto',
+			'white-space: normal',
+		);
+		DebugR::send('html', '<div style="'.implode(';', $style).'"><span style="font-weight:normal;margin-right: 10px">DebugR</span>'.$_SERVER['REQUEST_METHOD'].'&nbsp;&nbsp;'.$_SERVER['REQUEST_URI'].'</div>'.$html);
 	}
 
 	/**
@@ -100,15 +134,29 @@ class DebugR extends Object {
 			return;
 		}
 		$value = base64_encode($message);
-		if (strlen($value) <= (4 * 1024)) { // Under 4KiB?
-			call_user_func(self::$headerAdd, 'DebugR-'.$label.': '.$value);
+		$length = strlen($value);
+		// Prevent 325 net::ERR_RESPONSE_HEADERS_TOO_BIG in Google Chrome.
+		if (self::$bytesSent + $length >= 240000) { // >= 235KiB?
+			if (self::$bytesSent < 239950) {
+				call_user_func(self::$headerAdd, 'DebugR-'.$label.': '.base64_encode('DebugR: TOO_MUCH_DATA'));
+			}
+			return;
+		}
+
+		if ($length <= (4 * 1024)) { // Under 4KiB?
+			$header = 'DebugR-'.$label.': ';
+			call_user_func(self::$headerAdd, $header.$value);
+			self::$bytesSent += strlen($header) + $length;
 		} else {
 			// Send in 4KB chunks.
 			call_user_func(self::$headerRemove, 'DebugR-'.$label);
 			$chunks = str_split($value, (4 * 1024));
 			foreach ($chunks as $index => $chunk) {
-				call_user_func(self::$headerAdd, 'DebugR-'.$label.'.chunk'.$index.': '.$chunk);
+				$header = 'DebugR-'.$label.'.chunk'.$index.': ';
+				call_user_func(self::$headerAdd, $header.$chunk);
+				self::$bytesSent += strlen($header);
 			}
+			self::$bytesSent += $length;
 		}
 	}
 

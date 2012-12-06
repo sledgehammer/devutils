@@ -348,6 +348,9 @@ class ErrorHandler {
 					if (class_exists('Sledgehammer\Logger', false) && !empty(Logger::$instances)) {
 						echo '<br />';
 						foreach (Logger::$instances as $name => $logger) {
+							if ($logger->count === 0 && count($logger->entries) === 0) {
+								continue;
+							}
 							if ($this->email) {
 								echo '<b>', $name, '</b><br />';
 								$logger->render();
@@ -402,10 +405,10 @@ class ErrorHandler {
 			if ($this->log) {
 				error_log($error_message);
 			}
-			if ($this->cli) {
-				echo '[', date('Y-m-d H:i:s'), '] ', $error_message, "\n";
-			}
-			if ($this->debugR && class_exists('Sledgehammer\DebugR')) {
+			if ($this->debugR) {
+				if (class_exists('Sledgehammer\DebugR', false) === false) {
+					require_once(__DIR__.'/DebugR.php');
+				}
 				if ($type instanceof \Exception || in_array($type, array(E_USER_ERROR, E_ERROR, 'EXCEPTION'))) {
 					DebugR::error($error_message);
 				} else {
@@ -424,36 +427,50 @@ class ErrorHandler {
 			$this->isProcessing = false;
 			return; // Stoppen met het bouwen van een foutrapport
 		}
-		if ($this->email) { // De limiet is niet niet bereikt.
-			ob_start(); // bouw de html van de foutmelding eerst op in een buffer.
+		$buffer = ($this->email || $this->debugR);
+		if ($buffer) { // store the html of the error-report in a buffer
+			ob_start();
 		}
 		self::render($type, $message, $information);
-		if ($this->email) { // email versturen?
-			// Headers voor de email met HTML indeling
-			$headers = "MIME-Version: 1.0\n";
-			$headers .= "Content-type: text/html; charset=iso-8859-1\n";
-			$headers .= 'From: '.$this->fromEmail()."\n";
-
-			if ($type instanceof \Exception) {
-				$subject = get_class($type).': '.$type->getMessage();
-				if ($message === '__UNCAUGHT_EXCEPTION__') {
-					$subject = ' Uncaught '.$subject;
-				}
-			} else {
-				$subject = $this->error_types[$type].': '.$message;
+		if ($buffer) {
+			$html = ob_get_clean();
+			if ($this->debugR) {
+				DebugR::html($html);
 			}
+			if ($this->email) { // email versturen?
+				// Headers voor de email met HTML indeling
+				$headers = "MIME-Version: 1.0\n";
+				$headers .= "Content-type: text/html; charset=".Framework::$charset."\n";
+				$headers .= 'From: '.$this->fromEmail()."\n";
 
-			if (function_exists('mail') && !mail($this->email, $subject, '<html><body style="background-color: #fcf8e3">'.ob_get_contents()."</body></html>\n", $headers)) {
-				error_log('The Sledgehammer\ErrorHandler was unable to email the report.');
+				if ($type instanceof \Exception) {
+					$subject = get_class($type).': '.$type->getMessage();
+					if ($message === '__UNCAUGHT_EXCEPTION__') {
+						$subject = ' Uncaught '.$subject;
+					}
+				} else {
+					$subject = $this->error_types[$type].': '.$message;
+				}
+
+				if (function_exists('mail') && !mail($this->email, $subject, '<html><body style="background-color: #fcf8e3">'.$html."</body></html>\n", $headers)) {
+					error_log('The Sledgehammer\ErrorHandler was unable to email the report.');
+				}
 			}
 			if ($this->html) {
-				ob_end_flush(); // buffer weergeven
-			} else {
-				ob_end_clean(); // buffer niet weergeven
+				if  (headers_sent() === false) {
+					header('Content-Type: text/html; charset='.Framework::$charset);
+				}
+				echo $html; // buffer weergeven
+				if (ob_get_level() === 0) {
+					flush();
+				}
 			}
-		} elseif (ob_get_level() === 0) {
-			flush();
 		}
+
+		if ($this->cli) {
+			echo '[', date('Y-m-d H:i:s'), '] ', $error_message, "\n";
+		}
+
 		$this->isProcessing = false;
 	}
 
@@ -583,8 +600,7 @@ class ErrorHandler {
 				$errorHandlerInvocations = array('errorCallback', 'trigger_error', 'warning', 'error', 'notice', 'deprecated');
 				$databaseClasses = array('PDO', 'Sledgehammer\Database', 'mysqli'); // prevent showing/mailing passwords in the backtrace.
 				$databaseFunctions = array('mysql_connect', 'mysql_pconnect', 'mysqli_connect', 'mysqli_pconnect');
-				if (
-						in_array($call['function'], array_merge($errorHandlerInvocations, $databaseFunctions)) || (in_array(@$call['class'], $databaseClasses) && in_array($call['function'], array('connect', '__construct'))) || (in_array($call['function'], array('call_user_func', 'call_user_func_array')) && in_array($call['args'][0], $errorHandlerInvocations))) {
+				if (in_array($call['function'], array_merge($errorHandlerInvocations, $databaseFunctions)) || (in_array(@$call['class'], $databaseClasses) && in_array($call['function'], array('connect', '__construct'))) || (in_array($call['function'], array('call_user_func', 'call_user_func_array')) && in_array($call['args'][0], $errorHandlerInvocations))) {
 					echo '(&hellip;)';
 				} else {
 					echo '(';

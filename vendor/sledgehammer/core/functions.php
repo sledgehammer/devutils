@@ -31,6 +31,9 @@ namespace {
 		if ($export) {
 			return ob_get_clean();
 		}
+		if (Sledgehammer\ENVIRONMENT === 'phpunit') {
+			ob_flush();
+		}
 	}
 
 	/**
@@ -96,6 +99,21 @@ namespace {
 	 */
 	function deprecated($message = 'This functionality will no longer be supported in upcomming releases', $information = null) {
 		Sledgehammer\Framework::$errorHandler->report(E_USER_DEPRECATED, $message, $information, true);
+	}
+
+	/**
+	 * Shorthand for sending DebugR messages.
+	 *   debugr()->log($var); instead of \Sledgehammer\DebugR::log($var);
+	 *   debugr($var); instead of \Sledgehammer\DebugR::dump($var)
+	 *
+	 * @param mixed $variable
+	 * @return \Sledgehammer\DebugR
+	 */
+	function debugr($variable = null) {
+		if (func_num_args() != 0) { //
+			\Sledgehammer\DebugR::dump($variable);
+		}
+		return new \Sledgehammer\DebugR();
 	}
 
 	/**
@@ -385,6 +403,28 @@ namespace Sledgehammer {
 	}
 
 	/**
+	 * Extract and return the logical operator of a $conditions array.
+	 *
+	 * @param array $conditions
+	 * @return string|false operator 'AND' or 'OR' or false when no operator was found.
+	 */
+	function extract_logical_operator($conditions) {
+		if (is_array($conditions) === false) {
+			return false;
+		}
+		reset($conditions);
+		if (key($conditions) !== 0) {
+			return false;
+		}
+		$operators = array('AND', 'OR');
+		$operator = current($conditions);
+		if (in_array($operator, $operators)) {
+			return $operator;
+		}
+		return false;
+	}
+
+	/**
 	 * Controleerd of 2 variabelen gelijk of bijna gelijk aan elkaar zijn.
 	 * equals((float) 1.000, (int) 1) == true
 	 * equals("1.1", 1.1) == true
@@ -508,6 +548,67 @@ namespace Sledgehammer {
 	}
 
 	/**
+	 * Use Reflection to extract all properties.
+	 *
+	 * @param object $object
+	 * @return array array(
+	 *    'public' => array(  // Public properties
+	 *       $property => $value,
+	 *    ),
+	 *    'protected' => array(), // protected properties
+	 *    'private' => array(), // private properties
+	 * )
+	 */
+	function reflect_properties($object) {
+		$reflection = new \ReflectionObject($object);
+		$values = get_object_vars($object);
+		$properties = array(
+			'public' => array(),
+			'protected' => array(),
+			'private' => array(),
+		);
+		foreach ($reflection->getProperties() as $property) {
+			if ($property->isPublic()) {
+				if (array_key_exists($property->name, $values) === false) {
+					continue; // skip properties that are unset()
+				}
+				$scope = 'public';
+			} elseif ($property->isProtected()) {
+				$scope = 'protected';
+			} elseif ($property->isPrivate()) {
+				$scope = 'private';
+			}
+			$property->setAccessible(true);
+			$properties[$scope][$property->name] = $property->getValue($object);
+		}
+		return $properties;
+	}
+
+	/**
+	 * Helper function for the showing the existing properties in an errorreport.
+	 * @param array $scopedProperties
+	 * @return string
+	 */
+	function build_properties_hint($scopedProperties) {
+		$hint = '';
+		foreach ($scopedProperties as $scope => $properties) {
+			if (count($properties)) {
+				$hint .= '<div style="margin-top: 7px">'.$scope.'</b></div>';
+				foreach ($properties as $property => $value) {
+					$type = gettype($value);
+					if ($type === 'object') {
+						$type = get_class($value);
+					} else {
+						$type = strtolower($type);
+					}
+					$hint .= '&nbsp;&nbsp;'.syntax_highlight($property, 'attribute').' '.syntax_highlight(':'.$type, 'comment').'<br />';
+				}
+			}
+		}
+		return $hint;//
+	}
+
+	/**
 	 * Call a static method on a specific class without Late Static Binding.
 	 * Using "call_user_func" will bind the get_called_class() to subclass when the method is inside the parent class.
 	 *
@@ -556,22 +657,47 @@ namespace Sledgehammer {
 	}
 
 	/**
-	 * Bestand downloaden(naar het geheugen) en opslaan.
-	 * retourneert de groote van het bestand (in karakters)
+	 * Filter a variable using a callable.
 	 *
-	 * @param string $url
-	 * @param string $filename
-	 * @return int|false
+	 * Usages:
+	 *
+	 * // Filter via a global function
+	 * $encoded = filter($rawData, 'urlencode');
+	 *
+	 * // Filter via an existing class
+	 * $db = new PDO('sqlite::memory:');
+	 * $quoted = filter($rawData, array($db, 'quote'));
+	 *
+	 * // Filter via a class with an __invoke() method.
+	 * $slug = filter($title, new SlugFilter());
+	 *
+	 * // Filter via a closure.
+	 * $filter = function ($data) { return substr($data, 0, 10); };
+	 * $truncated = filter($myData, $filter);
+	 *
+	 * @param mixed $value Input
+	 * @param callable $filter The filter
+	 * @return mixed Output
 	 */
-	function wget($url, $filename) {
-		deprecated('Use cURL::download() instead');
-		$contents = file_get_contents($url);
-		if ($contents) {
-			if (file_put_contents($filename, $contents)) {
-				return strlen($contents);
-			}
+	function filter($value, $filter) {
+		if (is_callable($filter) === false) {
+			throw new InfoException('The $filter parameter isn\'t a valid callable', $filter);
 		}
-		return false;
+		return call_user_func($filter, $value);
+	}
+
+	/**
+	 * Validate a variable using a callable.
+	 *
+	 * @param mixed $value Input
+	 * @param callable $validator The filter
+	 * @return bool Output
+	 */
+	function is_valid($value, $validator) {
+		if (is_callable($validator) === false) {
+			throw new InfoException('The $validator parameter isn\'t a valid callable', $validator);
+		}
+		return call_user_func($validator, $value);
 	}
 
 	/**
@@ -694,15 +820,29 @@ namespace Sledgehammer {
 	 * Get the timestamp for the latest change in the directory.
 	 *
 	 * @param string $path
+	 * @param array|string|false $extensions  Only check timestamp for files that match one of the extensions in the array or match against a regex.
 	 * @return int
 	 */
-	function mtime_folders($path) {
+	function mtime_folders($path, $extensions = null) {
 		$max_ts = filemtime($path); // Vraag de mtime op van de map
 		if ($max_ts === false) { // Bestaat het $path niet?
 			return false;
 		}
 		if (substr($path, -1) != '/') {
 			$path .= '/';
+		}
+		if (is_array($extensions)) {
+			// Convert $extensions array into a regex.
+			$regex = array();
+			foreach ($extensions as $extension) {
+				$regex[] = preg_quote($extension, '/');
+			}
+			$regex = '/\.('.implode('|', $extensions).')$/';
+		} else {
+			$regex = $extensions;
+		}
+		if ($regex) {
+			$max_ts = false; // Don't count the folder changes when extensions are given.
 		}
 		// Controleer of een van de bestanden of submappen een nieuwere mtime heeft.
 		$dir = opendir($path);
@@ -713,8 +853,11 @@ namespace Sledgehammer {
 				}
 				$filepath = $path.$filename;
 				if (is_dir($filepath)) {
-					$ts = mtime_folders($filepath.'/');
+					$ts = mtime_folders($filepath.'/', $regex);
 				} else {
+					if ($regex && preg_match($regex, $filename) === 0) { // Does't match any of the extensions?
+						continue;
+					}
 					$ts = filemtime($filepath);
 				}
 				if ($ts > $max_ts) { // Heeft de submap een nieuwere timestamp?
@@ -964,7 +1107,7 @@ namespace Sledgehammer {
 			$db = new Database($settings[$link]);
 			foreach (Logger::$instances as $name => $logger) {
 				if ($db->logger === $logger) {
-					$loggerName  = ($link === 'default') ? 'Database' : 'Database[<b>'.$link.'</b>]';
+					$loggerName = ($link === 'default') ? 'Database' : 'Database[<b>'.$link.'</b>]';
 					if (empty(Logger::$instances[$loggerName])) {
 						Logger::$instances[$loggerName] = $logger;
 						unset(Logger::$instances[$name]);
@@ -1542,13 +1685,13 @@ exit [lindex $result 3]');
 	 *
 	 * @param array|string $columns
 	 * param string ...
-	 * @return SQL
+	 * @return Sql
 	 */
 	function select($columns) {
 		if (func_num_args() > 1) {
 			$columns = func_get_args();
 		}
-		$sql = new SQL();
+		$sql = new Sql();
 		return $sql->select($columns);
 	}
 
@@ -1594,6 +1737,31 @@ exit [lindex $result 3]');
 	function cache($path, $options, $closure) {
 		$cache = PropertyPath::get($path, Cache::rootNode());
 		return $cache->value($options, $closure);
+	}
+
+	/**
+	 * Creates a version of the function that can only be called one time.
+	 * Repeated calls to the returned closure will have no effect, returning the value from the original call.
+	 *
+	 * @link http://underscorejs.org/#once
+	 *
+	 * @param callable $callback
+	 * @return \Closure
+	 */
+	function once($callback) {
+		if (is_callable($callback) == false) {
+			throw new \Exception('Unexpected value for $callback, expecting a callable');
+		}
+		$called = false;
+		$retval = null;
+		return function () use ($callback, &$called, &$retval) {
+			if ($called) {
+				return $retval;
+			}
+			$retval = call_user_func_array($callback, func_get_args());
+			$called = true;
+			return $retval;
+		};
 	}
 
 }

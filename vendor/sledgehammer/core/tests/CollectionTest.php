@@ -1,10 +1,11 @@
 <?php
 /**
  * CollectionTests
- *
  */
 namespace Sledgehammer;
-
+/**
+ * @package Core
+ */
 class CollectionTest extends TestCase {
 
 	function test_where() {
@@ -39,6 +40,11 @@ class CollectionTest extends TestCase {
 				'type' => 'fruit',
 			),
 		));
+		$andWhere = $fruitsAndVegetables->where(array('AND', 'type' => 'fruit', 'id <=' => 4));
+		$this->assertCount(1, $andWhere);
+
+		$orWhere = $fruitsAndVegetables->where(array('OR', 'type' => 'fruit', 'id' => 8));
+		$this->assertCount(4, $orWhere);
 	}
 
 	function test_select() {
@@ -82,8 +88,8 @@ class CollectionTest extends TestCase {
 			'carrot',
 			'pear',
 		));
-		$zxy = $fruitsAndVegetables->orderByDescending('name')->select('name');
-		$this->assertEquals($zxy->toArray(), array(
+		$zyx = $fruitsAndVegetables->orderByDescending('name')->select('name');
+		$this->assertEquals($zyx->toArray(), array(
 			'pear',
 			'carrot',
 			'banana',
@@ -92,7 +98,7 @@ class CollectionTest extends TestCase {
 	}
 
 	function test_selectKey() {
-		$xyz= new Collection(array('x' => 10, 'y' => 20, 'z' => 30));
+		$xyz = new Collection(array('x' => 10, 'y' => 20, 'z' => 30));
 		$this->assertEquals(array(10, 20, 30), $xyz->selectKey(null)->toArray(), 'null should return an index array.');
 		$this->assertEquals(array(10 => 10, 20 => 20, 30 => 30), $xyz->selectKey('.')->toArray(), 'Using a path as key.');
 		$closure = function ($item, $key) {
@@ -125,8 +131,8 @@ class CollectionTest extends TestCase {
 		$this->assertTrue(compare(0, '>=', null));
 		$this->assertFalse(compare('', '==', 0));
 		$this->assertFalse(compare(0, '>', null));
-		$this->assertTrue(compare(2, 'IN', array(1,2,3)));
-		$this->assertFalse(compare(4, 'IN', array(1,2,3)));
+		$this->assertTrue(compare(2, 'IN', array(1, 2, 3)));
+		$this->assertFalse(compare(4, 'IN', array(1, 2, 3)));
 	}
 
 	/**
@@ -135,12 +141,13 @@ class CollectionTest extends TestCase {
 	 */
 	private function getFruitsAndVegetables() {
 		return new Collection(array(
-				array('id' => '4', 'name' => 'apple', 'type' => 'fruit'),
-				array('id' => '6', 'name' => 'pear', 'type' => 'fruit'),
-				array('id' => '7', 'name' => 'banana', 'type' => 'fruit'),
-				array('id' => '8', 'name' => 'carrot', 'type' => 'vegetable'),
-			));
+			array('id' => '4', 'name' => 'apple', 'type' => 'fruit'),
+			array('id' => '6', 'name' => 'pear', 'type' => 'fruit'),
+			array('id' => '7', 'name' => 'banana', 'type' => 'fruit'),
+			array('id' => '8', 'name' => 'carrot', 'type' => 'vegetable'),
+		));
 	}
+
 }
 
 ?>

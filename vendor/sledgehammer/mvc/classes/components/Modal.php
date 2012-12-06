@@ -97,10 +97,10 @@ class Modal extends Object implements View, Import {
 		if ($this->close) {
 			echo '<button class="close" data-dismiss="modal">&times;</button>';
 		}
-		echo HTML::escape($this->title), "</h3></div>\n";
+		echo Html::escape($this->title), "</h3></div>\n";
 		echo "\t<div class=\"modal-body\">\n\t\t", $this->body, "\n\t</div>\n";
 		if (count($this->choices) !== 0) {
-			echo "\t<form class=\"modal-footer\" action=\"".URL::getCurrentURL()."\" method=\"".$this->method."\">\n";
+			echo "\t<form class=\"modal-footer\" action=\"".Url::getCurrentURL()."\" method=\"".$this->method."\">\n";
 			$indexed = is_indexed($this->choices);
 			foreach (array_reverse($this->choices) as $answer => $choice) {
 				if (is_array($choice) === false) {

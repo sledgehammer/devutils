@@ -21,16 +21,16 @@ class DescriptionList extends Object implements View {
 	}
 
 	function render() {
-		echo HTML::element('dl', $this->attributes, true);
+		echo Html::element('dl', $this->attributes, true);
 		foreach($this->items as $label => $values) {
 			echo "\t";
-			echo HTML::element('dt', array(), $label);
+			echo Html::element('dt', array(), $label);
 			if (is_array($values)) {
 				foreach ($values as $value) {
-					echo HTML::element('dd', array(), $value);
+					echo Html::element('dd', array(), $value);
 				}
 			} else {
-				echo HTML::element('dd', array(), $values);
+				echo Html::element('dd', array(), $values);
 			}
 		}
 		echo '</dl>'."\n";

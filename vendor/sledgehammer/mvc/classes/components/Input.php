@@ -115,9 +115,9 @@ class Input extends Object implements View, Import {
 			if (in_array($this->type, array('checkbox', 'radio'))) {
 				echo '<label>';
 				$this->renderElement();
-				echo '&nbsp;', HTML::escape($this->label), '</label>';
+				echo '&nbsp;', Html::escape($this->label), '</label>';
 			} else {
-				echo '<label>', HTML::escape($this->label), '</label>';
+				echo '<label>', Html::escape($this->label), '</label>';
 				$this->renderElement();
 			}
 			return;
@@ -133,7 +133,7 @@ class Input extends Object implements View, Import {
 			case 'select':
 				$options = $attributes['options'];
 				unset($attributes['options']);
-				echo HTML::element('select', $attributes, true);
+				echo Html::element('select', $attributes, true);
 				$isIndexed = is_indexed($options);
 				foreach ($options as $value => $label) {
 					$option = array();
@@ -145,13 +145,13 @@ class Input extends Object implements View, Import {
 					if (equals($value, $this->value)) {
 						$option['selected'] = 'selected';
 					}
-					echo HTML::element('option', $option, HTML::escape($label));
+					echo Html::element('option', $option, Html::escape($label));
 				}
 				echo '</select>';
 				break;
 
 			case 'textarea':
-				echo HTML::element('textarea', $attributes, HTML::escape($this->value));
+				echo Html::element('textarea', $attributes, Html::escape($this->value));
 				break;
 
 			default:
@@ -159,7 +159,7 @@ class Input extends Object implements View, Import {
 				if ($this->value !== null) {
 					$attributes['value'] = $this->value;
 				}
-				echo HTML::element('input', $attributes);
+				echo Html::element('input', $attributes);
 				break;
 		}
 	}

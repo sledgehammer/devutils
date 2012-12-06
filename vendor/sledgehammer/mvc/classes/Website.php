@@ -58,7 +58,7 @@ abstract class Website extends VirtualFolder {
 		if ($isDocument) {
 			return $content;
 		}
-		$document = new HTMLDocument();
+		$document = new HtmlDocument();
 		$document->content = $this->wrapContent($content);
 		return $document;
 	}

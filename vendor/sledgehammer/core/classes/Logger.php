@@ -12,6 +12,8 @@ namespace Sledgehammer;
  * - Limits for the detailed log
  * - Customizable columns and renderer.
  * - Ability to add a backtrace per log message.
+ *
+ * @package Core
  */
 class Logger extends Object {
 
@@ -150,11 +152,11 @@ class Logger extends Object {
 	 * @return void
 	 */
 	function statusbar($name) {
-		if ($this->count === 0) {
+		$popup = count($this->entries) > 0;
+		if ($this->count === 0 && $popup === false) {
 			echo $name;
 			return;
 		}
-		$popup = count($this->entries) > 0;
 		if ($popup) {
 			$id = 'logger_C'.$this->count.'_R'.uniqid(); // Generate unique ID
 			echo '<div id="'.$id.'" class="statusbar-log" tabindex="-1" style="display:none;">';
@@ -211,7 +213,7 @@ class Logger extends Object {
 					foreach ($backtrace as $call) {
 						$tooltip .= ' '.$call['file'].' on line '.$call['line']."\n";
 					}
-					echo ' <td class="log-backtrace" title="'.HTML::escape($tooltip).'">'.$trace.'</td>';
+					echo ' <td class="log-backtrace" title="'.Html::escape($tooltip).'">'.$trace.'</td>';
 				} else {
 					echo '<td></td>';
 				}

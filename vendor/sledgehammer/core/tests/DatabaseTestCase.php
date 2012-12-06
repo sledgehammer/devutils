@@ -65,7 +65,7 @@ abstract class DatabaseTestCase extends TestCase {
 				case 'mysql':
 					$this->dbLink .= '_'.$_SERVER['HTTP_HOST'];
 					;
-					$db = new Database('mysql://root@localhost', null, null, array('logIdentifier' => substr($this->dbLink, 9)));
+					$db = new Database('mysql://root:root@localhost', null, null, array('logIdentifier' => substr($this->dbLink, 9)));
 					$db->reportWarnings = false;
 					$db->query('DROP DATABASE IF EXISTS '.$this->dbName);
 					$db->query('CREATE DATABASE '.$this->dbName);
@@ -140,8 +140,8 @@ abstract class DatabaseTestCase extends TestCase {
 	 * @param null|string $message Het bericht dat op de testpagina getoond wordt (met een PASS of FAIL ervoor)
 	 * @return bool
 	 */
-	function assertQuery($sql, $message = NULL) {
-		if ($message === NULL) {
+	function assertQuery($sql, $message = null) {
+		if ($message === null) {
 			$message = 'SQL ['.$sql.'] should be executed';
 		}
 		$db = $this->getDatabase();
@@ -156,11 +156,10 @@ abstract class DatabaseTestCase extends TestCase {
 				return true;
 			}
 		}
-		$this->fail($message);
 		if ($this->debug) {
 			dump($queries);
 		}
-		return false;
+		$this->fail($message);
 	}
 
 	/**
@@ -170,17 +169,17 @@ abstract class DatabaseTestCase extends TestCase {
 	 * @param null|string $message Het bericht dat op de testpagina getoond wordt (met een PASS of FAIL ervoor)
 	 * @return bool
 	 */
-	function assertLastQuery($sql, $message = NULL) {
+	function assertLastQuery($sql, $message = null) {
 		$db = $this->getDatabase();
 		$entry = $db->logger->entries[count($db->logger->entries) - 1][0];
 		if ($sql == $entry) {
-			if ($message === NULL) {
+			if ($message === null) {
 				$message = 'SQL ['.$sql.'] is executed';
 			}
 			$this->assertTrue(true, $message);
 			return true;
 		} else {
-			if ($message === NULL) {
+			if ($message === null) {
 				$message = 'Unexpected SQL ['.$entry.'], expecting ['.$sql.']';
 			}
 			$this->fail($message);

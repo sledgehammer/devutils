@@ -81,13 +81,13 @@ abstract class VirtualFolder extends Object implements Controller {
 	 */
 	function generateContent() {
 		$this->initDepth();
-		$url = URL::getCurrentURL();
+		$url = Url::getCurrentURL();
 		$folders = $url->getFolders();
 		$filename = $url->getFilename();
 		$folder_count = count($folders);
 		if ($folder_count == $this->depth) {
 			$extension = file_extension($filename, $file);
-			if ($extension === NULL && $this->handle_filenames_without_extension == false) { // Ongeldige bestandsnaam? (geen  extentie)
+			if ($extension === null && $this->handle_filenames_without_extension == false) { // Ongeldige bestandsnaam? (geen  extentie)
 				error_log('filename without extension, redirecting to "'.$filename.'/"', E_NOTICE);
 				return new Redirect($filename.'/'); // Redirect naar dezelfde url, maar dan als mapnaam
 			}
@@ -122,7 +122,7 @@ abstract class VirtualFolder extends Object implements Controller {
 	 */
 	function getPath($includeSubfolders = false) {
 		$this->initDepth();
-		$folders = URL::getCurrentURL()->getFolders();
+		$folders = Url::getCurrentURL()->getFolders();
 		$path = '/';
 		for($i = 0; $i < $this->depth; $i++) {
 			$path .= $folders[$i].'/';
@@ -184,7 +184,7 @@ abstract class VirtualFolder extends Object implements Controller {
 		if ($this->parent !== null) {
 			return $this->parent->onFileNotFound();
 		}
-		$relativePath = substr(rawurldecode(URL::getCurrentURL()->path), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
+		$relativePath = substr(rawurldecode(Url::getCurrentURL()->path), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
 		return new HttpError(404, array('notice' => 'HTTP[404] File "'.$relativePath.'" not found'));
 
 	}
@@ -199,7 +199,7 @@ abstract class VirtualFolder extends Object implements Controller {
 		if ($this->parent !== null) {
 			return $this->parent->onFolderNotFound();
 		}
-		$url = URL::getCurrentURL();
+		$url = Url::getCurrentURL();
 		$relativePath = substr(rawurldecode($url->path), strlen(WEBPATH) - 1); // Relative path vanaf de WEBROOT
 		$isFolder = (substr($relativePath, -1) == '/'); // Gaat de request om een folder?
 		if ($isFolder) {
@@ -253,7 +253,7 @@ abstract class VirtualFolder extends Object implements Controller {
 	function &getParentByClass($class) {
 		if (strtolower(get_class($this)) == strtolower($class)) { // Is dit de gespecifeerde virtualfolder?
 			return $this;
-		} elseif ($this->parent === NULL) { // Is de virtualfolder niet gevonden in de hierarchie?
+		} elseif ($this->parent === null) { // Is de virtualfolder niet gevonden in de hierarchie?
 			$message = ($class === null) ? 'VirtualFolder "'.get_class($this).'" has no parent' : 'VirtualFolder \''.$class.'\' is niet actief';
 			throw new \Exception($message);
 		}
@@ -267,7 +267,7 @@ abstract class VirtualFolder extends Object implements Controller {
 	 * @return int
 	 */
 	private function initDepth() {
-		if ($this->depth !== NULL) { // Is de diepte reeds ingesteld?
+		if ($this->depth !== null) { // Is de diepte reeds ingesteld?
 			return;
 		}
 		if (isset(VirtualFolder::$current) == false) { // Gaat het om de eerste VirtualFolder (Website)

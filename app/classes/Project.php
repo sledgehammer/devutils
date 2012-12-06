@@ -29,8 +29,8 @@ class Project extends Object {
 		$moduleDir = $projectPath.'vendor/sledgehammer/';
 		if (file_exists($projectPath.'composer.json')) {
 			$composerJson = json_decode(file_get_contents($projectPath.'composer.json'), true);
-			if (isset($composerJson['vendor-dir'])) {
-				$moduleDir = $projectPath.$composerJson['vendor-dir'].'/sledgehammer/';
+			if (isset($composerJson['config']['vendor-dir'])) {
+				$moduleDir = $projectPath.$composerJson['config']['vendor-dir'].'/sledgehammer/';
 			}
 		}
 		$modules = array_reverse(Framework::getModules($moduleDir));

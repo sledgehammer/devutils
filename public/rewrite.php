@@ -1,16 +1,20 @@
 <?php
 /**
- * Detecteer de DevUtils projectmap en de sledgehammer enabled "parent" website
+ * rewrite
+ */
+
+/**
+ * Detect and include the DevUtils installation.
  *
  * @package DevUtils
  */
-
-define('MICROTIME_START', microtime(true));
+define('Sledgehammer\STARTED', microtime(true));
 // Detecteer de locatie van de devutils bestanden.
 $locations = array(
+	dirname(__DIR__).'/', // Is installed in full
+	dirname(dirname(dirname(__DIR__))).'/devutils/', // In a  $project/public
+	dirname(dirname(dirname(dirname(__DIR__)))).'/devutils/', // in a $project/app/webroot
 	'/var/www/devutils/',
-	dirname(dirname(dirname(__DIR__))).'/devutils/', // Zelfde niveau als het project
-	dirname(__DIR__).'/', // de devutils map staat helemaal in de public map.
 );
 $devutilsPath = false;
 foreach ($locations as $path) {
@@ -20,8 +24,8 @@ foreach ($locations as $path) {
 	}
 }
 if ($devutilsPath == false) {
-	error_log('DevUtils project not found in "'.implode('", "', $locations).'"');
-	die('DevUtils not found');
+	error_log('DevUtils not found in "'.implode('", "', $locations).'"', E_USER_WARNING);
+	die('Error: DevUtils installation not found.');
 }
 require($devutilsPath.'devutils.php');
 ?>

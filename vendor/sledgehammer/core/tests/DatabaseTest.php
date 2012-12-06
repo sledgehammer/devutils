@@ -1,11 +1,13 @@
 <?php
 /**
- * Test Database behaviour
+ * DatabaseTest
+ */
+namespace Sledgehammer;
+/**
+ * Test Database behavior
  *
  * @package Core
  */
-namespace Sledgehammer;
-
 class DatabaseTest extends DatabaseTestCase {
 
 	function __construct() {
@@ -70,7 +72,7 @@ class DatabaseTest extends DatabaseTestCase {
 	function test_count() {
 		$db = $this->getDatabase();
 		$result = $db->query('SELECT * FROM ducks');
-		$this->assertInstanceOf('Sledgehammer\PDOStatement', $result);
+		$this->assertInstanceOf('Sledgehammer\Statement', $result);
 		$this->assertEquals(count($result), 3); //, 'count() should return the number of rows found');
 	}
 

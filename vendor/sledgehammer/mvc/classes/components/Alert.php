@@ -51,7 +51,7 @@ class Alert extends Object implements View {
 	 * Render the html.
 	 */
 	function render() {
-		echo HTML::element('div', $this->attributes, true);
+		echo Html::element('div', $this->attributes, true);
 		if ($this->close) {
 			echo '<button class="close" data-dismiss="alert">&times</button>';
 		}

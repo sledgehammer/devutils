@@ -11,14 +11,17 @@ namespace Sledgehammer;
  */
 class CrudFolder extends VirtualFolder {
 
-	public
-		$requireDataOnSave = 1; // int Controleer bij de create() & update() of er $_POST data is verstuurd.
+	public $requireDataOnSave = 1; // int Controleer bij de create() & update() of er $_POST data is verstuurd.
+	protected $model;
+	protected $repository = 'default';
 
-	protected
-		$model,
-		$repository = 'default',
-		$primaryKey = 'id', // @var string $id  Wordt gebruik om te id uit de $_REQUEST te halen.  $idValue = $_POST[$this->id]
-		$maxRecursion = 0;
+	/**
+	 * Wordt gebruik om te id uit de $_REQUEST te halen.  $idValue = $_POST[$this->id]
+	 * @var string $id
+	 */
+	protected $primaryKey = 'id';
+	protected $maxRecursion = 0;
+
 	/**
 	 *
 	 * @param Record $record in static mode
@@ -32,19 +35,19 @@ class CrudFolder extends VirtualFolder {
 			$this->$option = $value;
 		}
 	}
+
 	public function generateContent() {
 		try {
 			return parent::generateContent();
-		}
-		catch (\Exception $e) {
-			return jsonError($e);
+		} catch (\Exception $e) {
+			return Json::error($e);
 		}
 	}
 
 	function index($format) {
 		$repo = getRepository($this->repository);
-		$all = $repo->all($this->model);
-		$data = $this->extract($all, $this->maxRecursion + 1);
+		$collection = $repo->all($this->model);
+		$data = $repo->export($this->model, $collection, $this->maxRecursion);
 		return $this->format($data, $format);
 	}
 
@@ -56,9 +59,18 @@ class CrudFolder extends VirtualFolder {
 
 		$repo = getRepository($this->repository);
 		$instance = $repo->get($this->model, $id);
-
-		$data = $this->extract($instance, $this->maxRecursion);
+		$data = $repo->export($this->model, $instance, $this->maxRecursion);
 		return $this->format($data, $format);
+	}
+
+	function dynamicFoldername($folder, $filename = false) {
+		$instance = $this->load($folder);
+		if (isset($instance->$filename)) {
+			$repo = getRepository($this->repository);
+			$data = $repo->export('Order', $instance->$filename, $this->maxRecursion + 2);
+			return $this->format($data, 'json');
+		}
+		return parent::dynamicFoldername($folder, $filename);
 	}
 
 	/**
@@ -67,42 +79,39 @@ class CrudFolder extends VirtualFolder {
 	 * @throws Exception on failure
 	 * @return Json
 	 */
-	function read() {
-		$repo = getRepository($this->repository);
-		$instance = $repo->get($this->model, $_REQUEST[$this->primaryKey]);
+	protected function read() {
+		$instance = $this->load($_REQUEST[$this->primaryKey]);
 		$data = $this->extract($instance, $this->maxRecursion);
-		return new Json(array(
-			'success' => true,
-			$this->model => $data
-		));
+		return Json::succes($data);
 	}
 
-	/**
-	 * @throws Exception on failure
-	 * @return Json
-	 */
-	function update() {
+	private function load($id) {
 		$repo = getRepository($this->repository);
-		$instance = $repo->get($this->model, $_REQUEST[$this->primaryKey]);
-		set_object_vars($instance, $this->getNewValues());
-		$repo->save($this->model, $instance);
-		return new Json(array(
-			'success' => true,
-		));
+		return $repo->get($this->model, $id);
 	}
 
 	/**
 	 * @throws Exception on failure
 	 * @return Json
 	 */
-	function create() {
+	private function update() {
+		$instance = $this->load($_REQUEST[$this->primaryKey]);
+		set_object_vars($instance, $this->getNewValues());
+		$repo = getRepository($this->repository);
+		$repo->save($this->model, $instance);
+		return Json::success();
+	}
+
+	/**
+	 * @throws Exception on failure
+	 * @return Json
+	 */
+	private function create() {
 		$repo = getRepository($this->repository);
 		$instance = $repo->create($this->model, $this->getNewValues());
 		$repo->save($model, $instance);
-		return new Json(array(
-			'success' => true,
-			$this->primaryKey => $instance->{$this->primaryKey}
-		));
+//		redirect();
+//		return Json::success($this->primaryKey => $instance->{$this->primaryKey});
 	}
 
 	/**
@@ -111,7 +120,7 @@ class CrudFolder extends VirtualFolder {
 	 * @throws Exception on failure
 	 * @return Json
 	 */
-	function save() {
+	private function save() {
 		if (empty($_REQUEST[$this->primaryKey])) {
 			// Converteer een eventuele "" naar null
 			if (value($_POST[$this->primaryKey]) === '') {
@@ -129,13 +138,11 @@ class CrudFolder extends VirtualFolder {
 	 * @throws Exception on failure
 	 * @return Json
 	 */
-	function delete() {
+	private function delete() {
 		$repo = getRepository($this->repository);
 		$repo->delete($this->model, $_POST[$this->primaryKey]);
 		//throw new Exception('Verwijderen van '.$this->subject.' #'.$_POST[$this->primarykey].' is mislukt');
-		return new Json(array(
-			'success' => true
-		));
+		return Json::success();
 	}
 
 	/**
@@ -146,37 +153,20 @@ class CrudFolder extends VirtualFolder {
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 			throw new \Exception('Invalid request-method "'.$_SERVER['REQUEST_METHOD'].'", expecting "POST"');
 		}
-		if(count($_POST) < $this->requireDataOnSave) {
+		if (count($_POST) < $this->requireDataOnSave) {
 			throw new \Exception('Er zijn onvoldoende gegevens verstuurd. (Minimaal '.$this->requireDataOnSave.' $_POST variabele is vereist)');
 		}
 		return $_POST;
 	}
 
-	/**
-	 * Extract the raw properties from a instance
-	 * @param mixed $instance
-	 * @return array
-	 */
-	protected function extract($instance, $maxDepth) {
-		$data = array();
-		foreach ($instance as $property => $value) {
-			if (is_object($value) || is_array($value)) {
-				if ($maxDepth != 0) {
-					$data[$property] = $this->extract($value, $maxDepth - 1);
-				}
-			} else {
-				$data[$property] = $value;
-			}
-		}
-		return $data;
-	}
-
 	protected function format($data, $format) {
 		if ($format === 'xml') {
-			return new XML(XML::build(array($this->model => $data)));
+			return new Xml(Xml::build(array($this->model => $data)));
 		} else {
 			return new Json($data);
 		}
 	}
+
 }
+
 ?>

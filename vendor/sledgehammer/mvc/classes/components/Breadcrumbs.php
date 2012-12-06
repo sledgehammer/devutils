@@ -57,7 +57,7 @@ class Breadcrumbs extends Object implements View {
 	}
 
 	function render() {
-		echo HTML::element('ul', $this->attributes, true), "\n";
+		echo Html::element('ul', $this->attributes, true), "\n";
 		$count = count($this->crumbs);
 		$i = 0;
 		foreach ($this->crumbs as $crumb) {
@@ -67,12 +67,12 @@ class Breadcrumbs extends Object implements View {
 				echo "\t<li>";
 			}
 			if (isset($crumb['icon'])) {
-				$label = HTML::icon($crumb['icon']).' '.HTML::escape($crumb['label']);
+				$label = Html::icon($crumb['icon']).' '.Html::escape($crumb['label']);
 			} else {
-				$label = HTML::escape($crumb['label']);
+				$label = Html::escape($crumb['label']);
 			}
 			if ($crumb['url']) {
-				echo HTML::element('a', array('href' => $crumb['url']), $label);
+				echo Html::element('a', array('href' => $crumb['url']), $label);
 			} else {
 				echo $label;
 			}

@@ -103,71 +103,30 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 	/**
 	 * Return a new Collection with a subsection of the collection based on the conditions.
 	 *
-	 * @example
+	 * @examples
 	 * where('apple') returns the items with the value is "apple" (1D array)
 	 * where('> 5')   returns the items where the value is greater-than 5
 	 * where(array('id' => 4))  returns the items where the element or property 'id' is 4
 	 * where(array('user->id <' => 4))  returns the items where the property 'id' of element/property 'user' is smaller-than 4
+	 * where(array('id IN' => array(2, 3, 5)))  returns the items where the property 'id' is 2, 3 or 5
 	 * where(function ($item) { return (strpos($item, 'needle') !== false); })  return the items which contain the text 'needle'
 	 *
 	 * @see PropertyPath::get() & compare() for supported paths and operators
 	 *
 	 * NOTE: The Collection class uses Sledgehammer\compare() for matching while the DatabaseCollection uses the sql WHERE part.
-	 *       this may cause different behaviour. For example "ABC" == "abc" might evalute to in MySQL (depends on the chosen collation)
+	 *       this may cause different behavior. For example "ABC" == "abc" might evalute to true in MySQL (depends on the chosen collation)
 	 *
 	 * @param mixed $conditions array|Closure|expression
 	 * @return Collection
 	 */
 	function where($conditions) {
-		$isClosure = is_closure($conditions);
-		if ($isClosure === false) {
-			if (is_array($conditions)) {
-				$operators = array();
-				foreach ($conditions as $path => $expectation) {
-					if (preg_match('/^(.*) ('.COMPARE_OPERATORS.')$/', $path, $matches)) {
-						unset($conditions[$path]);
-						$conditions[$matches[1]] = $expectation;
-						$operators[$matches[1]] = $matches[2];
-					} else {
-						$operators[$path] = false;
-					}
-				}
-			} else { //'<= 5' or '10'
-				// Compare the items directly (1D)
-				if (preg_match('/^('.COMPARE_OPERATORS.') (.*)$/', $conditions, $matches)) {
-					$operator = $matches[1];
-					$expectation = $matches[2];
-				} else {
-					$expectation = $conditions;
-					$operator = '==';
-				}
-				$conditions = function ($value) use ($expectation, $operator) {
-					return compare($value, $operator, $expectation);
-				};
-				$isClosure = true;
-			}
-		}
-
+		$filter = $this->buildFilter($conditions);
 		$data = array();
 		$counter = -1;
 		foreach ($this as $key => $item) {
 			$counter++;
-			if ($isClosure) {
-				if ($conditions($item, $key) === false) {
-					continue;
-				}
-			} else {
-				foreach ($conditions as $path => $expectation) {
-					$actual = PropertyPath::get($path, $item);
-					$operator = $operators[$path];
-					if ($operator) {
-						if (compare($actual, $operator, $expectation) === false) {
-							continue 2; // Skip this entry
-						}
-					} elseif (equals($actual, $expectation) === false) {
-						continue 2; // Skip this entry
-					}
-				}
+			if ($filter($item, $key) === false) {
+				continue;
 			}
 			if ($key != $counter) { // Is this an array?
 				$data[$key] = $item;
@@ -176,6 +135,125 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 			}
 		}
 		return new Collection($data);
+	}
+
+	/**
+	 * Returns the first item that matches the conditions.
+	 *
+	 * @param mixed $conditions array|Closure|expression  See Collection::where() for condition options
+	 * @param bool $allowNone  When no match is found, return null instead of throwing an Exception.
+	 * @return mixed
+	 */
+	function find($conditions, $allowNone = false) {
+		$filter = $this->buildFilter($conditions);
+		foreach ($this as $key => $item) {
+			if ($filter($item, $key) !== false) {
+				return $item;
+			}
+		}
+		if ($allowNone) {
+			return null;
+		}
+		throw new \Exception('No item found that matches the conditions');
+	}
+
+	/**
+	 * Returns the the key of first item that matches the conditions.
+	 *
+	 * Returns null when nothing matched the conditions.
+	 *
+	 * @param mixed $conditions array|Closure|expression  See Collection::where() for condition options
+	 * @return mixed|null
+	 */
+	function indexOf($conditions) {
+		$this->dataToArray(); // Array-access is expected, convert data to array.
+		$filter = $this->buildFilter($conditions);
+		foreach ($this as $key => $item) {
+			if ($filter($item, $key) !== false) {
+				return $key;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Build a closure which validates an item with the gives $conditions
+	 *
+	 * @param mixed $conditions array|Closure|expression  See Collection::where() for condition options
+	 * @return callable
+	 */
+	protected function buildFilter($conditions) {
+		if (is_closure($conditions)) {
+			return $conditions;
+		}
+		if (is_array($conditions)) {
+			// Create filter that checks all conditions
+			$logicalOperator = extract_logical_operator($conditions);
+			if ($logicalOperator === false) {
+				if (count($conditions) > 1) {
+					notice('Conditions with multiple conditions require a logical operator.', "Example: array('AND', 'x' => 1, 'y' => 5)");
+				}
+				$logicalOperator = 'AND';
+			} else {
+				unset($conditions[0]);
+			}
+			$operators = array();
+			foreach ($conditions as $path => $expectation) {
+				if (preg_match('/^(.*) ('.COMPARE_OPERATORS.')$/', $path, $matches)) {
+					unset($conditions[$path]);
+					$conditions[$matches[1]] = $expectation;
+					$operators[$matches[1]] = $matches[2];
+				} else {
+					$operators[$path] = false;
+				}
+			}
+			// @todo Build an optimized closure for when a single conditions is given.
+			if ($logicalOperator === 'AND') {
+				return function ($item) use ($conditions, $operators) {
+					foreach ($conditions as $path => $expectation) {
+						$actual = PropertyPath::get($path, $item);
+						$operator = $operators[$path];
+						if ($operator) {
+							if (compare($actual, $operator, $expectation) === false) {
+								return false;
+							}
+						} elseif (equals($actual, $expectation) === false) {
+							return false;
+						}
+					}
+					return true; // All conditions are met.
+				};
+			} elseif ($logicalOperator === 'OR') {
+				return function ($item) use ($conditions, $operators) {
+					foreach ($conditions as $path => $expectation) {
+						$actual = PropertyPath::get($path, $item);
+						$operator = $operators[$path];
+						if ($operator) {
+							if (compare($actual, $operator, $expectation) !== false) {
+								return true;
+							}
+						} elseif (equals($actual, $expectation) !== false) {
+							return true;
+						}
+					}
+					return false; // None of conditions are met.
+				};
+			} else {
+				throw new \Exception('Unsupported logical operator "'.$logicalOperator.'", expecting "AND" or "OR"');
+			}
+		}
+		//'<= 5' or '10'
+		// Compare the item directly with value given as $condition.
+		if (is_string($conditions) && preg_match('/^('.COMPARE_OPERATORS.') (.*)$/', $conditions, $matches)) {
+			$operator = $matches[1];
+			$expectation = $matches[2];
+		} else {
+			$expectation = $conditions;
+			$operator = '==';
+		}
+		return function ($value) use ($expectation, $operator) {
+			return compare($value, $operator, $expectation);
+		};
 	}
 
 	/**

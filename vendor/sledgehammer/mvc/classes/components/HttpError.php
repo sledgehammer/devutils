@@ -100,7 +100,7 @@ class HttpError extends Object implements View {
 					'header' => 'Forbidden',
 					'icon'=> 'warning',
 					'title' => 'Verboden toegang',
-					'message' => (substr(URL::getCurrentURL()->path, -1) == '/') ? 'U mag de inhoud van deze map niet bekijken' : 'U mag deze pagina niet bekijken',
+					'message' => (substr(Url::getCurrentURL()->path, -1) == '/') ? 'U mag de inhoud van deze map niet bekijken' : 'U mag deze pagina niet bekijken',
 				);
 
 			case 404:
@@ -108,7 +108,7 @@ class HttpError extends Object implements View {
 					'header' => 'Not Found',
 					'icon'=> 'warning',
 					'title' => 'Bestand niet gevonden',
-					'message' => 'De opgegeven URL "'.URL::getCurrentURL().'" kon niet worden gevonden.',
+					'message' => 'De opgegeven URL "'.Url::getCurrentURL().'" kon niet worden gevonden.',
 				);
 
 			case 500:

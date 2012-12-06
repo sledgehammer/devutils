@@ -1,23 +1,23 @@
 [
     {
         "name": "sledgehammer/core",
-        "version": "12.10.1",
-        "version_normalized": "12.10.1.0",
+        "version": "12.11.3",
+        "version_normalized": "12.11.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/sledgehammer/core",
-            "reference": "12.10.1"
+            "reference": "12.11.3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/sledgehammer/core/zipball/12.10.1",
-            "reference": "12.10.1",
+            "url": "https://github.com/sledgehammer/core/archive/12.11.3.zip",
+            "reference": "12.11.3",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2012-10-12 11:07:47",
+        "time": "2012-11-28 14:07:03",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -25,6 +25,7 @@
                 "bootstrap.php"
             ]
         },
+        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "CC-BY-SA-3.0"
         ],
@@ -38,17 +39,17 @@
     },
     {
         "name": "sledgehammer/mvc",
-        "version": "12.10.1",
-        "version_normalized": "12.10.1.0",
+        "version": "12.10.2",
+        "version_normalized": "12.10.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/sledgehammer/mvc",
-            "reference": "12.10.1"
+            "reference": "12.10.2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/sledgehammer/mvc/zipball/12.10.1",
-            "reference": "12.10.1",
+            "url": "https://github.com/sledgehammer/mvc/zipball/12.10.2",
+            "reference": "12.10.2",
             "shasum": ""
         },
         "require": {
@@ -57,9 +58,10 @@
         "suggest": {
             "sledgehammer/minify": "Minify assets like css, javascript and images"
         },
-        "time": "2012-10-12 11:33:27",
+        "time": "2012-10-17 08:13:42",
         "type": "library",
         "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "CC-BY-SA-3.0"
         ],

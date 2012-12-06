@@ -86,7 +86,7 @@ class Form extends Object implements View, Import {
 	}
 
 	function render() {
-		echo HTML::element('form', $this->attributes, true), "\n";
+		echo Html::element('form', $this->attributes, true), "\n";
 		$this->renderContents();
 		echo '</form>';
 	}
@@ -100,7 +100,7 @@ class Form extends Object implements View, Import {
 		if ($this->fieldset) {
 			echo "<fieldset>\n";
 			if ($this->legend !== null) {
-				echo "\t<legend>", HTML::escape($this->legend), "</legend>\n";
+				echo "\t<legend>", Html::escape($this->legend), "</legend>\n";
 			}
 		}
 
@@ -110,14 +110,14 @@ class Form extends Object implements View, Import {
 			if ($renderControlGroups) {
 				echo '<div class="control-group">';
 				if (is_int($label) === false) {
-					echo '<label class="control-label">', HTML::escape($label), '</label>';
+					echo '<label class="control-label">', Html::escape($label), '</label>';
 				}
 				echo '<div class="controls">';
 				render($field);
 				echo "</div></div>";
 			} else {
 				if (is_int($label) === false) {
-					echo '<label>', HTML::escape($label), '</label>';
+					echo '<label>', Html::escape($label), '</label>';
 				}
 				render($field);
 			}

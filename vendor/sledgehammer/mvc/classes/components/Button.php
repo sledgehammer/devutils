@@ -61,11 +61,11 @@ class Button extends Object implements View {
 
 	function render() {
 		if ($this->icon) {
-			$label = HTML::icon($this->icon).'&nbsp;'.HTML::escape($this->label);
+			$label = Html::icon($this->icon).'&nbsp;'.Html::escape($this->label);
 		} else {
-			$label = HTML::escape($this->label);
+			$label = Html::escape($this->label);
 		}
-		echo HTML::element($this->element, $this->attributes, $label);
+		echo Html::element($this->element, $this->attributes, $label);
 	}
 
 	function __toString() {

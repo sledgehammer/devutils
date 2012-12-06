@@ -3,6 +3,19 @@ PHPUnit 3.7
 
 This is the list of changes for the PHPUnit 3.7 release series.
 
+* Fixed #709: `assertJsonStringEqualsJsonFile` didn't work with json arrays.
+
+PHPUnit 3.7.10
+--------------
+
+* Fixed #734: `phpunit.phar` cannot be executed if it is renamed.
+* Fixed error message when `assertArrayHasKey()` and `assertArrayNotHasKey()` are invoked with wrong arguments.
+
+PHPUnit 3.7.9
+-------------
+
+* Fixed #708: JSON matcher source files missing from `package.xml`.
+
 PHPUnit 3.7.8
 -------------
 

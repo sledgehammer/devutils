@@ -47,7 +47,7 @@ class Nav extends Object implements View {
 	 * Render the navigation
 	 */
 	function render() {
-		echo HTML::element('ul', $this->attributes, true), "\n";
+		echo Html::element('ul', $this->attributes, true), "\n";
 		$this->renderContents();
 		echo '</ul>';
 	}
@@ -58,13 +58,13 @@ class Nav extends Object implements View {
 	function renderContents() {
 		foreach ($this->items as $url => $action) {
 			if (is_int($url) && is_string($action)) {
-				echo "\t<li class=\"nav-header\">".HTML::escape($action)."</li>\n";
+				echo "\t<li class=\"nav-header\">".Html::escape($action)."</li>\n";
 			} else {
 				echo "\t<li><a href=\"".$url.'">';
 				if (is_array($action)) { //  has an icon?
-					echo HTML::icon($action['icon']), ' ', HTML::escape($action['label']);
+					echo Html::icon($action['icon']), ' ', Html::escape($action['label']);
 				} else {
-					echo HTML::escape($action);
+					echo Html::escape($action);
 				}
 				echo "</a></li>\n";
 			}

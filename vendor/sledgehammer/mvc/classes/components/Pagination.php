@@ -49,7 +49,7 @@ class Pagination extends Object implements View {
 			$this->$key = $value;
 		}
 		if ($this->href === null) {
-			$url = URL::getCurrentURL();
+			$url = Url::getCurrentURL();
 			unset($url->query[$this->parameter]);
 			$url->query[$this->parameter] = '';
 			$this->href = (string) $url;
@@ -70,7 +70,7 @@ class Pagination extends Object implements View {
 		echo "<div class=\"".$class."\"><ul>\n";
 		// previous
 		if ($this->current != 1) {
-			echo "\t<li>", HTML::element('a', array('href' => $this->href.($this->current - 1)), '&laquo;'), "</li>\n";
+			echo "\t<li>", Html::element('a', array('href' => $this->href.($this->current - 1)), '&laquo;'), "</li>\n";
 		}
 		if ($this->count > $this->max) {
 			$offset = floor($this->max / 2);
@@ -91,7 +91,7 @@ class Pagination extends Object implements View {
 		// numbers
 		for ($i = $start; $i <= $end; $i++) {
 			$attributes = ($i == $this->current) ? array('class' => 'active') : array();
-			echo "\t", HTML::element('li', $attributes, HTML::element('a', array('href' => $this->href.$i), $i)), "\n";
+			echo "\t", Html::element('li', $attributes, Html::element('a', array('href' => $this->href.$i), $i)), "\n";
 		}
 		// total pages indication
 		if ($end != $this->count) {
@@ -100,13 +100,13 @@ class Pagination extends Object implements View {
 				if ($nextDecimal > $this->count) {
 					$nextDecimal = $this->count;
 				}
-				echo "\t<li>", HTML::element('a', array('href' => $this->href.$nextDecimal), '...'), "</li>\n"; // @todo jump to page
+				echo "\t<li>", Html::element('a', array('href' => $this->href.$nextDecimal), '...'), "</li>\n"; // @todo jump to page
 			}
-			echo "\t<li>", HTML::element('a', array('href' => $this->href.($this->count)), $this->count), "</li>\n";
+			echo "\t<li>", Html::element('a', array('href' => $this->href.($this->count)), $this->count), "</li>\n";
 		}
 		// next
 		if ($this->current != $this->count) {
-			echo "\t<li>", HTML::element('a', array('href' => $this->href.($this->current + 1)), '&raquo;'), "</li>\n";
+			echo "\t<li>", Html::element('a', array('href' => $this->href.($this->current + 1)), '&raquo;'), "</li>\n";
 		}
 		echo "</ul></div>";
 	}

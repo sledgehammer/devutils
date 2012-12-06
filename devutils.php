@@ -4,15 +4,17 @@
  *
  * @package DevUtils
  */
-$projectPath = dirname($_SERVER['SCRIPT_FILENAME']);
+$projectPath = dirname($_SERVER['SCRIPT_FILENAME']).DIRECTORY_SEPARATOR;
 $found = false;
 // Doorzoek alle hoger gelegen mappen naar een sledgehammer enabled project.
-$vendorDir = 'vendor';
+
 while (strlen($projectPath) > 4) {
 	//  Extract vendor-dir from composer.json
 	if (file_exists($projectPath.'composer.json')) {
 		$composerJson = json_decode(file_get_contents($projectPath.'composer.json'), true);
-		$vendorDir = (isset($composerJson['vendor-dir'])) ? $composerJson['vendor-dir'] : 'vendor';
+		$vendorDir = (isset($composerJson['config']['vendor-dir'])) ? $composerJson['config']['vendor-dir'] : 'vendor';
+	} else {
+		$vendorDir = 'vendor';
 	}
 	if (file_exists($projectPath.$vendorDir.'/sledgehammer/core/bootstrap.php')) {
 		if (realpath($projectPath) != realpath(__DIR__)) { // Is dit NIET de sledgehammer map binnen deze devutils?
@@ -47,7 +49,7 @@ if ($found) {
 		exit;
 	}
 } else {
-	$projectPath = '.';
+	$projectPath = './';
 }
 
 // Render static files vanuit de Devutils map
