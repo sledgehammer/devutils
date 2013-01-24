@@ -3,13 +3,29 @@ PHPUnit 3.7
 
 This is the list of changes for the PHPUnit 3.7 release series.
 
-* Fixed #709: `assertJsonStringEqualsJsonFile` didn't work with json arrays.
+PHPUnit 3.7.13
+--------------
+
+* Fixed #710: Ensure isolation tests display errors so they can be handled by the test runner.
+* Fixed sebastianbergmann/phpunit-mock-objects#81.
+* Fixed an issue where PHP complained about an undeclared `$time` variable when running tests in strict mode.
+
+PHPUnit 3.7.12
+--------------
+
+* Fixed version number.
+
+PHPUnit 3.7.11
+--------------
+
+* Fixed installation issue for Symfony/Yaml.
 
 PHPUnit 3.7.10
 --------------
 
 * Fixed #734: `phpunit.phar` cannot be executed if it is renamed.
 * Fixed error message when `assertArrayHasKey()` and `assertArrayNotHasKey()` are invoked with wrong arguments.
+* Fixed #709: `assertJsonStringEqualsJsonFile` didn't work with json arrays.
 
 PHPUnit 3.7.9
 -------------
@@ -73,6 +89,7 @@ PHPUnit 3.7.0
 * Implemented #377: Show messages and stracktraces in JSON output for skipped and incomplete tests.
 * Implemented #424: Added `assertJson*` functions that work like the existing `assertXml*` functions.
 * Implemented #492: PHPUnit now provides a `configuration.xsd` schema file at [http://schema.phpunit.de/configuration.xsd]() that can be used to validate your `phpunit.xml` and `phpunit.xml.dist` configuration files.
+* Implemented #495: Added `--testsuite` argument, allowing to filter files/directory by parent testsuite name attribute.
 * Implemented #504: Expanded the `@requires` annotation to allow for checking the existence of functions and extensions using multiple `@requires function name` statements.
 * Implemented #508 #86: `@expectedExceptionCode` and `@expectedExceptionMessage` can now use constants like `Classname::CONST` as their parameters. They will get evaluated if the class constant exists and used for comparison so test authors can avoid duplication.
 * Implemented #512: Test listeners now trigger one autoload call instead of being silently ignored when the class was not loaded.
