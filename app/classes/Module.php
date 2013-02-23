@@ -24,14 +24,14 @@ class Module extends Object {
 			$path .= DIRECTORY_SEPARATOR; // trailing "/" toevoegen
 		}
 		$this->path = $path;
-		if ($identifier == 'application') {
-			$this->name = 'Application';
-		} else {
+		if (file_exists($path.'composer.json')) {
 			$this->info = Json::decode(file_get_contents($path.'composer.json'), true);
 			$this->name = ucfirst(basename($this->info['name']));
 			if (isset($this->info['icon'])) {
 				$this->icon = $this->info['icon'];
 			}
+		} else {
+			$this->name = ucfirst($identifier);
 		}
 	}
 

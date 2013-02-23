@@ -12,6 +12,7 @@ class DevUtilsWebsite extends Website {
 	private $project;
 	private static $username;
 	private static $password;
+
 	/**
 	 *
 	 * @var Breadcrumbs
@@ -54,17 +55,17 @@ class DevUtilsWebsite extends Website {
 					$label = substr($testfile, 0, -4);
 				}
 				$label = basename($label);
-				$unittestList['tests/'.$identifier.'/'.$testfile] = array('icon'=> $iconPrefix.'test.png', 'label' => ucfirst($identifier).' - '.$label);
+				$unittestList['tests/'.$identifier.'/'.$testfile] = array('icon' => $iconPrefix.'test.png', 'label' => ucfirst($identifier).' - '.$label);
 			}
 		}
 		$template = new Template('project.php', array(
-					'project' => $this->project->name,
-					'properties' => new DescriptionList($properties, array('class' => 'dl-horizontal')),
-					'utilities' => new Nav($utilityList, array('class' => 'nav nav-list')),
-					'unittests' => new Nav($unittestList, array('class' => 'nav nav-list')),
-						), array(
-					'title' => $this->project->name.' project',
-				));
+			'project' => $this->project->name,
+			'properties' => new DescriptionList($properties, array('class' => 'dl-horizontal')),
+			'utilities' => new Nav($utilityList, array('class' => 'nav nav-list')),
+			'unittests' => new Nav($unittestList, array('class' => 'nav nav-list')),
+				), array(
+			'title' => $this->project->name.' project',
+		));
 		return $template;
 	}
 
@@ -91,11 +92,11 @@ class DevUtilsWebsite extends Website {
 	function module_icons_folder() {
 		$url = URL::getCurrentURL();
 		file_extension($url->getFilename(), $module);
-		$icon = $this->project->modules[$module]->path.'/icon.png';
+		$icon = $this->project->modules[$module]->path.'icon.png';
 		if (file_exists($icon)) {
 			return new FileDocument($icon);
 		}
-		return new FileDocument(PATH.'application/public/icons/module.png');
+		return new FileDocument(APP_DIR.'public/icons/module.png');
 	}
 
 	function files_folder() {
@@ -161,20 +162,20 @@ class DevUtilsWebsite extends Website {
 		$sortedModules = $this->project->modules;
 		ksort($sortedModules);
 		foreach ($sortedModules as $name => $module) {
-			if ($name != 'application') {
+			if ($name != 'application' && $name != 'app') {
 				$navigation[WEBROOT.$name.'/'] = array('icon' => WEBROOT.'module_icons/'.$name.'.png', 'label' => $module->name);
 			}
 		}
 		$template = new Template('layout.php', array(
-				'navigation' => new Nav($navigation, array('class' => 'nav nav-list')),
-				'breadcrumbs' => $this->breadcrumbs,
-				'contents' => $content,
-			), array(
-				'css' => array(
-					WEBROOT.'mvc/css/bootstrap.css',
-					WEBROOT.'css/devutils.css',
-				),
-			));
+			'navigation' => new Nav($navigation, array('class' => 'nav nav-list')),
+			'breadcrumbs' => $this->breadcrumbs,
+			'contents' => $content,
+				), array(
+			'css' => array(
+				WEBROOT.'mvc/css/bootstrap.css',
+				WEBROOT.'css/devutils.css',
+			),
+		));
 		return $template;
 	}
 
@@ -207,6 +208,7 @@ class DevUtilsWebsite extends Website {
 	static function sudo($command) {
 		return sudo(self::$username, self::$password, $command);
 	}
+
 }
 
 ?>
