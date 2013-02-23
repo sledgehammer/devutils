@@ -16,16 +16,12 @@ foreach ($head as $html) {
 <?php flush(); ?>
 <body<?php echo $bodyParameters; ?>>
 
-<?php render($body); ?>
-<?php if ($showStatusbar): ?>
-
-
-<div class="statusbar" id="statusbar">
-	<a href="javascript:document.getElementById('statusbar').style.display='none';" class="statusbar-close">&times;</a>
-	<?php echo $GLOBALS['website']->statusbar(); ?>
-	<span id="sledgehammer-requests"></span>
-</div>
-<?php endif; ?>
+<?php
+render($body);
+if ($showStatusbar) {
+	include(__DIR__.'/../statusbar.php');
+}
+?>
 
 </body>
 </html>

@@ -284,6 +284,8 @@ namespace Sledgehammer {
 				'mp4' => 'video/mp4',
 				'mkv' => 'video/x-matroska',
 				'3gp' => 'video/3gpp',
+				'wav' => 'audio/wav',
+				'mid' => 'audio/mid',
 				// Adobe
 				'pdf' => 'application/pdf',
 				'psd' => 'image/vnd.adobe.photoshop',
@@ -303,6 +305,30 @@ namespace Sledgehammer {
 			);
 			$mimetype = value($mimetypes[strtolower($extension)]);
 		}
+		if ($mimetype !== null) {
+			return $mimetype;
+		}
+		static $globalMimetypes = null;
+		if ($globalMimetypes === null) {
+			// Import global mime.types.
+			$globalMimetypes = array();
+			foreach (array('/etc/mime.types', '/etc/apache2/mime.types') as $mimeFile) {
+				if (is_readable($mimeFile)) {
+					foreach(file($mimeFile) as $line) {
+						if (substr($line, 0, 1) == '#') {  // skip comments
+							continue;
+						}
+						$extensions = preg_split('/[\s\t]+/', rtrim($line));
+						$mime = array_shift($extensions);
+						foreach ($extensions as $ext) {
+							$globalMimetypes[$ext] = $mime;
+						}
+					 }
+					break;
+				}
+			}
+		}
+		$mimetype = value($globalMimetypes[strtolower($extension)]);
 		if ($mimetype === null) {
 			if (!$allow_unknown_types) {
 				trigger_error('Unknown mime type for :"'.$extension.'", E_USER_WARNING');
@@ -504,10 +530,10 @@ namespace Sledgehammer {
 	/**
 	 * Werkt als get_object_vars() maar i.p.v. de waardes op te vragen worden deze ingesteld
 	 *
-	 * @param stdClass $object Het (doel) object waar de eigenschappen worden aangepast
-	 * @param array $values Een assoc array met als key de eigenschap. bv: array('id' => 1)
-	 * @param bool $check_for_property Bij false zal de functie alle array-elementen proberen in het object te zetten, Bij true zullen alleen bestaande elementen ingesteld worden
-	 * @return void
+	 * @param stdClass $object  Het (doel) object waar de eigenschappen worden aangepast
+	 * @param array $values  Een assoc array met als key de eigenschap. bv: array('id' => 1)
+	 * @param bool $check_for_property  Bij false zal de functie alle array-elementen proberen in het object te zetten, Bij true zullen alleen bestaande elementen ingesteld worden
+	 * @return mixed  the $object
 	 */
 	function set_object_vars($object, $values, $check_for_property = false) {
 		if ($check_for_property) {
@@ -521,6 +547,7 @@ namespace Sledgehammer {
 				$object->$property = $value;
 			}
 		}
+		return $object;
 	}
 
 	/**

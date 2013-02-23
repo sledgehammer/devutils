@@ -17,9 +17,9 @@
   <email>sebastian@phpunit.de</email>
   <active>yes</active>
  </lead>
- <date>2013-01-13</date>
+ <date>2013-02-14</date>
  <version>
-  <release>3.7.13</release>
+  <release>3.7.14</release>
   <api>3.7.0</api>
  </version>
  <stability>
@@ -234,6 +234,7 @@
     <name>PHP_Timer</name>
     <channel>pear.phpunit.de</channel>
     <min>1.0.2</min>
+    <max>1.0.99</max>
    </package>
    <package>
     <name>PHPUnit_MockObject</name>
@@ -259,6 +260,7 @@
     <name>PHP_Invoker</name>
     <channel>pear.phpunit.de</channel>
     <min>1.1.0</min>
+    <max>1.1.99</max>
    </package>
    <extension>
     <name>json</name>

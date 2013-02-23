@@ -43,7 +43,8 @@ class Curl extends Observable {
 	protected $events = array(
 		'load' => array(), // Fires when the request has completed
 		'abort' => array(), // Fires when the request was aborted
-		'closed' => array(), // Fires when the curl handle is closed
+		'closed' => array(), // Fires when the curl handle is closed,
+		'error' => array(), // Fires when the curl handle encounters an error CURLOPT_FAILONERROR.
 	);
 
 	/**
@@ -105,6 +106,16 @@ class Curl extends Observable {
 		if ($this->handle === false) {
 			throw new \Exception('Failed to create cURL handle');
 		}
+		/**
+		 * Handle a curl_error by throwing the message as an Exception
+		 *
+		 * @param string $message
+		 * @throws InfoException
+		 */
+		$onError = function ($message, $options) {
+			throw new InfoException($message, $options);
+		};
+		$this->on('error', $onError);
 		$this->start($options);
 	}
 
@@ -131,8 +142,8 @@ class Curl extends Observable {
 	 *
 	 * @param string $url
 	 * @param array $options Additional CURLOPT_* options
-	 * @param Closure|callback $callback  The callback that will e triggered on the load event.
-	 * @return \Sledgehammer\Curl  cURL response
+	 * @param Closure|callback $callback  The callback for the load event.
+	 * @return \Sledgehammer\Curl  Response
 	 */
 	static function get($url, $options = array(), $callback = null) {
 		$options[CURLOPT_URL] = $url;
@@ -150,8 +161,8 @@ class Curl extends Observable {
 	 * @param string $url
 	 * @param array|string $data
 	 * @param array $options Additional CURLOPT_* options
-	 * @param Closure|callback $callback  The callback that will e triggered on the load event.
-	 * @return \Sledgehammer\Curl  cURL response
+	 * @param Closure|callback $callback  The callback for the load event.
+	 * @return \Sledgehammer\Curl  Response
 	 */
 	static function post($url, $data = array(), $options = array(), $callback = null) {
 		$options[CURLOPT_URL] = $url;
@@ -170,15 +181,15 @@ class Curl extends Observable {
 	 * Preform an asynchonous PUT request
 	 *
 	 * @param string $url
-	 * @param array|string $data
+	 * @param string|array $data
 	 * @param array $options Additional CURLOPT_* options
-	 * @param Closure|callback $callback  The callback that will e triggered on the load event.
-	 * @return \Sledgehammer\Curl  cURL response
+	 * @param Closure|callback $callback  The callback for the load event.
+	 * @return \Sledgehammer\Curl  Response
 	 */
-	static function put($url, $data = array(), $options = array(), $callback = null) {
+	static function put($url, $data = '', $options = array(), $callback = null) {
 		$options[CURLOPT_URL] = $url;
 		$defaults = self::defaults(array(
-			CURLOPT_PUT => true,
+			CURLOPT_CUSTOMREQUEST => 'PUT',
 			CURLOPT_POSTFIELDS => $data,
 		));
 		$response = new Curl($options + $defaults);
@@ -194,8 +205,8 @@ class Curl extends Observable {
 	 * @param string $url
 	 * @param array|string $data
 	 * @param array $options Additional CURLOPT_* options
-	 * @param Closure|callback $callback  The callback that will e triggered on the load event.
-	 * @return \Sledgehammer\Curl  cURL response
+	 * @param Closure|callback $callback  The callback for the load event.
+	 * @return \Sledgehammer\Curl  Response
 	 */
 	static function delete($url, $options = array(), $callback = null) {
 		$options[CURLOPT_URL] = $url;
@@ -231,8 +242,14 @@ class Curl extends Observable {
 		));
 		$response = new Curl($options + $defaults);
 		$response->on('closed', function () use ($fp) {
-				fclose($fp);
-			});
+			fclose($fp);
+		});
+		// Overwite default error handle
+		$response->onError = function ($message, $options) use ($filename, $fp) {
+			fclose($fp);
+			unlink($filename);
+			throw new InfoException($message, $options);
+		};
 		if ($async == false) {
 			$response->waitForCompletion();
 		}
@@ -374,12 +391,13 @@ class Curl extends Observable {
 						unset(Curl::$requests[$index]); // Cleanup global curl pool
 						$curl->state = 'COMPLETED';
 						$error = $message['result'];
+						$tranferCount = self::$tranferCount;
 						if ($error !== CURLE_OK) {
 							$curl->state = 'ERROR';
-							throw new InfoException('['.self::errorName($error).'] '.curl_error($curl->handle), $curl->options);
+							$curl->trigger('error', '['.self::errorName($error).'] '.curl_error($curl->handle), $curl->options, $curl);
+						} else {
+							$curl->trigger('load', $curl);
 						}
-						$tranferCount = self::$tranferCount;
-						$curl->trigger('load', $curl);
 						if ($curl === $this) {
 							return true;
 						}
