@@ -81,7 +81,9 @@ class CurlTest extends TestCase {
 		$this->assertEquals($response->http_code, 200);
 		rewind($fp);
 		$log = stream_get_contents($fp);
-		fclose($fp);
+		$response->on('closed', function () use ($fp) {
+			fclose($fp);
+		});
 		$this->assertTrue(strstr($log, '< HTTP/1.1 200 OK') !== false, 'Use CURLOPT_VERBOSE should write to the CURLOPT_STDERR');
 	}
 
@@ -95,6 +97,14 @@ class CurlTest extends TestCase {
 		for ($i = 0; $i < 2; $i++) {
 			unlink(TMP_DIR.'curltest'.$i.'.downoad');
 		}
+	}
+
+	function test_put() {
+		$filename = TMP_DIR.basename(__CLASS__).'.txt';
+		file_put_contents($filename, 'Curl TEST');
+		$request = Curl::putFile('http://bfanger.nl/', $filename);
+		$this->assertEquals(200,  $request->http_code);
+
 	}
 
 	private function assertEmptyPool() {

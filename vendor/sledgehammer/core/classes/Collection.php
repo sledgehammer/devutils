@@ -34,7 +34,7 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 	 * Contructor
 	 * @param \Traversable|array $data
 	 */
-	function __construct($data) {
+	function __construct($data = array()) {
 		$this->data = $data;
 	}
 
@@ -176,6 +176,56 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Return the highest value.
+	 * @param string|Closure $selector  Path to the variable to select. Examples: "->id", "[message]", "customer.name"
+	 * @return mixed
+	 */
+	function max($selector = '.') {
+		if (is_closure($selector)) {
+			$closure = $selector;
+		} else {
+			$closure = PropertyPath::compile($selector);
+		}
+		$max = null;
+		$first = true;
+		foreach ($this as $item) {
+			$value = $closure($item);
+			if ($first) {
+				$first = false;
+				$max = $value;
+			} elseif ($value > $max ) {
+				$max = $value;
+			}
+		}
+		return $max;
+	}
+
+	/**
+	 * Return the lowest value.
+	 * @param string|Closure $selector  Path to the variable to select. Examples: "->id", "[message]", "customer.name"
+	 * @return mixed
+	 */
+	function min($selector = '.') {
+		if (is_closure($selector)) {
+			$closure = $selector;
+		} else {
+			$closure = PropertyPath::compile($selector);
+		}
+		$min = null;
+		$first = true;
+		foreach ($this as $item) {
+			$value = $closure($item);
+			if ($first) {
+				$first = false;
+				$min = $value;
+			} elseif ($value < $min ) {
+				$min = $value;
+			}
+		}
+		return $min;
 	}
 
 	/**

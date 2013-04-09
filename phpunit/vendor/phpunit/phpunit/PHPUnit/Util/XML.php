@@ -65,10 +65,10 @@ class PHPUnit_Util_XML
     public static function prepareString($string)
     {
         return preg_replace_callback(
-          '([\\x00-\\x04\\x0b\\x0c\\x0e-\\x1f\\x7f])',
+          '/[\\x00-\\x04\\x0b\\x0c\\x0e-\\x1f\\x7f]/',
           function ($matches)
           {
-              return sprintf('&#x%02x;', ord($matches[1]));
+              return sprintf('&#x%02x;', ord($matches[0]));
           },
           htmlspecialchars(
             PHPUnit_Util_String::convertToUtf8($string), ENT_COMPAT, 'UTF-8'
@@ -907,7 +907,8 @@ class PHPUnit_Util_XML
         $result = '';
 
         foreach ($node->childNodes as $childNode) {
-            if ($childNode->nodeType === XML_TEXT_NODE) {
+            if ($childNode->nodeType === XML_TEXT_NODE ||
+                $childNode->nodeType === XML_CDATA_SECTION_NODE) {
                 $result .= trim($childNode->data) . ' ';
             } else {
                 $result .= self::getNodeText($childNode);

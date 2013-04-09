@@ -3,6 +3,34 @@ PHPUnit 3.7
 
 This is the list of changes for the PHPUnit 3.7 release series.
 
+PHPUnit 3.7.19
+--------------
+
+* Fixed #763: `assertTag()` fails to match content in CDATA sections.
+* Fixed #860: Version requirement for `symfony/yaml` is too restrictive.
+* Fixed #863: Number of tests to run calculated incorrectly when `--repeat` is used.
+
+PHPUnit 3.7.18
+--------------
+
+* Make sure the autoloader for PEAR-based installation is not used when PHPUnit is installed via Composer.
+
+PHPUnit 3.7.17
+--------------
+
+* Make sure the autoloader for PEAR-based installation is not used when PHPUnit is installed via Composer.
+
+PHPUnit 3.7.16
+--------------
+
+* Make sure the autoloader for PEAR-based installation is not used when PHPUnit is installed via Composer.
+
+PHPUnit 3.7.15
+--------------
+
+* Fixed #823: Process isolation not working on windows if there are spaces in path to `php.exe`
+* Fixed #830: PHP notice in `PHPUnit_Util_XML`
+
 PHPUnit 3.7.14
 --------------
 

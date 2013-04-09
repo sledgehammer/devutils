@@ -1,18 +1,22 @@
 {
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
     "hash": "59ead4a04e9349318a570babd3a84a5d",
     "packages": [
         {
             "name": "sledgehammer/core",
-            "version": "13.02.2",
+            "version": "13.04.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sledgehammer/core",
-                "reference": "13.02.2"
+                "url": "https://github.com/sledgehammer/core.git",
+                "reference": "13.04.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sledgehammer/core/zipball/13.02.2",
-                "reference": "13.02.2",
+                "url": "https://api.github.com/repos/sledgehammer/core/zipball/13.04.0",
+                "reference": "13.04.0",
                 "shasum": ""
             },
             "require": {
@@ -24,7 +28,7 @@
                     "bootstrap.php"
                 ]
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "CC-BY-SA-3.0"
             ],
@@ -35,7 +39,7 @@
                 "framework",
                 "sledgehammer"
             ],
-            "time": "2013-02-13 10:40:50"
+            "time": "2013-04-09 13:41:27"
         },
         {
             "name": "sledgehammer/mvc",
@@ -66,12 +70,20 @@
             "time": "2013-02-12 14:58:39"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+
+    ],
     "aliases": [
 
     ],
     "minimum-stability": "stable",
     "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
 
     ]
 }

@@ -1587,6 +1587,21 @@ namespace Sledgehammer {
 	}
 
 	/**
+	 * Convert all applicable characters to numeric HTML/XML entities
+	 * Similar to htmlentities() but also converts "☂" (umbrella) to "&#9730;", including emoticons.
+	 *
+	 * @param string $string UTF8 string
+	 * @param string $charset string: The charset of $string, defaults to Framework::$charset
+	 * @return string
+	 */
+	function xmlentities($string, $charset = null) {
+		if ($charset === null) {
+			$charset = Framework::$charset;
+		}
+		return mb_encode_numericentity($string, array(0x0080, 0xfffff, 0, 0xfffff), $charset);
+	}
+
+	/**
 	 * Genereer aan de hand van de $identifier een (meestal) uniek id
 	 *
 	 * @param string $identifier
