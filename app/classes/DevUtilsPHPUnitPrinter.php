@@ -44,7 +44,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 				if ($e->getComparisonFailure() !== null) {
 					$diff = $e->getComparisonFailure()->getDiff();
 					if ($diff !== '') {
-						echo '<pre>', $diff, '</pre>';
+						echo '<pre>', htmlentities($diff), '</pre>';
 					}
 				}
 				break;
@@ -132,6 +132,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	private function trace(PHPUnit_Framework_Test $test, Exception $e, $suffix = '') {
 		if (self::$firstError && ($e instanceof PHPUnit_Framework_SkippedTestError) === false) {
 			echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() '.$suffix.'<br />';
+			Sledgehammer\Framework::$errorHandler->headers = false;
 			report_exception($e);
 			self::$firstError = false;
 			return;

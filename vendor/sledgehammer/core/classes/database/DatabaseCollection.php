@@ -117,7 +117,7 @@ class DatabaseCollection extends Collection {
 	 * @return Collection
 	 */
 	function where($conditions) {
-		if ($this->data !== null || is_string($this->sql) || (is_object($conditions) && is_callable($conditions))) {
+		if ($this->data !== null || is_string($this->sql) || (is_object($conditions) && is_callable($conditions)) || $this->sql->limit !== false || $this->sql->offset != 0) {
 			return parent::where($conditions);
 		}
 		$db = getDatabase($this->dbLink);
@@ -293,16 +293,6 @@ class DatabaseCollection extends Collection {
 	}
 
 	/**
-	 * Rewind the Iterator to the first element.
-	 * @link http://php.net/manual/en/iterator.rewind.php
-	 * @return void
-	 */
-	function rewind() {
-		$this->dataToIterator();
-		parent::rewind();
-	}
-
-	/**
 	 * Returns the number of elements in the collection.
 	 * @link http://php.net/manual/en/class.countable.php
 	 *
@@ -339,19 +329,6 @@ class DatabaseCollection extends Collection {
 			throw new InfoException('Unable to "fetchAll()", the query failed', (string) $this->sql);
 		}
 		return parent::dataToArray();
-	}
-
-	/**
-	 * Converts $this->data to an iterator.
-	 * Executes the SQL query if needed.
-	 *
-	 * @return void
-	 */
-	private function dataToIterator() {
-		if ($this->data === null) {
-			$db = getDatabase($this->dbLink);
-			$this->data = $db->query($this->sql);
-		}
 	}
 
 	/**

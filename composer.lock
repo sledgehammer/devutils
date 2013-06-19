@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "sledgehammer/core",
-            "version": "13.04.0",
+            "version": "13.06.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sledgehammer/core.git",
-                "reference": "13.04.0"
+                "reference": "13.06.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sledgehammer/core/zipball/13.04.0",
-                "reference": "13.04.0",
+                "url": "https://api.github.com/repos/sledgehammer/core/zipball/13.06.1",
+                "reference": "13.06.1",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +39,7 @@
                 "framework",
                 "sledgehammer"
             ],
-            "time": "2013-04-09 13:41:27"
+            "time": "2013-06-19 15:37:07"
         },
         {
             "name": "sledgehammer/mvc",

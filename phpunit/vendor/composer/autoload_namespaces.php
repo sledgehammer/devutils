@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Symfony\\Component\\Yaml\\' => $vendorDir . '/symfony/yaml',
+    'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
 );

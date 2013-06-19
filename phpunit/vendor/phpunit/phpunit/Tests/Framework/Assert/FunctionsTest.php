@@ -35,39 +35,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    PHPUnit
- * @subpackage Framework_Constraint
- * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @author     Bernhard Schussek <bschussek@2bepublished.at>
- * @copyright  2001-2013 Sebastian Bergmann <sebastian@phpunit.de>
+ * @author     Kuzuha SHINODA <kuzuha01@hotmail.com>
+ * @copyright  2013-2013 Kuzuha SHINODA <kuzuha01@hotmail.com>
  * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
- * @since      File available since Release 3.6.0
+ * @since      File available since Release 3.7.20
  */
+
+require_once dirname(dirname(dirname(__DIR__))) . '/PHPUnit/Framework/Assert/Functions.php';
 
 /**
  *
  *
  * @package    PHPUnit
- * @subpackage Framework_Constraint
- * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @author     Bernhard Schussek <bschussek@2bepublished.at>
- * @copyright  2001-2013 Sebastian Bergmann <sebastian@phpunit.de>
+ * @author     Kuzuha SHINODA <kuzuha01@hotmail.com>
+ * @copyright  2013-2013 Kuzuha SHINODA <kuzuha01@hotmail.com>
  * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
- * @since      Class available since Release 3.6.0
+ * @since      File available since Release 3.7.20
  */
-class PHPUnit_Framework_Constraint_SameSize extends PHPUnit_Framework_Constraint_Count
+class Framework_Assert_FunctionsTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var integer
-     */
-    protected $expectedCount;
 
-    /**
-     * @param integer $expected
-     */
-    public function __construct($expected)
+    public function testLogicalAnd()
     {
-        parent::__construct($this->getCountOf($expected));
+        $expected = $this->logicalAnd($this->isTrue(), $this->isFalse());
+        $actual = logicalAnd($this->isTrue(), $this->isFalse());
+        $this->assertSame($expected->toString(), $actual->toString());
+    }
+
+    public function testLogicalOr()
+    {
+        $expected = $this->logicalOr($this->isTrue(), $this->isFalse());
+        $actual = logicalOr($this->isTrue(), $this->isFalse());
+        $this->assertSame($expected->toString(), $actual->toString());
+    }
+
+    public function testLogicalXor()
+    {
+        $expected = $this->logicalXor($this->isTrue(), $this->isFalse());
+        $actual = logicalXor($this->isTrue(), $this->isFalse());
+        $this->assertSame($expected->toString(), $actual->toString());
     }
 }

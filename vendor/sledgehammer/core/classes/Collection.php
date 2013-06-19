@@ -11,7 +11,7 @@ namespace Sledgehammer;
  *
  * @package Core
  */
-class Collection extends Observable implements \Iterator, \Countable, \ArrayAccess {
+class Collection extends Observable implements \IteratorAggregate, \Countable, \ArrayAccess {
 
 	/**
 	 * The traversable the Collection class operates on.
@@ -31,7 +31,7 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 	);
 
 	/**
-	 * Contructor
+	 * Constructor
 	 * @param \Traversable|array $data
 	 */
 	function __construct($data = array()) {
@@ -157,6 +157,44 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 			return null;
 		}
 		throw new \Exception('No item found that matches the conditions');
+	}
+
+	/**
+	 * Remove one or more items from the this collection.
+	 *
+	 * @param mixed $conditions array|Closure|expression  See Collection::where() for condition options
+	 * @return bool
+	 */
+	function remove($conditions, $allowNone = false) {
+		$this->dataToArray();
+		$filter = $this->buildFilter($conditions);
+		$removeKeys = array();
+		$isIndexed = true;
+		$index = 0;
+		$previousKey = false;
+		foreach ($this as $key => $item) {
+			if ($index !== $key) {
+				$isIndexed = false;
+			}
+			$index++;
+			if ($filter($item, $key) !== false) {
+				$removeKeys[] = $key;
+			}
+			$previousKey = $key;
+		}
+		foreach ($removeKeys as $key) {
+			$this->offsetUnset($key);
+		}
+		if (count($removeKeys) === 0) {
+			if ($allowNone) {
+				return false;
+			}
+			throw new \Exception('Unable to remove the entry, No item found that matches the conditions');
+		}
+		if ($isIndexed) {
+			$this->data = array_values($this->data);
+		}
+		return true;
 	}
 
 	/**
@@ -449,76 +487,6 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 	}
 
 	/**
-	 * Return the current element
-	 * @link http://php.net/manual/en/iterator.current.php
-	 * @return mixed
-	 */
-	function current() {
-		if (is_array($this->data)) {
-			return current($this->data);
-		}
-		return $this->data->current();
-	}
-
-	/**
-	 * Return the current key/index.
-	 * @link http://php.net/manual/en/iterator.key.php
-	 * @return int|string
-	 */
-	function key() {
-		if (is_array($this->data)) {
-			return key($this->data);
-		}
-		return $this->data->key();
-	}
-
-	/**
-	 * Move forward to next element.
-	 * @link http://php.net/manual/en/iterator.next.php
-	 * @return void
-	 */
-	function next() {
-		if (is_array($this->data)) {
-			return next($this->data);
-		}
-		return $this->data->next();
-	}
-
-	/**
-	 * Rewind the Iterator to the first element.
-	 * @link http://php.net/manual/en/iterator.rewind.php
-	 * @return void
-	 */
-	function rewind() {
-		if (is_array($this->data)) {
-			reset($this->data);
-			return;
-		}
-		if ($this->data instanceof \Iterator) {
-			return $this->data->rewind();
-		}
-		if ($this->data instanceof \Traversable) {
-			$this->dataToArray();
-			return;
-		}
-		$type = gettype($this->data);
-		$typeOrClass = ($type === 'object') ? get_class($this->data) : $type;
-		throw new \Exception(''.$typeOrClass.' is not an Traversable');
-	}
-
-	/**
-	 * Checks if current position is valid.
-	 * @link http://php.net/manual/en/iterator.valid.php
-	 * @return bool
-	 */
-	function valid() {
-		if (is_array($this->data)) {
-			return (key($this->data) !== null);
-		}
-		return $this->data->valid();
-	}
-
-	/**
 	 * Whether a offset exists.
 	 * @link http://php.net/manual/en/arrayaccess.offsetexists.php
 	 * @param int|string $offset
@@ -535,7 +503,7 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 	 * @param int|string $offset
 	 * @return mixed
 	 */
-	function offsetGet($offset) {
+	function &offsetGet($offset) {
 		$this->dataToArray();
 		return $this->data[$offset];
 	}
@@ -609,7 +577,26 @@ class Collection extends Observable implements \Iterator, \Countable, \ArrayAcce
 				$items[$key] = $item;
 			}
 			$this->data = $items;
+			return;
 		}
+		$type = gettype($this->data);
+		$typeOrClass = ($type === 'object') ? get_class($this->data) : $type;
+		throw new \Exception(''.$typeOrClass.' is not an Traversable');
+	}
+
+	/**
+	 *
+	 * @return \Iterator
+	 */
+	public function getIterator() {
+		if ($this->data instanceof \IteratorAggregate) {
+			return $this->data->getIterator();
+		}
+		$this->dataToArray();
+		if (is_array($this->data) === false) {
+			throw new \Exception('Failed to convert data to an array');
+		}
+		return new \ArrayIterator($this->data);
 	}
 
 }

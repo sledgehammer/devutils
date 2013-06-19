@@ -13,27 +13,45 @@ namespace Sledgehammer;
  */
 class CacheTest extends TestCase {
 
+	/**
+	 * var int Counter which increments when the cache expired.
+	 */
 	private $counter = 0;
+
+	/**
+	 * @var bool true: when apc extension is installed
+	 */
+	private $apcSupported;
 
 	function test_startup() {
 		mkdirs(TMP_DIR.'Cache');
 		$cache = Cache::rootNode();
 		$this->assertInstanceOf('Sledgehammer\Cache', $cache);
+		$this->apcSupported = function_exists('apc_fetch');
+		if ($this->apcSupported === false) {
+			$this->markTestSkipped('Skipping tests for "apc" backend, the php-extension "apc" is not installed.');
+		}
 	}
 
 	function test_cache_miss() {
 		$this->cache_miss_test('file');
-		$this->cache_miss_test('apc');
+		if ($this->apcSupported) {
+			$this->cache_miss_test('apc');
+		}
 	}
 
 	function test_cache_hit() {
 		$this->cache_hit_test('file');
-		$this->cache_hit_test('apc');
+		if ($this->apcSupported) {
+			$this->cache_hit_test('apc');
+		}
 	}
 
 	function test_cache_expires() {
 		$this->cache_expires_test('file');
-		$this->cache_expires_test('apc');
+		if ($this->apcSupported) {
+			$this->cache_expires_test('apc');
+		}
 	}
 
 	function test_invalid_option() {
@@ -67,9 +85,9 @@ class CacheTest extends TestCase {
 		$this->counter = 0;
 		$cache = new CacheTester(__FILE__.__FUNCTION__, $type);
 		$counter1 = $cache->value('+1sec', array($this, 'incrementCounter')); // miss/store
-		$this->assertEquals($counter1, 1, 'Sanity check');
+		$this->assertEquals(1, $counter1, 'Sanity check');
 		$counter2 = $cache->value('+1sec', array($this, 'incrementCounter')); // hit
-		$this->assertEquals($counter2, 1, 'The counter should only be incremented once');
+		$this->assertEquals(1, $counter2, 'The counter should only be incremented once');
 		$cache->clear();
 	}
 
@@ -77,13 +95,13 @@ class CacheTest extends TestCase {
 		$this->counter = 0;
 		$cache = new CacheTester(__FILE__.__FUNCTION__, $type);
 		$counter1 = $cache->value('+1sec', array($this, 'incrementCounter')); // miss/store
-		$this->assertEquals($counter1, 1, 'Sanity check');
+		$this->assertEquals(1, $counter1, 'Sanity check');
 		usleep(100000); // 0.1 sec
 		$counter2 = $cache->value('+1sec', array($this, 'incrementCounter')); // hit
-		$this->assertEquals($counter2, 1, 'Should not be expired just yet');
+		$this->assertEquals(1, $counter2, 'Should not be expired just yet');
 		sleep(2); // Wait 2 sec for the cache to expire.
 		$counter3 = $cache->value('+1sec', array($this, 'incrementCounter')); // miss (expired)
-		$this->assertEquals($counter3, 2, 'Should be expired (and incremented again)');
+		$this->assertEquals(2, $counter3, 'Should be expired (and incremented again)');
 		$cache->clear();
 	}
 

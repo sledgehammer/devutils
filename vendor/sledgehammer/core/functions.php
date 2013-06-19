@@ -451,21 +451,37 @@ namespace Sledgehammer {
 	}
 
 	/**
-	 * Controleerd of 2 variabelen gelijk of bijna gelijk aan elkaar zijn.
+	 * Check if two variables are equal with minimal type-coercion.
+	 *
 	 * equals((float) 1.000, (int) 1) == true
 	 * equals("1.1", 1.1) == true
-	 * equals("abc", "ABC") == f
+	 * equals("abc", "ABC") == false
+	 * equals(1, true) == true
+	 * equals(2, true) == false
 	 *
 	 * @param mixed $var1
 	 * @param mixed $var2
 	 * @return bool
 	 */
 	function equals($var1, $var2) {
-		if ($var1 === $var2) { // Zijn de variabelen van het zelfde type en hebben ze dezelde waarde?
-			return true; // Dan zijn ze gelijk aan elkaar.
-		}
-		if (is_numeric($var1) && is_numeric($var2) && $var1 == $var2) { // Zijn het allebij getallen en hebben ze dezelde waarde?
+		if ($var1 === $var2) { // Strict match?
 			return true;
+		}
+		// Numbers
+		// numbers with the same value to be equal.
+		// 1 matches 1, "1" & "1.0"
+		if (is_numeric($var1) && is_numeric($var2) && (string) $var1 === (string) $var2) {
+			return true;
+		}
+		// Booleans
+		// true matches true, "1" and 1
+		// false matches false, "0" and 0 (not "" or null)
+		if (is_bool($var1) && is_numeric($var2) || is_bool($var2) && is_numeric($var1)) {
+			$int1 = intval($var1);
+			if ($int1 === intval($var2) && ($int1 === 1 || $int1 === 0)) {
+				return true;
+			}
+			return false;
 		}
 		return false;
 	}
@@ -473,18 +489,18 @@ namespace Sledgehammer {
 	/**
 	 * Regex for supported operators for the compare() function
 	 */
-	define('Sledgehammer\COMPARE_OPERATORS', '==|!=|<|<=|>|>=|IN');
+	define('Sledgehammer\COMPARE_OPERATORS', '==|!=|<|<=|>|>=|IN|NOT IN|LIKE|NOT LIKE');
 
 	/**
 	 * Compare two values with the given operator.
-	 * For '==' the values are compared with strcasecmp().
+	 * For '==' the values are compared with equals().
 	 *
 	 * compare("1",'==', 1) == true
 	 * compare("abc", '==', "ABC") == true
 	 * compare("0", '==', 0) == true
 	 * compare("", '==', 0) == false
 	 *
-	 * @see CollectionTests for more examples
+	 * @see CoreFunctionTest for more examples
 	 *
 	 * @param mixed $value
 	 * @param string $operator
@@ -506,6 +522,42 @@ namespace Sledgehammer {
 					}
 				}
 				return false;
+
+			case 'LIKE':
+				static $patternCache = array();
+				$pattern = array_value($patternCache, $expectation);
+				if ($pattern === null) {
+					// Build the regular expression.
+					$pattern = '';
+					for ($i = 0; $i < strlen($expectation); $i++) {
+						$char = $expectation[$i];
+						if ($char === '%') {
+							$pattern .= '.*';
+						} elseif ($char === '_') {
+							$pattern .= '.{1}';
+						} elseif ($char === '\\') {
+							$i++;
+							$nextChar = @$expectation[$i];
+							if ($nextChar === null) { // last character?
+								$pattern .= preg_quote($char, '/');
+							} else if (in_array($nextChar, array('%', '_', '\\'))) { // The \ is used as an escape?
+								$pattern .= preg_quote($nextChar, '/');
+							} else {
+								$pattern .= preg_quote($char.$nextChar, '/');
+							}
+						} else {
+							$pattern .= preg_quote($char, '/');
+						}
+					}
+					$pattern = '/^'.$pattern.'$/';
+					$patternCache[$expectation] = $pattern;
+				}
+				return preg_match($pattern, $value) !== 0;
+
+			case 'NOT IN':
+				return compare($value, 'IN', $expectation) == false;
+			case 'NOT LIKE':
+				return compare($value, 'LIKE', $expectation) == false;
 		}
 		throw new \Exception('Invalid operator: "'.$operator.'" use '.quoted_human_implode(' or ', explode('|', COMPARE_OPERATORS)));
 	}
@@ -848,9 +900,10 @@ namespace Sledgehammer {
 	 *
 	 * @param string $path
 	 * @param array|string|false $extensions  Only check timestamp for files that match one of the extensions in the array or match against a regex.
+	 * @param int $count out Set to the number of files checked. Used to detect deleted files.
 	 * @return int
 	 */
-	function mtime_folders($path, $extensions = null) {
+	function mtime_folders($path, $extensions = null, &$count = null) {
 		$max_ts = filemtime($path); // Vraag de mtime op van de map
 		if ($max_ts === false) { // Bestaat het $path niet?
 			return false;
@@ -874,18 +927,21 @@ namespace Sledgehammer {
 		// Controleer of een van de bestanden of submappen een nieuwere mtime heeft.
 		$dir = opendir($path);
 		if ($dir) {
+			$count = 0;
 			while (($filename = readdir($dir)) !== false) {
 				if ($filename === '.' || $filename === '..') {
 					continue;
 				}
 				$filepath = $path.$filename;
 				if (is_dir($filepath)) {
-					$ts = mtime_folders($filepath.'/', $regex);
+					$ts = mtime_folders($filepath.'/', $regex, $subcount);
+					$count += $subcount;
 				} else {
 					if ($regex && preg_match($regex, $filename) === 0) { // Does't match any of the extensions?
 						continue;
 					}
 					$ts = filemtime($filepath);
+					$count++;
 				}
 				if ($ts > $max_ts) { // Heeft de submap een nieuwere timestamp?
 					$max_ts = $ts;

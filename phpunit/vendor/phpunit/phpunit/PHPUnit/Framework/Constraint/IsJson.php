@@ -37,37 +37,73 @@
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @author     Bernhard Schussek <bschussek@2bepublished.at>
  * @copyright  2001-2013 Sebastian Bergmann <sebastian@phpunit.de>
  * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
- * @since      File available since Release 3.6.0
+ * @since      File available since Release 3.7.20
  */
 
 /**
- *
+ * Constraint that asserts that a string is valid JSON.
  *
  * @package    PHPUnit
  * @subpackage Framework_Constraint
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @author     Bernhard Schussek <bschussek@2bepublished.at>
  * @copyright  2001-2013 Sebastian Bergmann <sebastian@phpunit.de>
  * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
- * @since      Class available since Release 3.6.0
+ * @since      Class available since Release 3.7.20
  */
-class PHPUnit_Framework_Constraint_SameSize extends PHPUnit_Framework_Constraint_Count
+class PHPUnit_Framework_Constraint_IsJson extends PHPUnit_Framework_Constraint
 {
     /**
-     * @var integer
+     * Evaluates the constraint for parameter $other. Returns TRUE if the
+     * constraint is met, FALSE otherwise.
+     *
+     * @param mixed $other Value or object to evaluate.
+     * @return bool
      */
-    protected $expectedCount;
+    protected function matches($other)
+    {
+        json_decode($other);
+        if (json_last_error()) {
+            return FALSE;
+        }
+
+        return TRUE;
+    }
 
     /**
-     * @param integer $expected
+     * Returns the description of the failure
+     *
+     * The beginning of failure messages is "Failed asserting that" in most
+     * cases. This method should return the second part of that sentence.
+     *
+     * @param  mixed $other Evaluated value or object.
+     * @return string
      */
-    public function __construct($expected)
+    protected function failureDescription($other)
     {
-        parent::__construct($this->getCountOf($expected));
+        json_decode($other);
+        $error = PHPUnit_Framework_Constraint_JsonMatches_ErrorMessageProvider::determineJsonError(
+          json_last_error()
+        );
+
+        return sprintf(
+          '%s is valid JSON (%s)',
+
+          PHPUnit_Util_Type::shortenedExport($other),
+          $error
+        );
+    }
+
+    /**
+     * Returns a string representation of the constraint.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return 'is valid JSON';
     }
 }
