@@ -16,7 +16,8 @@ class HttpError extends Object implements View {
 	 * The HTTP ErrorCode (404, 500, etc)
 	 * @var int
 	 */
-	private $errorCode;
+	public $errorCode;
+
 	/**
 	 * @var array
 	 */
@@ -38,7 +39,7 @@ class HttpError extends Object implements View {
 		$error = $this->getError();
 		return array(
 			'title' => $this->errorCode.' - '.$error['title'],
-			'http' => array('Status' => $this->errorCode.' '.$error['header']),
+			'http' => array('Status' => $this->errorCode.' '.Framework::$statusCodes[$this->errorCode]),
 		);
 	}
 
@@ -81,7 +82,6 @@ class HttpError extends Object implements View {
 
 			case 400:
 				return array(
-					'header' => 'Bad Request',
 					'icon' => 'error',
 					'title' => 'Bad Request',
 					'message' => 'Server begreep de aanvraag niet'
@@ -89,39 +89,34 @@ class HttpError extends Object implements View {
 
 			case 401:
 				return array(
-					'header' => 'Unauthorized',
-					'icon'=> 'warning',
+					'icon' => 'warning',
 					'title' => 'Niet geauthoriseerd',
 					'message' => 'U heeft onvoldoende rechten om deze pagina te bekijken.',
 				);
 
 			case 403:
 				return array(
-					'header' => 'Forbidden',
-					'icon'=> 'warning',
+					'icon' => 'warning',
 					'title' => 'Verboden toegang',
 					'message' => (substr(Url::getCurrentURL()->path, -1) == '/') ? 'U mag de inhoud van deze map niet bekijken' : 'U mag deze pagina niet bekijken',
 				);
 
 			case 404:
 				return array(
-					'header' => 'Not Found',
-					'icon'=> 'warning',
+					'icon' => 'warning',
 					'title' => 'Bestand niet gevonden',
 					'message' => 'De opgegeven URL "'.Url::getCurrentURL().'" kon niet worden gevonden.',
 				);
 
 			case 500:
 				return array(
-					'header' => 'Internal Server Error',
-					'icon'=> 'error',
+					'icon' => 'error',
 					'title' => 'Interne serverfout',
 					'message' => 'Er is een interne fout opgetreden, excuses voor het ongemak.',
 				);
 
 			case 501:
 				return array(
-					'header' => 'Not Implemented',
 					'icon' => 'error',
 					'title' => 'Not Implemented',
 					'message' => 'Dit wordt niet door de server ondersteund'
@@ -129,8 +124,9 @@ class HttpError extends Object implements View {
 
 			default:
 				throw new \Exception('HTTP errorCode '.$this->errorCode.' is not (yet) supported.');
-
 		}
 	}
+
 }
+
 ?>

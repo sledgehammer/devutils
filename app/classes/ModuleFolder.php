@@ -37,7 +37,7 @@ class ModuleFolder extends VirtualFolder {
 		}
 		return new Template('module.php', array(
 					'module' => $this->module,
-					'properties' => new DescriptionList($properties, array('class' => 'dl-horizontal')),
+					'properties' => new DescriptionList(array('class' => 'dl-horizontal', 'items' => $properties)),
 					'documentation' => $this->getDocumentationList(),
 					'utilities' => $utilities,
 					'unittests' => $this->getUnitTestList(),

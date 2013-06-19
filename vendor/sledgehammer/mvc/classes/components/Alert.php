@@ -8,25 +8,25 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class Alert extends Object implements View {
+class Alert extends HtmlElement {
 
 	/**
 	 * The alert body.
 	 * @var string html
 	 */
-	private $message;
+	public $message;
 
 	/**
 	 * Show a "X "to dismiss the alert.
 	 * @var bool
 	 */
-	protected $close = false;
+	public $close = false;
 
 	/**
 	 * Attributes for the html element.
 	 * @var array
 	 */
-	protected $attributes = array(
+	public $attributes = array(
 		'class' => 'alert'
 	);
 
@@ -48,15 +48,13 @@ class Alert extends Object implements View {
 	}
 
 	/**
-	 * Render the html.
+	 * Render the element contents.
 	 */
-	function render() {
-		echo Html::element('div', $this->attributes, true);
+	function renderContents() {
 		if ($this->close) {
 			echo '<button class="close" data-dismiss="alert">&times</button>';
 		}
 		echo $this->message;
-		echo '</div>';
 	}
 
 	/**

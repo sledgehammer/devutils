@@ -4,54 +4,46 @@
  */
 namespace Sledgehammer;
 /**
- * An <input> element.
+ * An <input>, <textarea> or <select> element.
  *
  * @package MVC
  */
-class Input extends Object implements View, Import {
+class Input extends HtmlElement implements Import {
 
 	/**
-	 * Input name.
+	 * Prepends a <label> when set
 	 * @var string
 	 */
-	public $name;
+	public $label;
 
 	/**
-	 * Input type. 'text', 'checkbox', 'radio', 'select', 'textarea'
 	 * @var string
 	 */
-	protected $type = 'text';
-	protected $value;
-
-	/**
-	 * Attributes for the input element.
-	 * @var array
-	 */
-	protected $attributes = array();
-
-	protected $label;
+	public $tag = 'input';
 
 	function __construct($options) {
-		// Set attributes and properties
-		foreach ($options as $option => $value) {
-			if (property_exists($this, $option)) {
-				$this->$option = $value;
-			} else {
-				$this->attributes[$option] = $value;
-			}
+		if (is_string($options)) {
+			$options = array('name' => $options);
 		}
-		$this->type = strtolower($this->type);
+		parent::__construct($options);
+		if ($this->tag === 'input' && empty($this->attributes['type'])) {
+			$this->attributes['type'] = 'text';
+		}
 	}
 
 	function initial($value) {
-		$this->value = $value;
+		$this->attributes['value'] = $value;
 	}
 
 	function import(&$error, $request = null) {
 		if ($request === null) {
 			$request = $_REQUEST;
 		}
-		switch ($this->type) {
+		$name = $this->getAttribute('name');
+		if ($name === null) {
+			return null; // De naam is niet opgegeven.
+		}
+		switch (strtolower($this->getAttribute('type'))) {
 
 			case 'file':
 				// Import a file upload
@@ -62,11 +54,11 @@ class Input extends Object implements View, Import {
 					notice('$_FILES is empty, check for <form enctype="multipart/form-data">');
 					return null;
 				}
-				if (array_key_exists($this->name, $_FILES) == false) {
+				if (array_key_exists($name, $_FILES) == false) {
 					$error = 'Invalid name';
 					return null;
 				}
-				$file = $_FILES[$this->name]; // @todo support for multiple files
+				$file = $_FILES[$name]; // @todo support for multiple files
 				switch ($file['error']) {
 
 					case UPLOAD_ERR_OK:
@@ -95,11 +87,8 @@ class Input extends Object implements View, Import {
 				return null; // Er is geen (volledig) bestand ge-upload
 
 			default:
-				if ($this->name === null) {
-					return null; // De naam is niet opgegeven.
-				}
-				if (extract_element($request, $this->name, $value)) {
-					$this->value = $value;
+				if (extract_element($request, $name, $value)) {
+					$this->attributes['value'] = $value;
 					return $value;
 				}
 
@@ -112,7 +101,7 @@ class Input extends Object implements View, Import {
 		if ($this->label === null) {
 			$this->renderElement();
 		} else {
-			if (in_array($this->type, array('checkbox', 'radio'))) {
+			if (in_array(strtolower($this->getAttribute('type')), array('checkbox', 'radio'))) {
 				echo '<label>';
 				$this->renderElement();
 				echo '&nbsp;', Html::escape($this->label), '</label>';
@@ -125,15 +114,20 @@ class Input extends Object implements View, Import {
 	}
 
 	protected function renderElement() {
-		$attributes = $this->attributes;
-		if ($this->name !== null) {
-			array_key_unshift($attributes, 'name', $this->name);
+		$type = strtolower($this->getAttribute('type'));
+		if (in_array($type, array('select', 'textarea'))) {
+			$this->tag = $type;
+			unset($this->attributes['type']);
 		}
-		switch ($this->type) {
+		$attributes = $this->attributes;
+
+		switch ($this->tag) {
 			case 'select':
 				$options = $attributes['options'];
 				unset($attributes['options']);
-				echo Html::element('select', $attributes, true);
+				$selected = $this->getAttribute('value');
+				unset($attributes['value']);
+				echo Html::element($this->tag, $attributes, true);
 				$isIndexed = is_indexed($options);
 				foreach ($options as $value => $label) {
 					$option = array();
@@ -142,7 +136,7 @@ class Input extends Object implements View, Import {
 					} else {
 						$option['value'] = $value;
 					}
-					if (equals($value, $this->value)) {
+					if (equals($value, $selected)) {
 						$option['selected'] = 'selected';
 					}
 					echo Html::element('option', $option, Html::escape($label));
@@ -151,21 +145,14 @@ class Input extends Object implements View, Import {
 				break;
 
 			case 'textarea':
-				echo Html::element('textarea', $attributes, Html::escape($this->value));
+				unset($attributes['value']);
+				echo Html::element($this->tag, $attributes, Html::escape($this->getAttribute('value')));
 				break;
 
 			default:
-				array_key_unshift($attributes, 'type', $this->type);
-				if ($this->value !== null) {
-					$attributes['value'] = $this->value;
-				}
-				echo Html::element('input', $attributes);
+				echo Html::element($this->tag, $attributes);
 				break;
 		}
-	}
-
-	function __toString() {
-		return view_to_string($this);
 	}
 
 }

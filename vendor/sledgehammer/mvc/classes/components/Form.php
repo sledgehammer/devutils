@@ -7,48 +7,45 @@ namespace Sledgehammer;
  * Generate and import a Form
  * @package MVC
  */
-class Form extends Object implements View, Import {
+class Form extends HtmlElement implements Import {
 
 	/**
 	 * @var string
 	 */
-	protected $legend;
+	public $legend;
 
 	/**
 	 * @var array
 	 */
-	protected $fields = array();
+	public $fields = array();
 
 	/**
 	 * @var array
 	 */
-	protected $actions = array();
+	public $actions = array();
 
 	/**
 	 * @var bool
 	 */
-	protected $fieldset = true;
+	public $fieldset = true;
+
+	/**
+	 * @var string
+	 */
+	public $tag = 'form';
 
 	/**
 	 * @var array
 	 */
-	private $attributes = array(
+	protected $attributes = array(
 		'method' => 'post'
 	);
 
-	/**
-	 * Constructor
-	 * @param array $options
-	 */
-	function __construct($options = array()) {
-		// Set attributes and properties
-		foreach ($options as $option => $value) {
-			if (property_exists($this, $option)) {
-				$this->$option = $value;
-			} else {
-				$this->attributes[$option] = $value;
-			}
+	public function __construct($options) {
+		if (is_indexed($options)) {
+			$options = array('fields' => $options);
 		}
+		parent::__construct($options);
 	}
 
 	function initial($values) {
@@ -59,9 +56,9 @@ class Form extends Object implements View, Import {
 
 	function import(&$error, $request = null) {
 		if ($request === null) {
-			if (strtolower($this->attributes['method']) === 'post') {
+			if (strtolower($this->getAttribute('method')) === 'post') {
 				$request = $_POST;
-			} elseif (strtolower($this->attributes['method']) === 'get') {
+			} elseif (strtolower($this->getAttribute('method')) === 'get') {
 				$request = $_GET;
 			} else {
 				notice('Invalid import method');
@@ -74,7 +71,11 @@ class Form extends Object implements View, Import {
 		}
 		$data = array();
 		foreach ($this->fields as $key => $field) {
-			$data[$field->name] = $field->import($fieldError, $request);
+			$name = $field->getAttribute('name');
+			if ($name === null) {
+				continue;
+			}
+			$data[$name] = $field->import($fieldError, $request);
 			if ($fieldError) {
 				$error[$field->name] = $fieldError;
 			}
@@ -85,13 +86,8 @@ class Form extends Object implements View, Import {
 		return $data;
 	}
 
-	function render() {
-		echo Html::element('form', $this->attributes, true), "\n";
-		$this->renderContents();
-		echo '</form>';
-	}
-
 	function renderContents() {
+		echo "\n";
 		if (array_value($this->attributes, 'class') === 'form-horizontal') {
 			$renderControlGroups = true;
 		} else {

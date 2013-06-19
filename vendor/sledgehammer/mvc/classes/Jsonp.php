@@ -21,19 +21,9 @@ class Jsonp extends Json {
 	 * @param string $charset   The encoding used in $data, use null for autodetection. Assume UTF-8 by default
 	 */
 	function __construct($callback, $data, $charset = 'UTF-8') {
-		parent::__construct($data, $charset);
+		parent::__construct($data, array(), $charset);
 		$this->callback = $callback;
-	}
-
-	/**
-	 * Change Content-Type to "text/javascript; charset=UTF-8"
-	 */
-	function getHeaders() {
-		return array(
-			'http' => array(
-				'Content-Type' => 'text/javascript; charset=UTF-8',
-			)
-		);
+		$this->headers['http']['Content-Type'] = 'text/javascript; charset=utf-8';
 	}
 
 	/**

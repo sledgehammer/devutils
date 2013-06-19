@@ -11,12 +11,17 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class Nav extends Object implements View {
+class Nav extends HtmlElement {
 
 	/**
 	 * @var array
 	 */
-	private $items;
+	public $items;
+
+	/**
+	 * @var string
+	 */
+	public $tag = 'ul';
 
 	/**
 	 * Attributes for the ul element.
@@ -41,15 +46,6 @@ class Nav extends Object implements View {
 				$this->attributes[$option] = $value;
 			}
 		}
-	}
-
-	/**
-	 * Render the navigation
-	 */
-	function render() {
-		echo Html::element('ul', $this->attributes, true), "\n";
-		$this->renderContents();
-		echo '</ul>';
 	}
 
 	/**

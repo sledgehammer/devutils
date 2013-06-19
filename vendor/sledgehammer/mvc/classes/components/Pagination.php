@@ -14,27 +14,27 @@ class Pagination extends Object implements View {
 	 * Number of pages.
 	 * @var int
 	 */
-	private $count;
+	public $count;
 
 	/**
 	 * The current page
 	 * @var int
 	 */
-	private $current;
+	public $current;
 	// Options
 
-	private $parameter = 'page';
-	private $max = 11;
+	public $parameter = 'page';
+	public $max = 11;
 
 	/**
 	 * @var string
 	 */
-	private $href;
+	public $href;
 
 	/**
 	 * @var string Alignent "left", "center", "right"
 	 */
-	private $align = 'left';
+	public $align = 'left';
 
 	/**
 	 *

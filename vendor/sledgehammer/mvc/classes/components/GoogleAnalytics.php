@@ -10,15 +10,17 @@ namespace Sledgehammer;
  */
 class GoogleAnalytics extends Object implements View {
 
-	public
-		$code;
+	/**
+	 * @var string "UA-xxxxxxx-x"
+	 */
+	public $code;
 
 	/**
 	 *
 	 * @param string $code  "UA-xxxxxxx-x"
 	 */
 	function __construct($code) {
-		//@todo code valideren
+		// @todo code valideren
 		$this->code = $code;
 	}
 

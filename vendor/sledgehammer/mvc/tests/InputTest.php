@@ -11,7 +11,7 @@ class InputTest extends TestCase {
 
 	function test_text_input() {
 		$input = new Input(array('name' => 'input1'));
-		$this->assertSame('<input type="text" name="input1" />', view_to_string($input));
+		$this->assertSame('<input name="input1" type="text" />', view_to_string($input));
 	}
 
 	function test_checkbox() {

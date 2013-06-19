@@ -43,16 +43,16 @@
         },
         {
             "name": "sledgehammer/mvc",
-            "version": "13.02.0",
+            "version": "13.06.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sledgehammer/mvc",
-                "reference": "13.02.0"
+                "url": "https://github.com/sledgehammer/mvc.git",
+                "reference": "13.06.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sledgehammer/mvc/zipball/13.02.0",
-                "reference": "13.02.0",
+                "url": "https://api.github.com/repos/sledgehammer/mvc/zipball/13.06.0",
+                "reference": "13.06.0",
                 "shasum": ""
             },
             "require": {
@@ -62,12 +62,12 @@
                 "sledgehammer/minify": "Minify assets like css, javascript and images"
             },
             "type": "library",
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "CC-BY-SA-3.0"
             ],
             "description": "Sledgehammer MVC module: Provides a Model View Controller architecture",
-            "time": "2013-02-12 14:58:39"
+            "time": "2013-06-19 20:39:22"
         }
     ],
     "packages-dev": [

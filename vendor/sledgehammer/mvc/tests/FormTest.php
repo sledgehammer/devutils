@@ -15,7 +15,7 @@ class FormTest extends TestCase {
 				new Input(array('name' => 'field1'))
 			)
 		));
-		$this->assertSame("<form method=\"post\">\n<fieldset>\n\t<input type=\"text\" name=\"field1\" />\n</fieldset>\n</form>", view_to_string($form));
+		$this->assertSame("<form method=\"post\">\n<fieldset>\n\t<input name=\"field1\" type=\"text\" />\n</fieldset>\n</form>", view_to_string($form));
 	}
 
 	function test_render_with_labels() {
@@ -25,7 +25,7 @@ class FormTest extends TestCase {
 				'Label1' => new Input(array('name' => 'field1'))
 			)
 		));
-		$this->assertSame("<form method=\"post\">\n\t<label>Label1</label><input type=\"text\" name=\"field1\" />\n</form>", view_to_string($form));
+		$this->assertSame("<form method=\"post\">\n\t<label>Label1</label><input name=\"field1\" type=\"text\" />\n</form>", view_to_string($form));
 	}
 
 	function test_render_with_control_groups() {
@@ -36,7 +36,7 @@ class FormTest extends TestCase {
 				'Label1' => new Input(array('name' => 'field1'))
 			)
 		));
-		$this->assertSame("<form method=\"post\" class=\"form-horizontal\">\n\t<div class=\"control-group\"><label class=\"control-label\">Label1</label><div class=\"controls\"><input type=\"text\" name=\"field1\" /></div></div>\n</form>", view_to_string($form));
+		$this->assertSame("<form method=\"post\" class=\"form-horizontal\">\n\t<div class=\"control-group\"><label class=\"control-label\">Label1</label><div class=\"controls\"><input name=\"field1\" type=\"text\" /></div></div>\n</form>", view_to_string($form));
 	}
 
 	function test_import() {

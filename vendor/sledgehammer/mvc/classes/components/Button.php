@@ -8,35 +8,33 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class Button extends Object implements View {
+class Button extends HtmlElement {
 
 	/**
 	 * @var string
 	 */
-	protected $icon;
-
-	/**
-	 * @var string
-	 */
-	protected $label;
-
-
-
-	/**
-	 * @var string Determine the element type (a|button|input)
-	 */
-	protected $element = 'button';
+	public $tag = 'button';
 
 	/**
 	 * Attributes for the html element.
 	 * @var array
 	 */
-	protected $attributes = array(
+	public $attributes = array(
 		'class' => 'btn'
 	);
 
 	/**
-	 * Contructor
+	 * @var string
+	 */
+	public $icon;
+
+	/**
+	 * @var string
+	 */
+	public $label;
+
+	/**
+	 * Constructor
 	 * @param string|array $label_or_options
 	 * @param array $options
 	 */
@@ -65,7 +63,7 @@ class Button extends Object implements View {
 		} else {
 			$label = Html::escape($this->label);
 		}
-		echo Html::element($this->element, $this->attributes, $label);
+		echo Html::element($this->tag, $this->attributes, $label);
 	}
 
 	function __toString() {

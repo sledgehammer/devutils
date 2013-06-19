@@ -10,19 +10,20 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class DescriptionList extends Object implements View {
+class DescriptionList extends HtmlElement {
 
-	private $items;
-	private $attributes;
+	/**
+	 * @var array
+	 */
+	public $items = array();
 
-	function __construct($items, $attributes = array()) {
-		$this->items = $items;
-		$this->attributes = $attributes;
-	}
+	/**
+	 * @var string
+	 */
+	public $tag = 'dl';
 
-	function render() {
-		echo Html::element('dl', $this->attributes, true);
-		foreach($this->items as $label => $values) {
+	function renderContents() {
+		foreach ($this->items as $label => $values) {
 			echo "\t";
 			echo Html::element('dt', array(), $label);
 			if (is_array($values)) {
@@ -33,7 +34,8 @@ class DescriptionList extends Object implements View {
 				echo Html::element('dd', array(), $values);
 			}
 		}
-		echo '</dl>'."\n";
 	}
+
 }
+
 ?>

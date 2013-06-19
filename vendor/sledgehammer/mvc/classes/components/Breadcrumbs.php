@@ -8,16 +8,20 @@ namespace Sledgehammer;
  *
  * @package MVC
  */
-class Breadcrumbs extends Object implements View {
+class Breadcrumbs extends HtmlElement {
 
-	protected $active = null;
-	protected $divider = '/';
+	public $active = null;
+	public $divider = '/';
 	/**
 	 * Format: array(array('url' => url, 'label' => label))
 	 * @var array
 	 */
-	protected $crumbs = array();
+	public $crumbs = array();
 
+	/**
+	 * @var string
+	 */
+	public $tag = 'ul';
 	/**
 	 * Attributes for the html element.
 	 * @var array
@@ -56,8 +60,8 @@ class Breadcrumbs extends Object implements View {
 		$this->crumbs[] = $crumb;
 	}
 
-	function render() {
-		echo Html::element('ul', $this->attributes, true), "\n";
+	function renderContents() {
+		echo "\n";
 		$count = count($this->crumbs);
 		$i = 0;
 		foreach ($this->crumbs as $crumb) {
@@ -82,7 +86,6 @@ class Breadcrumbs extends Object implements View {
 			}
 			echo "</li>\n";
 		}
-		echo "</ul>\n";
 	}
 
 }
