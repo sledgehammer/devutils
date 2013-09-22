@@ -173,6 +173,7 @@ class DevUtilsWebsite extends Website {
 				), array(
 			'css' => array(
 				WEBROOT.'mvc/css/bootstrap.css',
+				WEBROOT.'mvc/css/bootstrap-theme.css',
 				WEBROOT.'css/devutils.css',
 			),
 		));

@@ -11,7 +11,6 @@ namespace Sledgehammer;
 class Breadcrumbs extends HtmlElement {
 
 	public $active = null;
-	public $divider = '/';
 	/**
 	 * Format: array(array('url' => url, 'label' => label))
 	 * @var array
@@ -63,7 +62,6 @@ class Breadcrumbs extends HtmlElement {
 	function renderContents() {
 		echo "\n";
 		$count = count($this->crumbs);
-		$i = 0;
 		foreach ($this->crumbs as $crumb) {
 			if ($crumb['url'] == false || value($crumb['active'])) {
 				echo "\t<li class=\"active\">";
@@ -79,10 +77,6 @@ class Breadcrumbs extends HtmlElement {
 				echo Html::element('a', array('href' => $crumb['url']), $label);
 			} else {
 				echo $label;
-			}
-			$i++;
-			if ($i !== $count) {
-				echo ' <span class="divider">', $this->divider, '</span>';
 			}
 			echo "</li>\n";
 		}

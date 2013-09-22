@@ -5,6 +5,8 @@
 namespace Sledgehammer;
 /**
  * Baseclass for Components based on an Element.
+ *
+ * @package MVC
  */
 class HtmlElement extends Object implements View {
 

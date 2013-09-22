@@ -1,15 +1,15 @@
 <?php
 /**
- * Modal
+ * Dialog
  */
 namespace Sledgehammer;
 /**
  * A dialog popup with where selected choice is posted back the server.
- * Compatible with Twitter Bootrap css and $().modal()
+ * Compatible with Bootrap 3 `.modal-dialog`
  *
  * @package MVC
  */
-class Modal extends Object implements View, Import {
+class Dialog extends Object implements View, Import {
 
 	private $title;
 	private $body;
@@ -91,16 +91,17 @@ class Modal extends Object implements View, Import {
 	}
 
 	function render() {
-		echo "<div class=\"modal\">\n";
-		echo "\t<div class=\"modal-header\">";
-		echo '<h3>';
+		echo "<div class=\"modal-dialog\">\n";
+		echo "\t<div class=\"modal-content\">\n";
+		echo "\t\t<div class=\"modal-header\">";
+		echo '<h4 class="modal-title">';
 		if ($this->close) {
 			echo '<button class="close" data-dismiss="modal">&times;</button>';
 		}
-		echo Html::escape($this->title), "</h3></div>\n";
-		echo "\t<div class=\"modal-body\">\n\t\t", $this->body, "\n\t</div>\n";
+		echo Html::escape($this->title), "</h4></div>\n";
+		echo "\t\t<div class=\"modal-body\">\n\t\t\t", $this->body, "\n\t\t</div>\n";
 		if (count($this->choices) !== 0) {
-			echo "\t<form class=\"modal-footer\" action=\"".Url::getCurrentURL()."\" method=\"".$this->method."\">\n";
+			echo "\t\t<form class=\"modal-footer\" action=\"".Url::getCurrentURL()."\" method=\"".$this->method."\">\n";
 			$indexed = is_indexed($this->choices);
 			foreach (array_reverse($this->choices) as $answer => $choice) {
 				if (is_array($choice) === false) {
@@ -114,11 +115,12 @@ class Modal extends Object implements View, Import {
 					$choice['value'] = $answer;
 				}
 				$button = new Button($choice);
-				echo "\t\t", $button, "\n";
+				echo "\t\t\t", $button, "\n";
 			}
-			echo "\t</form>\n";
+			echo "\t\t</form>\n";
 		}
-		echo '</div>';
+		echo "\t</div>\n";
+		echo "</div>\n";
 	}
 
 }

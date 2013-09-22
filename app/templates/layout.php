@@ -4,7 +4,7 @@
  */
 namespace Sledgehammer;
 ?>
-<div class="pageLayout container">
+<div class="pageLayout">
 	<header class="titlebar">
 		<a class="titlebar-title" href="<?php echo WEBPATH; ?>">DevUtils</a>
 	</header>

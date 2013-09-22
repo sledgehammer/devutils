@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "sledgehammer/core",
-            "version": "13.06.1",
+            "version": "13.09.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sledgehammer/core.git",
-                "reference": "13.06.1"
+                "reference": "76297cbcf7dc9cb496506a1d7943c2a8516706b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sledgehammer/core/zipball/13.06.1",
-                "reference": "13.06.1",
+                "url": "https://api.github.com/repos/sledgehammer/core/zipball/76297cbcf7dc9cb496506a1d7943c2a8516706b6",
+                "reference": "76297cbcf7dc9cb496506a1d7943c2a8516706b6",
                 "shasum": ""
             },
             "require": {
@@ -39,20 +39,20 @@
                 "framework",
                 "sledgehammer"
             ],
-            "time": "2013-06-19 15:37:07"
+            "time": "2013-09-22 20:33:25"
         },
         {
             "name": "sledgehammer/mvc",
-            "version": "13.06.0",
+            "version": "13.09.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sledgehammer/mvc.git",
-                "reference": "13.06.0"
+                "reference": "345aa8fea2832840791173a8196d9c75b120cea4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sledgehammer/mvc/zipball/13.06.0",
-                "reference": "13.06.0",
+                "url": "https://api.github.com/repos/sledgehammer/mvc/zipball/345aa8fea2832840791173a8196d9c75b120cea4",
+                "reference": "345aa8fea2832840791173a8196d9c75b120cea4",
                 "shasum": ""
             },
             "require": {
@@ -67,7 +67,7 @@
                 "CC-BY-SA-3.0"
             ],
             "description": "Sledgehammer MVC module: Provides a Model View Controller architecture",
-            "time": "2013-06-19 20:39:22"
+            "time": "2013-09-22 20:55:05"
         }
     ],
     "packages-dev": [
