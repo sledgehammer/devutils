@@ -11,14 +11,14 @@
 		var $indicator = $('[data-unittest=indicator]');
 		if ($indicator.length > 0) {
 			if ($('.unittest-summary').length == 0) {
-				$indicator.text('Crashed').addClass('label-important');
+				$indicator.text('Crashed').addClass('label-danger');
 			} else {
 				if ($('.unittest-summary').hasClass('alert-success')) {
 					$indicator.text('Passed').addClass('label-success');
 				} else {
-					$indicator.text('Failed').addClass('label-important');
+					$indicator.text('Failed').addClass('label-danger');
 					var $firstFailure = $('.unittest-assertion:has([data-unittest=fail])').first();
-					$firstFailure.addClass('alert alert-error').css({
+					$firstFailure.addClass('alert alert-danger').css({
 						marginTop: '15px',
 						fontSize: '13px'
 					});
@@ -31,7 +31,7 @@
 				margin: 0,
 				width: '960px'
 			});
-			
+
 			$(window).resize(function () {
 				$('#phpdoc').height($('.pageLayout').height() - $('#phpdoc').offset().top - 30);
 			});

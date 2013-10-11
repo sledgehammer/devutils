@@ -21,7 +21,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		self::$exceptionCount++;
 		$this->pass = false;
 		echo '<div class="unittest-assertion">';
-		echo "<span class=\"label label-important\" data-unittest=\"fail\">Error</span> ";
+		echo "<span class=\"label label-danger\" data-unittest=\"fail\">Error</span> ";
 		echo '<b>', $this->translateException($e), '</b>: ', Html::escape($e->getMessage()), '<br />';
 		$this->trace($test, $e, 'contains an error');
 		echo "</div>\n";
@@ -33,7 +33,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		$this->pass = false;
 
 		echo '<div class="unittest-assertion">';
-		echo "<span class=\"label label-important\" data-unittest=\"fail\">Fail</span> ";
+		echo "<span class=\"label label-danger\" data-unittest=\"fail\">Fail</span> ";
 		$type = get_class($e);
 		switch ($type) {
 			case 'PHPUnit_Framework_OutputError':

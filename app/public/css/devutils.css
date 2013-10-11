@@ -7,7 +7,7 @@ html, body {
 	height: 100%;
 }
 h1 a,
-h2 a, 
+h2 a,
 h3 a {
 	color: inherit;
 }
@@ -24,7 +24,7 @@ h3 a {
 	margin-left: 200px;
 }
 .pageContents {
-	padding: 0px 0 40px 0;
+	padding: 0 0 40px 0;
 }
 .titlebar {
 	background-image: linear-gradient(left , rgb(255,255,255) 50px, rgb(250,179,0));
@@ -89,7 +89,7 @@ img.icon {
 }
 
 .unittest {
-	margin: 10px 0 15px 0;
+	margin: 10px 15px 15px 0;
 }
 .unittest-heading {
 	vertical-align: bottom;

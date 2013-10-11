@@ -73,7 +73,7 @@ class PHPSandbox extends Object implements View {
 			if ($return_value !== 0) {
 				echo ' exit() status: '.$return_value;
 			}
-			echo '<pre class="alert alert-error">', $errors, '</pre>';
+			echo '<pre class="alert alert-danger">', $errors, '</pre>';
 		}
 	}
 }
