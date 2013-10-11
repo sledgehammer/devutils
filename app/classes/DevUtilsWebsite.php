@@ -47,7 +47,12 @@ class DevUtilsWebsite extends Website {
 		$utilityList['phpinfo.php'] = array('icon' => $iconPrefix.'php.gif', 'label' => 'PHP Info');
 
 		// Unittests
-		foreach ($this->project->modules as $identifier => $module) {
+		$modules = $this->project->modules;
+		if ($this->project->application === null && file_exists($this->project->path.'app/tests')) {
+			// A non sledgehammer app? extract tests
+			array_key_unshift($modules, 'app', new Module('app', $this->project->path.'app'));
+		}
+		foreach ($modules as $identifier => $module) {
 			foreach ($module->getUnitTests() as $testfile) {
 				if (text($testfile)->endsWith('Test.php')) {
 					$label = substr($testfile, 0, -8);

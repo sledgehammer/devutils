@@ -23,7 +23,11 @@ class UnitTests extends VirtualFolder {
 
 	function dynamicFoldername($folder, $filename = null) {
 		$files = array();
-		$module = $this->project->modules[$folder];
+		if ($folder === 'app' && empty($this->project->modules[$folder])) { // A non sledgehammer app?
+			$module = new Module('app', $this->project->path.'app');
+		} else {
+			$module = $this->project->modules[$folder];
+		}
 		$testsPath = is_dir($module->path.'tests') ? $module->path.'tests' : $module->path;
 		$this->addCrumb($module->name.' module', $this->getPath(true));
 		if ($filename === 'index.html') {
@@ -70,6 +74,12 @@ class UnitTests extends VirtualFolder {
 		$source .= ");\n";
 		$source .= "require_once('".PATH."phpunit/vendor/autoload.php');\n";
 		$source .= "require_once('".$this->project->modules['core']->path."phpunit_bootstrap.php');\n";
+		if (file_exists($this->project->path.'phpunit.xml')) {
+			$config = simplexml_load_file($this->project->path.'phpunit.xml');
+			if ($config['bootstrap']) {
+				$source .= "require_once('".addslashes($this->project->path.$config['bootstrap'])."');\n";
+			}
+		}
 		$source .= "require_once('".__DIR__."/DevUtilsPHPUnitPrinter.php');\n";
 		$source .= "PHPUnit_TextUI_Command::main(false);\n";
 		$source .= "\DevUtilsPHPUnitPrinter::summary();\n";
