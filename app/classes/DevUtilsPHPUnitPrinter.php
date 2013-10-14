@@ -106,6 +106,11 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 				if (preg_match('@^(?<module>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
 					$url = DEVUTILS_WEBPATH.'tests/'.$matches['module'].'/'.$matches['file'];
 				}
+			} elseif (substr($filename, 0, strlen(\Sledgehammer\APP_DIR)) === \Sledgehammer\APP_DIR) {
+				$filename = substr($filename, strlen(dirname(Sledgehammer\APP_DIR)));
+				if (preg_match('@^/(?<app>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
+					$url = DEVUTILS_WEBPATH.'tests/'.$matches['app'].'/'.$matches['file'];
+				}
 			}
 			if ($url) {
 				echo '<h3><a href="'.$url.'">'.$suite->getName().'</a></h3>';
