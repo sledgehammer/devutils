@@ -60,7 +60,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 
 	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		echo '<div class="unittest-assertion">';
-		echo "<span class=\"label\" data-unittest=\"incomplete\">Incomplete</span> ";
+		echo "<span class=\"label label-warning\" data-unittest=\"incomplete\">Incomplete</span> ";
 		echo Html::escape($e->getMessage()), '<br />';
 		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() was incomplete<br />';
 		echo '</div>';
