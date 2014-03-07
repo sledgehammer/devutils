@@ -1,43 +1,5 @@
 [
     {
-        "name": "sledgehammer/core",
-        "version": "13.09.2",
-        "version_normalized": "13.09.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/sledgehammer/core.git",
-            "reference": "76297cbcf7dc9cb496506a1d7943c2a8516706b6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/sledgehammer/core/zipball/76297cbcf7dc9cb496506a1d7943c2a8516706b6",
-            "reference": "76297cbcf7dc9cb496506a1d7943c2a8516706b6",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2013-09-22 20:33:25",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "bootstrap.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "CC-BY-SA-3.0"
-        ],
-        "description": "The foundation of the Sledgehammer Framework",
-        "homepage": "http://sledgehammer.github.com/",
-        "keywords": [
-            "core",
-            "framework",
-            "sledgehammer"
-        ]
-    },
-    {
         "name": "sledgehammer/mvc",
         "version": "13.09.0",
         "version_normalized": "13.09.0.0",
@@ -66,5 +28,43 @@
             "CC-BY-SA-3.0"
         ],
         "description": "Sledgehammer MVC module: Provides a Model View Controller architecture"
+    },
+    {
+        "name": "sledgehammer/core",
+        "version": "14.03.0",
+        "version_normalized": "14.03.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sledgehammer/core.git",
+            "reference": "2e62198df15b1c76a1a8ea609cd89f5f1fe9d4e3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sledgehammer/core/zipball/2e62198df15b1c76a1a8ea609cd89f5f1fe9d4e3",
+            "reference": "2e62198df15b1c76a1a8ea609cd89f5f1fe9d4e3",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2014-03-07 11:57:36",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "bootstrap.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "CC-BY-SA-3.0"
+        ],
+        "description": "The foundation of the Sledgehammer Framework",
+        "homepage": "http://sledgehammer.github.com/",
+        "keywords": [
+            "core",
+            "framework",
+            "sledgehammer"
+        ]
     }
 ]

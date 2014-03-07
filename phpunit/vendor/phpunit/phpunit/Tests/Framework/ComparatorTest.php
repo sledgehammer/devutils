@@ -2,7 +2,7 @@
 /**
  * PHPUnit
  *
- * Copyright (c) 2001-2013, Sebastian Bergmann <sebastian@phpunit.de>.
+ * Copyright (c) 2001-2014, Sebastian Bergmann <sebastian@phpunit.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,13 +36,11 @@
  *
  * @package    PHPUnit
  * @author     Bernhard Schussek <bschussek@2bepublished.at>
- * @copyright  2001-2013 Sebastian Bergmann <sebastian@phpunit.de>
+ * @copyright  2001-2014 Sebastian Bergmann <sebastian@phpunit.de>
  * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      File available since Release 3.6.0
  */
-
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'ClassWithToString.php';
 
 class TestClass {}
 class TestClassComparator extends PHPUnit_Framework_Comparator_Object {}
@@ -52,7 +50,7 @@ class TestClassComparator extends PHPUnit_Framework_Comparator_Object {}
  *
  * @package    PHPUnit
  * @author     Bernhard Schussek <bschussek@2bepublished.at>
- * @copyright  2001-2013 Sebastian Bergmann <sebastian@phpunit.de>
+ * @copyright  2001-2014 Sebastian Bergmann <sebastian@phpunit.de>
  * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.phpunit.de/
  * @since      Class available since Release 3.6.0
@@ -67,15 +65,15 @@ class Framework_ComparatorTest extends PHPUnit_Framework_TestCase
         $tmpfile = tmpfile();
 
         return array(
-            array(NULL, NULL, 'PHPUnit_Framework_Comparator_Scalar'),
-            array(NULL, TRUE, 'PHPUnit_Framework_Comparator_Scalar'),
-            array(TRUE, NULL, 'PHPUnit_Framework_Comparator_Scalar'),
-            array(TRUE, TRUE, 'PHPUnit_Framework_Comparator_Scalar'),
-            array(FALSE, FALSE, 'PHPUnit_Framework_Comparator_Scalar'),
-            array(TRUE, FALSE, 'PHPUnit_Framework_Comparator_Scalar'),
-            array(FALSE, TRUE, 'PHPUnit_Framework_Comparator_Scalar'),
+            array(null, null, 'PHPUnit_Framework_Comparator_Scalar'),
+            array(null, true, 'PHPUnit_Framework_Comparator_Scalar'),
+            array(true, null, 'PHPUnit_Framework_Comparator_Scalar'),
+            array(true, true, 'PHPUnit_Framework_Comparator_Scalar'),
+            array(false, false, 'PHPUnit_Framework_Comparator_Scalar'),
+            array(true, false, 'PHPUnit_Framework_Comparator_Scalar'),
+            array(false, true, 'PHPUnit_Framework_Comparator_Scalar'),
             array('', '', 'PHPUnit_Framework_Comparator_Scalar'),
-            array('0', '0', 'PHPUnit_Framework_Comparator_Numeric'),
+            array('0', '0', 'PHPUnit_Framework_Comparator_Scalar'),
             array('0', 0, 'PHPUnit_Framework_Comparator_Numeric'),
             array(0, '0', 'PHPUnit_Framework_Comparator_Numeric'),
             array(0, 0, 'PHPUnit_Framework_Comparator_Numeric'),
@@ -85,9 +83,11 @@ class Framework_ComparatorTest extends PHPUnit_Framework_TestCase
             array(array(1), array(1), 'PHPUnit_Framework_Comparator_Array'),
             array($tmpfile, $tmpfile, 'PHPUnit_Framework_Comparator_Resource'),
             array(new stdClass, new stdClass, 'PHPUnit_Framework_Comparator_Object'),
+            array(new DateTime, new DateTime, 'PHPUnit_Framework_Comparator_DateTime'),
             array(new SplObjectStorage, new SplObjectStorage, 'PHPUnit_Framework_Comparator_SplObjectStorage'),
             array(new Exception, new Exception, 'PHPUnit_Framework_Comparator_Exception'),
-            array(new DOMDocument, new DOMDocument, 'PHPUnit_Framework_Comparator_DOMDocument'),
+            array(new DOMDocument, new DOMDocument, 'PHPUnit_Framework_Comparator_DOMNode'),
+            array(new DOMNode, new DOMNode, 'PHPUnit_Framework_Comparator_DOMNode'),
             // mixed types
             array($tmpfile, array(1), 'PHPUnit_Framework_Comparator_Type'),
             array(array(1), $tmpfile, 'PHPUnit_Framework_Comparator_Type'),

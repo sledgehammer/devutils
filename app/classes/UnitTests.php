@@ -18,7 +18,7 @@ class UnitTests extends VirtualFolder {
 
 	function index() {
 		$tests = $this->project->getUnitTests();
-		return $this->build($this->project->name.' TestSuite', $this->project->path);
+		return $this->build($this->project->name.' TestSuite', $this->project->path, value($_GET['group']));
 	}
 
 	function dynamicFoldername($folder, $filename = null) {
@@ -31,17 +31,17 @@ class UnitTests extends VirtualFolder {
 		$testsPath = is_dir($module->path.'tests') ? $module->path.'tests' : $module->path;
 		$this->addCrumb($module->name.' module', $this->getPath(true));
 		if ($filename === 'index.html') {
-			return $this->build('UnitTests - '.$module->name, $testsPath);
+			return $this->build('UnitTests - '.$module->name, $testsPath, value($_GET['group']));
 		} elseif ($filename === false) {
 			$filename = substr(URL::getCurrentURL()->path, strlen($this->getPath(true)));
 			file_extension(basename($filename), $title);
 			$this->addCrumb($title, false);
-			return $this->build($title, $testsPath.DIRECTORY_SEPARATOR.$filename);
+			return $this->build($title, $testsPath.DIRECTORY_SEPARATOR.$filename, value($_GET['group']));
 		} else {
 			// Gaat het om een enkele unittest
 			file_extension($filename, $title);
 			$this->addCrumb($title, false);
-			return $this->build($title, $testsPath.DIRECTORY_SEPARATOR.$filename);
+			return $this->build($title, $testsPath.DIRECTORY_SEPARATOR.$filename, value($_GET['group']));
 		}
 	}
 
@@ -50,8 +50,8 @@ class UnitTests extends VirtualFolder {
 		return parent::generateContent();
 	}
 
-	private function build($title, $tests) {
-		$source = $this->generateTestSuite($title, $tests);
+	private function build($title, $tests, $group = null) {
+		$source = $this->generateTestSuite($title, $tests, $group);
 		$filename = md5(serialize($tests)).'.php';
 		$tmpFile = TMP_DIR.'UnitTests/'.$filename;
 		mkdirs(dirname($tmpFile));
@@ -61,7 +61,7 @@ class UnitTests extends VirtualFolder {
 		return new ViewHeaders(new PHPFrame($url), array('title' => $title));
 	}
 
-	private function generateTestSuite($title, $path) {
+	private function generateTestSuite($title, $path, $group = null) {
 		$source = "<h1 class=\"unittest-heading\">".Html::escape($title)." <span class=\"label\" data-unittest=\"indicator\">Running tests</span></h1>\n";
 		$source .= "<?php\n";
 		$source .= "const DEVUTILS_WEBPATH = '".WEBPATH."';\n";
@@ -70,6 +70,9 @@ class UnitTests extends VirtualFolder {
 		$source .= "\t'--printer', 'DevUtilsPHPUnitPrinter',\n";
 		$source .= "\t'--strict',\n";
 		$source .= "\t'--debug',\n";
+        if ($group) {
+            $source .= "\t'--group', '".addslashes($group)."',\n";
+        }
 		$source .= "\t'".addslashes($path)."',\n";
 		$source .= ");\n";
 		$source .= "require_once('".PATH."phpunit/vendor/autoload.php');\n";

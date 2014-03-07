@@ -16,6 +16,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	static $skippedCount = 0;
 	private $pass;
 	private static $firstError = true;
+    private $groups = array();
 
 	public function addError(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		self::$exceptionCount++;
@@ -58,7 +59,15 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		flush();
 	}
 
-	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
+	public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
+		echo '<div class="unittest-assertion">';
+		echo "<span class=\"label label-warning\" data-unittest=\"risky\">Risky</span> ";
+		echo Html::escape($e->getMessage()), '<br />';
+		echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() is risky<br />';
+		echo '</div>';
+	}
+
+    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
 		echo '<div class="unittest-assertion">';
 		echo "<span class=\"label label-warning\" data-unittest=\"incomplete\">Incomplete</span> ";
 		echo Html::escape($e->getMessage()), '<br />';
@@ -86,7 +95,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 			self::$passCount++;
 			echo '<div class="unittest-assertion">';
 			echo "<span class=\"label label-success\" data-unittest=\"pass\">Pass</span> ";
-			echo get_class($test), '->', $test->getName(), '() is successful';
+			echo get_class($test), '->', $this->groupLink($test), '() is successful';
 
 			echo "</div>\n";
 			flush();
@@ -94,6 +103,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	}
 
 	public function startTestSuite(PHPUnit_Framework_TestSuite $suite) {
+        $this->groups = $suite->getGroupDetails();
 		echo '<div class="unittest">';
 		static $first = true;
 		if ($first) {
@@ -118,6 +128,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 				echo '<h3>'.$suite->getName().'</h3>';
 			}
 		}
+
 	}
 
 	public function endTestSuite(PHPUnit_Framework_TestSuite $suite) {
@@ -136,7 +147,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 
 	private function trace(PHPUnit_Framework_Test $test, Exception $e, $suffix = '') {
 		if (self::$firstError && ($e instanceof PHPUnit_Framework_SkippedTestError) === false) {
-			echo '<b>'.get_class($test).'</b>-&gt;<b>'.$test->getName().'</b>() '.$suffix.'<br />';
+			echo '<b>'.get_class($test).'</b>-&gt;<b>'.$this->groupLink($test).'</b>() '.$suffix.'<br />';
 			Sledgehammer\Framework::$errorHandler->headers = false;
 			report_exception($e);
 			self::$firstError = false;
@@ -185,6 +196,25 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		}
 		return $class;
 	}
+
+    /**
+     * When the test is in a group create a link for re-running only that group.
+     * @param PHPUnit_Framework_Test $test
+     */
+    private function groupLink(PHPUnit_Framework_TestCase $test) {
+        $method = $test->getName();
+        if (count($this->groups) > 1) {
+            foreach ($this->groups as $group => $tests) {
+                if ($group === '__nogroup__') {
+                    continue;
+                }
+                if (in_array($test, $tests, true)) {
+                    return Html::element('a', array('href' => '?group='.urlencode($group)), $method);
+                }
+            }
+        }
+        return $method;
+    }
 
 }
 

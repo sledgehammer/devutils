@@ -85,7 +85,7 @@ class Curl extends Observable {
 
 	/**
 	 * Global queue of active cURL requests
-	 * @var array|Curl
+	 * @var Curl[]
 	 */
 	static $requests = array();
 
@@ -308,6 +308,70 @@ class Curl extends Observable {
 			$response->waitForCompletion();
 		}
 		return $response;
+	}
+
+	/**
+	 * Proxy/resend the current request to different url/server.
+	 * @param string $endpoint Url
+	 * @param callback $filter Callback to change the generated Curl options.
+	 */
+	static function proxy($endpoint, $filter = null) {
+		$url = new Url($endpoint);
+		$url->query = $_GET;
+		$options = array(
+			CURLOPT_URL => (string) $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_CUSTOMREQUEST => $_SERVER['REQUEST_METHOD'],
+			CURLOPT_FAILONERROR => false,
+			CURLOPT_HEADER => true,
+			CURLOPT_HTTPHEADER => array()
+		);
+		// Proxy HTTP headers
+		foreach($_SERVER as $name => $value) {
+			if (substr($name, 0, 5) === 'HTTP_' && in_array($name, array('HTTP_HOST', 'HTTP_CONNECTION')) === false) {
+				$options[CURLOPT_HTTPHEADER][] = substr($name, 5).':'.$value;
+			}
+		}
+		// Proxy POST/PUT contents
+		if (in_array($_SERVER['REQUEST_METHOD'], array('POST', 'PUT'))) {
+			if (empty($_POST) === false) {
+				$options[CURLOPT_POSTFIELDS] = $_POST;
+			} elseif (empty($_PUT) === false) {
+				$options[CURLOPT_POSTFIELDS] = $_PUT;
+			} elseif (isset($HTTP_RAW_POST_DATA)) {
+				$options[CURLOPT_POSTFIELDS] = $HTTP_RAW_POST_DATA;
+			} else {
+				$options[CURLOPT_POSTFIELDS] = file_get_contents('php://input');
+			}
+		}
+		// Custom curl options
+		if ($filter !== null) {
+			$options = call_user_func($filter, $options);
+		}
+		// Send request
+		$response = new Curl($options);
+		$headers = $response->getHeaders();
+		unset($headers['Transfer-Encoding']);
+		$headers['Status'] = $response->http_code;
+		send_headers($headers);
+		echo $response->getBody();
+		exit();
+	}
+
+	/**
+	 * Create a file value for use in CURLOPT_POSTFIELDS.
+	 * @link http://php.net/manual/en/class.curlfile.php
+	 *
+	 * @param $filename
+	 * @param $mimetype
+	 * @param $postname
+	 * @return \CURLFile
+	 */
+	static function file($filename, $mimetype = null, $postname = null) {
+		if (function_exists('\curl_file_create')) {
+			return curl_file_create($filename, $mimetype, $postname);
+		}
+		return '@'.$filename; // Old insecure method (PHP before 5.5)
 	}
 
 	/**
