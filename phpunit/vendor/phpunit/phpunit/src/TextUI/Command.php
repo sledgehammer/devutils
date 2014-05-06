@@ -498,22 +498,22 @@ class PHPUnit_TextUI_Command
                 }
                 break;
 
-                case 'report-useless-tests': {
+                case '--report-useless-tests': {
                     $this->arguments['reportUselessTests'] = true;
                 }
                 break;
 
-                case 'strict-coverage': {
+                case '--strict-coverage': {
                     $this->arguments['strictCoverage'] = true;
                 }
                 break;
 
-                case 'disallow-test-output': {
+                case '--disallow-test-output': {
                     $this->arguments['disallowTestOutput'] = true;
                 }
                 break;
 
-                case 'enforce-time-limit': {
+                case '--enforce-time-limit': {
                     $this->arguments['enforceTimeLimit'] = true;
                 }
                 break;
@@ -634,6 +634,16 @@ class PHPUnit_TextUI_Command
 
             if (!isset($this->arguments['bootstrap']) && isset($phpunit['bootstrap'])) {
                 $this->handleBootstrap($phpunit['bootstrap']);
+            }
+
+            /**
+             * Issue #657
+             */
+            if (isset($phpunit['stderr']) && $phpunit['stderr'] == true) {
+                $this->arguments['printer'] = new PHPUnit_TextUI_ResultPrinter(
+                  'php://stderr',
+                  isset($this->arguments['verbose']) ? $this->arguments['verbose'] : FALSE
+                );
             }
 
             if (isset($phpunit['printerClass'])) {
@@ -816,7 +826,7 @@ class PHPUnit_TextUI_Command
           PHPUnit_Runner_Version::getReleaseChannel()
         );
 
-        $localFilename = $_SERVER['argv'][0];
+        $localFilename = realpath($_SERVER['argv'][0]);
         $tempFilename  = basename($localFilename, '.phar') . '-temp.phar';
 
         // Workaround for https://bugs.php.net/bug.php?id=65538
@@ -825,21 +835,25 @@ class PHPUnit_TextUI_Command
 
         print 'Updating the PHPUnit PHAR ... ';
 
+        $options = array(
+            'ssl' => array(
+                'allow_self_signed' => false,
+                'cafile' => $caFile,
+                'verify_peer' => true
+            )
+        );
+
+        if (PHP_VERSION_ID < 50600) {
+            $options['ssl']['CN_match']        = 'phar.phpunit.de';
+            $options['ssl']['SNI_server_name'] = 'phar.phpunit.de';
+        }
+
         file_put_contents(
           $tempFilename,
           file_get_contents(
             $remoteFilename,
             false,
-            stream_context_create(
-              array(
-                'ssl' => array(
-                  'CN_match' => 'phar.phpunit.de',
-                  'allow_self_signed' => false,
-                  'cafile' => $caFile,
-                  'verify_peer' => true
-                )
-              )
-            )
+            stream_context_create($options)
           )
         );
 

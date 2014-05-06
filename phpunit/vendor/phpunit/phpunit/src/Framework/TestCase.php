@@ -231,7 +231,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     /**
      * @var array
      */
-    private $mockObjectGenerator;
+    private $mockObjectGenerator = null;
 
     /**
      * @var integer
@@ -289,16 +289,6 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     private $outputBufferingActive = false;
 
     /**
-     * @var array
-     */
-    private $beforeMethods = array('setUp');
-
-    /**
-     * @var array
-     */
-    private $afterMethods = array('tearDown');
-
-    /**
      * Constructs a test case with the given name.
      *
      * @param string $name
@@ -313,7 +303,6 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
 
         $this->data                = $data;
         $this->dataName            = $dataName;
-        $this->mockObjectGenerator = new PHPUnit_Framework_MockObject_Generator;
     }
 
     /**
@@ -807,16 +796,20 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         // Backup the cwd
         $currentWorkingDirectory = getcwd();
 
+        $hookMethods = PHPUnit_Util_Test::getHookMethods(get_class($this));
+
         try {
             $this->checkRequirements();
 
             if ($this->inIsolation) {
-                $this->setUpBeforeClass();
+                foreach ($hookMethods['beforeClass'] as $method) {
+                    $this->$method();
+                }
             }
 
             $this->setExpectedExceptionFromAnnotation();
 
-            foreach ($this->beforeMethods as $method) {
+            foreach ($hookMethods['before'] as $method) {
                 $this->$method();
             }
 
@@ -845,12 +838,14 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         // Tear down the fixture. An exception raised in tearDown() will be
         // caught and passed on when no exception was raised before.
         try {
-            foreach ($this->afterMethods as $method) {
+            foreach ($hookMethods['after'] as $method) {
                 $this->$method();
             }
 
             if ($this->inIsolation) {
-                $this->tearDownAfterClass();
+                foreach ($hookMethods['afterClass'] as $method) {
+                    $this->$method();
+                }
             }
         } catch (Exception $_e) {
             if (!isset($e)) {
@@ -1298,7 +1293,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
      */
     public function getMock($originalClassName, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false, $callOriginalMethods = false)
     {
-        $mockObject = $this->mockObjectGenerator->getMock(
+        $mockObject = $this->getMockObjectGenerator()->getMock(
           $originalClassName,
           $methods,
           $arguments,
@@ -1379,7 +1374,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
      */
     public function getMockForAbstractClass($originalClassName, array $arguments = array(), $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $mockedMethods = array(), $cloneArguments = false)
     {
-        $mockObject = $this->mockObjectGenerator->getMockForAbstractClass(
+        $mockObject = $this->getMockObjectGenerator()->getMockForAbstractClass(
           $originalClassName,
           $arguments,
           $mockClassName,
@@ -1417,7 +1412,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
 
         if (!class_exists($originalClassName)) {
           eval(
-            $this->mockObjectGenerator->generateClassFromWsdl(
+            $this->getMockObjectGenerator()->generateClassFromWsdl(
               $wsdlFile, $originalClassName, $methods, $options
             )
           );
@@ -1453,7 +1448,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
      */
     public function getMockForTrait($traitName, array $arguments = array(), $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $mockedMethods = array(), $cloneArguments = false)
     {
-        $mockObject = $this->mockObjectGenerator->getMockForTrait(
+        $mockObject = $this->getMockObjectGenerator()->getMockForTrait(
           $traitName,
           $arguments,
           $mockClassName,
@@ -1485,7 +1480,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
      */
     protected function getObjectForTrait($traitName, array $arguments = array(), $traitClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false)
     {
-        return $this->mockObjectGenerator->getObjectForTrait(
+        return $this->getMockObjectGenerator()->getObjectForTrait(
           $traitName,
           $arguments,
           $traitClassName,
@@ -1904,20 +1899,16 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     }
 
     /**
-     * @internal
-     * @param string
+     * Get the mock object generator, creating it if it doesn't exist.
+     *
+     * @return   PHPUnit_Framework_MockObject_Generator
      */
-    public function hookBeforeMethod($name)
+    protected function getMockObjectGenerator()
     {
-        $this->beforeMethods[] = $name;
-    }
+        if (null === $this->mockObjectGenerator) {
+            $this->mockObjectGenerator = new PHPUnit_Framework_MockObject_Generator;
+        }
 
-    /**
-     * @internal
-     * @param string
-     */
-    public function hookAfterMethod($name)
-    {
-        $this->afterMethods[] = $name;
+        return $this->mockObjectGenerator;
     }
 }
