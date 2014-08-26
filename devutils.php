@@ -46,6 +46,11 @@ if (substr($filename, 0, 10) == 'run_tests/') {
 			$tmpDir .= '-'.$user['name'];
 		}
 		$tmpDir .= '/';
+	} else {
+		if (function_exists('posix_getpwuid')) {
+			$user = posix_getpwuid(posix_geteuid());
+			$tmpDir .= $user['name'].'/';
+		}
 	}
 	include($tmpDir.'UnitTests/'.basename($filename));
 	exit;

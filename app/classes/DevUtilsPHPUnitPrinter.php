@@ -128,7 +128,9 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 				echo '<h3>'.$suite->getName().'</h3>';
 			}
 		}
-
+		if (ob_get_level()) {
+			ob_flush();
+		}
 	}
 
 	public function endTestSuite(PHPUnit_Framework_TestSuite $suite) {
