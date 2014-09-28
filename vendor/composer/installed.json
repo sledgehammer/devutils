@@ -1,35 +1,5 @@
 [
     {
-        "name": "sledgehammer/mvc",
-        "version": "13.09.0",
-        "version_normalized": "13.09.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/sledgehammer/mvc.git",
-            "reference": "345aa8fea2832840791173a8196d9c75b120cea4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/sledgehammer/mvc/zipball/345aa8fea2832840791173a8196d9c75b120cea4",
-            "reference": "345aa8fea2832840791173a8196d9c75b120cea4",
-            "shasum": ""
-        },
-        "require": {
-            "sledgehammer/core": "*"
-        },
-        "suggest": {
-            "sledgehammer/minify": "Minify assets like css, javascript and images"
-        },
-        "time": "2013-09-22 20:55:05",
-        "type": "library",
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "CC-BY-SA-3.0"
-        ],
-        "description": "Sledgehammer MVC module: Provides a Model View Controller architecture"
-    },
-    {
         "name": "sledgehammer/core",
         "version": "14.03.0",
         "version_normalized": "14.03.0.0",
@@ -66,5 +36,35 @@
             "framework",
             "sledgehammer"
         ]
+    },
+    {
+        "name": "sledgehammer/mvc",
+        "version": "13.09.0",
+        "version_normalized": "13.09.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/sledgehammer/mvc.git",
+            "reference": "345aa8fea2832840791173a8196d9c75b120cea4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/sledgehammer/mvc/zipball/345aa8fea2832840791173a8196d9c75b120cea4",
+            "reference": "345aa8fea2832840791173a8196d9c75b120cea4",
+            "shasum": ""
+        },
+        "require": {
+            "sledgehammer/core": "*"
+        },
+        "suggest": {
+            "sledgehammer/minify": "Minify assets like css, javascript and images"
+        },
+        "time": "2013-09-22 20:55:05",
+        "type": "library",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "CC-BY-SA-3.0"
+        ],
+        "description": "Sledgehammer MVC module: Provides a Model View Controller architecture"
     }
 ]
