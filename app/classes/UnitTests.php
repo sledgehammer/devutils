@@ -23,7 +23,9 @@ class UnitTests extends VirtualFolder {
 
 	function dynamicFoldername($folder, $filename = null) {
 		$files = array();
-		if ($folder === 'app' && empty($this->project->modules[$folder])) { // A non sledgehammer app?
+        if ($folder === 'project' && empty($this->project->modules[$folder])) { // A non sledgehammer app?
+			$module = new Module('project', $this->project->path);
+		} elseif ($folder === 'app' && empty($this->project->modules[$folder])) { // A non sledgehammer app?
 			$module = new Module('app', $this->project->path.'app');
 		} else {
 			$module = $this->project->modules[$folder];

@@ -48,7 +48,10 @@ class DevUtilsWebsite extends Website {
 
 		// Unittests
 		$modules = $this->project->modules;
-		if ($this->project->application === null && file_exists($this->project->path.'app/tests')) {
+        if ($this->project->application === null && file_exists($this->project->path.'tests')) {
+            // tests are in the project root? extract tests
+            array_key_unshift($modules, 'project', new Module('project', $this->project->path));
+        } elseif ($this->project->application === null && file_exists($this->project->path.'app/tests')) {
 			// A non sledgehammer app? extract tests
 			array_key_unshift($modules, 'app', new Module('app', $this->project->path.'app'));
 		}
