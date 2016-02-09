@@ -1,55 +1,14 @@
 <?php
-/**
- * PHPUnit
+/*
+ * This file is part of the PHPUnit_MockObject package.
  *
- * Copyright (c) 2010-2014, Sebastian Bergmann <sebastian@phpunit.de>.
- * All rights reserved.
+ * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Sebastian Bergmann nor the names of his
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- * @package    PHPUnit_MockObject
- * @author     Giorgio Sironi <piccoloprincipeazzurro@gmail.com>
- * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2010-2014 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
- * @link       http://github.com/sebastianbergmann/phpunit-mock-objects
- * @since      File available since Release 1.0.0
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 /**
- * @package    PHPUnit_MockObject
- * @author     Giorgio Sironi <piccoloprincipeazzurro@gmail.com>
- * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  2010-2014 Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
- * @link       http://github.com/sebastianbergmann/phpunit-mock-objects
  * @since      File available since Release 1.0.0
  */
 class Framework_MockBuilderTest extends PHPUnit_Framework_TestCase
@@ -72,7 +31,7 @@ class Framework_MockBuilderTest extends PHPUnit_Framework_TestCase
     public function testMethodsToMockCanBeSpecified()
     {
         $spec = $this->getMockBuilder('Mockable');
-        $spec->setMethods(array('mockableMethod'));
+        $spec->setMethods(['mockableMethod']);
         $mock = $spec->getMock();
         $this->assertNull($mock->mockableMethod());
         $this->assertTrue($mock->anotherMockableMethod());
@@ -82,7 +41,7 @@ class Framework_MockBuilderTest extends PHPUnit_Framework_TestCase
     {
         $spec = $this->getMockBuilder('Mockable');
         $mock = $spec->getMock();
-        $this->assertEquals(array(NULL, NULL), $mock->constructorArgs);
+        $this->assertEquals([null, null], $mock->constructorArgs);
     }
 
     public function testMockClassNameCanBeSpecified()
@@ -96,7 +55,7 @@ class Framework_MockBuilderTest extends PHPUnit_Framework_TestCase
     public function testConstructorArgumentsCanBeSpecified()
     {
         $spec = $this->getMockBuilder('Mockable');
-        $spec->setConstructorArgs($expected = array(23, 42));
+        $spec->setConstructorArgs($expected = [23, 42]);
         $mock = $spec->getMock();
         $this->assertEquals($expected, $mock->constructorArgs);
     }
@@ -111,8 +70,8 @@ class Framework_MockBuilderTest extends PHPUnit_Framework_TestCase
 
     public function testByDefaultOriginalCloneIsPreserved()
     {
-        $spec = $this->getMockBuilder('Mockable');
-        $mock = $spec->getMock();
+        $spec   = $this->getMockBuilder('Mockable');
+        $mock   = $spec->getMock();
         $cloned = clone $mock;
         $this->assertTrue($cloned->cloned);
     }
@@ -121,9 +80,9 @@ class Framework_MockBuilderTest extends PHPUnit_Framework_TestCase
     {
         $spec = $this->getMockBuilder('Mockable');
         $spec->disableOriginalClone();
-        $mock = $spec->getMock();
-        $mock->cloned = FALSE;
-        $cloned = clone $mock;
+        $mock         = $spec->getMock();
+        $mock->cloned = false;
+        $cloned       = clone $mock;
         $this->assertFalse($cloned->cloned);
     }
 
@@ -137,8 +96,8 @@ class Framework_MockBuilderTest extends PHPUnit_Framework_TestCase
     public function testProvidesAFluentInterface()
     {
         $spec = $this->getMockBuilder('Mockable')
-                     ->setMethods(array('mockableMethod'))
-                     ->setConstructorArgs(array())
+                     ->setMethods(['mockableMethod'])
+                     ->setConstructorArgs([])
                      ->setMockClassName('DummyClassName')
                      ->disableOriginalConstructor()
                      ->disableOriginalClone()

@@ -1,22 +1,24 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
     "hash": "59ead4a04e9349318a570babd3a84a5d",
+    "content-hash": "076c8faced41df3568f80dfb37254e10",
     "packages": [
         {
             "name": "sledgehammer/core",
-            "version": "14.03.0",
+            "version": "15.08.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sledgehammer/core.git",
-                "reference": "2e62198df15b1c76a1a8ea609cd89f5f1fe9d4e3"
+                "reference": "a919d5f9d2911f40d8ee45577317bad9f41b13c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sledgehammer/core/zipball/2e62198df15b1c76a1a8ea609cd89f5f1fe9d4e3",
-                "reference": "2e62198df15b1c76a1a8ea609cd89f5f1fe9d4e3",
+                "url": "https://api.github.com/repos/sledgehammer/core/zipball/a919d5f9d2911f40d8ee45577317bad9f41b13c9",
+                "reference": "a919d5f9d2911f40d8ee45577317bad9f41b13c9",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +41,7 @@
                 "framework",
                 "sledgehammer"
             ],
-            "time": "2014-03-07 11:57:36"
+            "time": "2015-09-08 11:54:47"
         },
         {
             "name": "sledgehammer/mvc",
@@ -70,20 +72,12 @@
             "time": "2013-09-22 20:55:05"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
 }

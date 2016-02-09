@@ -10,16 +10,16 @@ require __DIR__ . '/../bootstrap.php';
 PHPUnit_TextUI_Command::main();
 ?>
 --EXPECTF--
-PHPUnit %s by Sebastian Bergmann.
+PHPUnit %s by Sebastian Bergmann and contributors.
 
-F
+W                                                                   1 / 1 (100%)
 
 Time: %s, Memory: %sMb
 
-There was 1 failure:
+There was 1 warning:
 
 1) Warning
 No tests found in class "EmptyTestCaseTest".
 
-FAILURES!
-Tests: 1, Assertions: 0, Failures: 1.
+WARNINGS!
+Tests: 1, Assertions: 0, Warnings: 1.

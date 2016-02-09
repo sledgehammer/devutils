@@ -70,9 +70,17 @@ class UnitTests extends VirtualFolder {
 		$source .= "\$GLOBALS['title'] = '".$title."';\n";
 		$source .= "\$_SERVER['argv'] = array(\n";
 		$source .= "\t'--printer', 'DevUtilsPHPUnitPrinter',\n";
-		$source .= "\t'--strict',\n";
-		$source .= "\t'--debug',\n";
-        if ($group) {
+        $flags = [
+            'report-useless-tests',
+            'strict-coverage',
+            'disallow-test-output',
+            'enforce-time-limit',
+            'debug'
+        ];
+        foreach ($flags as $flag) {
+            $source .= "\t'--".$flag."',\n";
+        }
+		if ($group) {
             $source .= "\t'--group', '".addslashes($group)."',\n";
         }
 		$source .= "\t'".addslashes($path)."',\n";

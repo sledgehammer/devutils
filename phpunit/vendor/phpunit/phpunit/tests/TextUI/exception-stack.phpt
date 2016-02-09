@@ -10,16 +10,16 @@ require __DIR__ . '/../bootstrap.php';
 PHPUnit_TextUI_Command::main();
 ?>
 --EXPECTF--
-PHPUnit %s by Sebastian Bergmann.
+PHPUnit %s by Sebastian Bergmann and contributors.
 
-EE
+EE                                                                  2 / 2 (100%)
 
 Time: %s, Memory: %sMb
 
 There were 2 errors:
 
 1) ExceptionStackTest::testPrintingChildException
-ExceptionStackTestException: Child exception
+PHPUnit_Framework_Exception: Child exception
 message
 Failed asserting that two arrays are equal.
 --- Expected
@@ -31,7 +31,6 @@ Failed asserting that two arrays are equal.
  )
 
 
-%s:%i
 %s:%i
 
 Caused by

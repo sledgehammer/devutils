@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/sledgehammer/core/bootstrap.php',
+    'e8d30742ba4e30710adf23591ced6a1f' => $vendorDir . '/sledgehammer/core/bootstrap.php',
 );

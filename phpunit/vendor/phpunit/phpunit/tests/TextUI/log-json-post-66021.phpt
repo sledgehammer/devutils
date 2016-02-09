@@ -2,11 +2,11 @@
 phpunit --log-json php://stdout BankAccountTest ../_files/BankAccountTest.php
 --SKIPIF--
 <?php
-if (!((version_compare(PHP_VERSION, '5.4.28', '>=') && version_compare(PHP_VERSION, '5.5', '<')) ||
-    (version_compare(PHP_VERSION, '5.5.12', '>=') && version_compare(PHP_VERSION, '5.6', '<')) ||
-    version_compare(PHP_VERSION, '5.6.0beta2', '>=') || PHP_VERSION == '5.6.0-dev') ||
-    (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.2.0-dev', '<')))
-    print "skip: PHP 5.4.(28+) or PHP 5.5.(12+) or PHP 5.6.0beta2+ or HHVM 3.(2+) required";
+if (!defined('JSON_PRETTY_PRINT')) {
+    print 'skip: JSON_PRETTY_PRINT is required';
+} elseif (json_encode([], JSON_PRETTY_PRINT) != '[]') {
+    print 'skip: Does not have PHP #66021 (Blank line inside empty JSON array/object)';
+}
 ?>
 --FILE--
 <?php
@@ -14,13 +14,13 @@ $_SERVER['argv'][1] = '--no-configuration';
 $_SERVER['argv'][2] = '--log-json';
 $_SERVER['argv'][3] = 'php://stdout';
 $_SERVER['argv'][4] = 'BankAccountTest';
-$_SERVER['argv'][5] = dirname(__FILE__).'/../_files/BankAccountTest.php';
+$_SERVER['argv'][5] = dirname(__FILE__) . '/../_files/BankAccountTest.php';
 
 require __DIR__ . '/../bootstrap.php';
 PHPUnit_TextUI_Command::main();
 ?>
 --EXPECTF--
-PHPUnit %s by Sebastian Bergmann.
+PHPUnit %s by Sebastian Bergmann and contributors.
 
 {
     "event": "suiteStart",
@@ -56,7 +56,7 @@ PHPUnit %s by Sebastian Bergmann.
     "event": "testStart",
     "suite": "BankAccountTest",
     "test": "BankAccountTest::testBalanceCannotBecomeNegative2"
-}.{
+}.                                                                 3 / 3 (100%){
     "event": "test",
     "suite": "BankAccountTest",
     "test": "BankAccountTest::testBalanceCannotBecomeNegative2",
