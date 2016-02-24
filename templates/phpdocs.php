@@ -3,7 +3,6 @@
  * PHPDocumentor
  */
 
-namespace Sledgehammer;
 javascript_once(WEBROOT.'core/js/jquery.js', 'jquery');
 
 if ($generate):

@@ -2,7 +2,7 @@
 /**
  * FileBrowser
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
 /**
  * Een eenvoudige filebrowser
  */

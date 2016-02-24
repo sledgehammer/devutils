@@ -1,3 +1,4 @@
 autoloader.db.php
-nbproject
-tmp
+/nbproject
+/tmp
+/vendor

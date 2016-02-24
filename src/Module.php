@@ -2,7 +2,9 @@
 /**
  * Module
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
+use Sledgehammer\Core\Object;
+deprecated('Module is deprecated use Sledgehammer\Devutils\Package');
 /**
  * Een Module binnen een Project
  * @package DevUtils

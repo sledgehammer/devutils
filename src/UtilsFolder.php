@@ -1,8 +1,9 @@
 <?php
-/**
- * UtilsFolder
- */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
+
+use Sledgehammer\Mvc\Component\HttpError;
+use Sledgehammer\Mvc\ViewHeaders;
+use Sledgehammer\Mvc\VirtualFolder;
 /**
  * Run utilities from inside a module folder.
  * @package DevUtils
@@ -23,7 +24,7 @@ class UtilsFolder extends VirtualFolder {
 		$this->addCrumb($util->title, false);
 		Util::$module = $this->module;
 		$component = $util->generateContent();
-		if (is_valid_view($component)) {
+		if (\Sledgehammer\is_valid_view($component)) {
 			return new ViewHeaders($component, array(
 				'title' => $util->title,
 			), true);

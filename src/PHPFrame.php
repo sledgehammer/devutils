@@ -2,7 +2,8 @@
 /**
  * PHPFrame
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
+use Sledgehammer\Core\Object;
 /**
  * Een View dat een url inlaad en direct laat zien.
  *

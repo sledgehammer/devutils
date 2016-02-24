@@ -2,7 +2,7 @@
 /**
  * UnitTests
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
 /**
  * Configure and run PHPUnit unittests.
  * @package DevUtils
@@ -85,8 +85,8 @@ class UnitTests extends VirtualFolder {
         }
 		$source .= "\t'".addslashes($path)."',\n";
 		$source .= ");\n";
-		$source .= "require_once('".PATH."phpunit/vendor/autoload.php');\n";
-		$source .= "require_once('".$this->project->modules['core']->path."phpunit_bootstrap.php');\n";
+//		$source .= "require_once('".PATH."phpunit/vendor/autoload.php');\n";
+//		$source .= "require_once('".$this->project->modules['core']->path."phpunit_bootstrap.php');\n";
 		if (file_exists($this->project->path.'phpunit.xml')) {
 			$config = simplexml_load_file($this->project->path.'phpunit.xml');
 			if ($config['bootstrap']) {

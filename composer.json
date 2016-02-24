@@ -1,8 +1,14 @@
 {
     "name": "sledgehammer/devutils",
-    "description": "A Sledgehammer Introspection & diagnostics tool",
+    "description": "An Introspection & diagnostics tool for composer based projects",
     "require": {
-        "sledgehammer/core": "*",
-        "sledgehammer/mvc": "*"
+        "sledgehammer/core": "16.x-dev",
+        "sledgehammer/mvc": "16.x-dev",
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sledgehammer\\Devutils\\": "src"
+        }
     }
 }

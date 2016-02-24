@@ -2,7 +2,7 @@
 /**
  * PHPInfo
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
 /**
  * phpinfo() with TwBootstrap styling
  * @package DevUtils

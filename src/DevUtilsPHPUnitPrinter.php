@@ -2,7 +2,7 @@
 /**
  * DevUtilsPHPUnitPrinter
  */
-use Sledgehammer\Html;
+use Sledgehammer\Core\Html;
 /**
  * A PHPUnit_Util_Printer for rendering PHPUnit results in html.
  * (Also shows successful passes)
@@ -110,18 +110,18 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 			$first = false;
 		} else {
 			$url = false;
-			$filename = \Sledgehammer\Framework::$autoloader->getFilename($suite->getName());
-			if (substr($filename, 0, strlen(\Sledgehammer\MODULES_DIR)) === \Sledgehammer\MODULES_DIR) {
-				$filename = substr($filename, strlen(Sledgehammer\MODULES_DIR));
-				if (preg_match('@^(?<module>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
-					$url = DEVUTILS_WEBPATH.'tests/'.$matches['module'].'/'.$matches['file'];
-				}
-			} elseif (substr($filename, 0, strlen(\Sledgehammer\APP_DIR)) === \Sledgehammer\APP_DIR) {
-				$filename = substr($filename, strlen(dirname(Sledgehammer\APP_DIR)));
-				if (preg_match('@^/(?<app>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
-					$url = DEVUTILS_WEBPATH.'tests/'.$matches['app'].'/'.$matches['file'];
-				}
-			}
+			// $filename = \Sledgehammer\Framework::$autoloader->getFilename($suite->getName());
+			// if (substr($filename, 0, strlen(\Sledgehammer\MODULES_DIR)) === \Sledgehammer\MODULES_DIR) {
+			// 	$filename = substr($filename, strlen(Sledgehammer\MODULES_DIR));
+			// 	if (preg_match('@^(?<module>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
+			// 		$url = DEVUTILS_WEBPATH.'tests/'.$matches['module'].'/'.$matches['file'];
+			// 	}
+			// } elseif (substr($filename, 0, strlen(\Sledgehammer\APP_DIR)) === \Sledgehammer\APP_DIR) {
+			// 	$filename = substr($filename, strlen(dirname(Sledgehammer\APP_DIR)));
+			// 	if (preg_match('@^/(?<app>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
+			// 		$url = DEVUTILS_WEBPATH.'tests/'.$matches['app'].'/'.$matches['file'];
+			// 	}
+			// }
 			if ($url) {
 				echo '<h3><a href="'.$url.'">'.$suite->getName().'</a></h3>';
 			} else {
@@ -150,7 +150,7 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 	private function trace(PHPUnit_Framework_Test $test, Exception $e, $suffix = '') {
 		if (self::$firstError && ($e instanceof PHPUnit_Framework_SkippedTestError) === false) {
 			echo '<b>'.get_class($test).'</b>-&gt;<b>'.$this->groupLink($test).'</b>() '.$suffix.'<br />';
-			Sledgehammer\Framework::$errorHandler->headers = false;
+			// Sledgehammer\Core\Debug\ErrorHandler::instance() = false;
 			report_exception($e);
 			self::$firstError = false;
 			return;
@@ -160,8 +160,8 @@ class DevUtilsPHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Fra
 		if (substr(get_class($e), 0, 8) === 'PHPUnit_') {
 			$phpunitPath = 'PHPUnit'.DIRECTORY_SEPARATOR.'Framework'.DIRECTORY_SEPARATOR;
 			$proxyFiles = array(
-				Sledgehammer\Framework::$autoloader->getFilename('Sledgehammer\Object'),
-				Sledgehammer\Framework::$autoloader->getFilename('Sledgehammer\ErrorHandler'),
+				// Sledgehammer\Framework::$autoloader->getFilename('Sledgehammer\Object'),
+				// Sledgehammer\Framework::$autoloader->getFilename('Sledgehammer\ErrorHandler'),
 			);
 			$backtrace = $e->getTrace();
 			foreach ($backtrace as $index => $call) {

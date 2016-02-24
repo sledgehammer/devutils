@@ -2,7 +2,7 @@
 /**
  * PhpDocs
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
 /**
  * Generate and show API documentation.
  * @package DevUtils

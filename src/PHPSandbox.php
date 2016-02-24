@@ -2,7 +2,8 @@
 /**
  * PHPSandbox
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
+use Sledgehammer\Core\Object;
 /**
  * Run phpcode in a separate process.
  * @package DevUtils

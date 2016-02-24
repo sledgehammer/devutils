@@ -2,7 +2,10 @@
 /**
  * Project
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
+use Sledgehammer\Core\Object;
+deprecated('Project is deprecated use Sledgehammer\Devutils\Package');
+
 /**
  * Een sledgehammer project/applicatie.
  * @package DevUtils

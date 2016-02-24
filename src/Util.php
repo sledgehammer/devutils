@@ -4,7 +4,10 @@
  *
  * @package DevUtils
  */
-namespace Sledgehammer;
+namespace Sledgehammer\Devutils;
+
+use Sledgehammer\Core\Object;
+use Sledgehammer\Mvc\Controller;
 abstract class Util extends Object implements Controller {
 
 	public static $module;
