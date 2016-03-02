@@ -17,43 +17,41 @@ use Sledgehammer\Mvc\ViewHeaders;
 use Sledgehammer\Mvc\Website;
 
 /**
- * The DevUtils Application FrontController
- * @package DevUtils
+ * The DevUtils Application FrontController.
  */
-class DevUtilsWebsite extends Website {
-
+class DevUtilsWebsite extends Website
+{
     private static $username;
     private static $password;
 
     /**
-     *
      * @var Package[]|Collection
      */
     public $packages;
 
     /**
-     *
      * @var Breadcrumbs
      */
     private $breadcrumbs;
 
-    function __construct() {
+    public function __construct()
+    {
         $this->breadcrumbs = new Breadcrumbs();
         $this->packages = new Collection();
         $vendorDir = new DirectoryIterator(\Sledgehammer\VENDOR_DIR);
-        foreach($vendorDir as $entry) {
-            if($entry->isDot() || $entry->isFile() || in_array($entry->getFilename(), ['composer', 'bin'])) {
+        foreach ($vendorDir as $entry) {
+            if ($entry->isDot() || $entry->isFile() || in_array($entry->getFilename(), ['composer', 'bin'])) {
                 continue;
             }
             $packageDirs = new DirectoryIterator($entry->getPathname());
             foreach ($packageDirs as $subentry) {
-                if($subentry->isDot() || $subentry->isFile()) {
+                if ($subentry->isDot() || $subentry->isFile()) {
                     continue;
                 }
                 $this->packages[] = new Package($entry->getFilename().'/'.$subentry->getFilename());
             }
         }
-        
+
 //		if ($projectPath) {
 //			$this->project = new Project($projectPath);
 //			$this->addCrumb(array('icon' => 'home-white', 'label' => 'Home'), $this->getPath());
@@ -61,17 +59,18 @@ class DevUtilsWebsite extends Website {
         parent::__construct();
     }
 
-    function index() {
-//        $packages = ;
+    public function index()
+    {
+        //        $packages = ;
         return new ViewHeaders(
-            new Nav($this->packages->orderBy('name')->select('name', 'name'), ['class' => 'nav nav-list']), 
+            new Nav($this->packages->orderBy('name')->select('name', 'name'), ['class' => 'nav nav-list']),
             ['title' => 'Devutils']
         );
-        
+
 //        if (!$this->project) {
         return new ViewHeaders(Alert::error('<h3>No projects detected</h3>See "Readme.md" for more info'), array('title' => 'Error'));
 //        }
-        $iconPrefix = \Sledgehammer\WEBROOT . 'icons/';
+        $iconPrefix = \Sledgehammer\WEBROOT.'icons/';
 
         // Properties
         $properties = $this->project->getProperties();
@@ -80,19 +79,19 @@ class DevUtilsWebsite extends Website {
         $utilityList = array();
         foreach ($this->project->modules as $moduleID => $module) {
             foreach ($module->getUtilities() as $utilFilename => $util) {
-                $utilityList[$moduleID . '/utils/' . $utilFilename] = array('icon' => $util->icon, 'label' => $util->title);
+                $utilityList[$moduleID.'/utils/'.$utilFilename] = array('icon' => $util->icon, 'label' => $util->title);
             }
         }
-        $utilityList['phpinfo.php'] = array('icon' => $iconPrefix . 'php.gif', 'label' => 'PHP Info');
+        $utilityList['phpinfo.php'] = array('icon' => $iconPrefix.'php.gif', 'label' => 'PHP Info');
 
         // Unittests
         $modules = $this->project->modules;
-        if ($this->project->application === null && file_exists($this->project->path . 'tests')) {
+        if ($this->project->application === null && file_exists($this->project->path.'tests')) {
             // tests are in the project root? extract tests
             array_key_unshift($modules, 'project', new Module('project', $this->project->path));
-        } elseif ($this->project->application === null && file_exists($this->project->path . 'app/tests')) {
+        } elseif ($this->project->application === null && file_exists($this->project->path.'app/tests')) {
             // A non sledgehammer app? extract tests
-            array_key_unshift($modules, 'app', new Module('app', $this->project->path . 'app'));
+            array_key_unshift($modules, 'app', new Module('app', $this->project->path.'app'));
         }
         foreach ($modules as $identifier => $module) {
             foreach ($module->getUnitTests() as $testfile) {
@@ -102,7 +101,7 @@ class DevUtilsWebsite extends Website {
                     $label = substr($testfile, 0, -4);
                 }
                 $label = basename($label);
-                $unittestList['tests/' . $identifier . '/' . $testfile] = array('icon' => $iconPrefix . 'test.png', 'label' => ucfirst($identifier) . ' - ' . $label);
+                $unittestList['tests/'.$identifier.'/'.$testfile] = array('icon' => $iconPrefix.'test.png', 'label' => ucfirst($identifier).' - '.$label);
             }
         }
         $template = new Template('project.php', array(
@@ -111,87 +110,111 @@ class DevUtilsWebsite extends Website {
             'utilities' => new Nav($utilityList, array('class' => 'nav nav-list')),
             'unittests' => new Nav($unittestList, array('class' => 'nav nav-list')),
                 ), array(
-            'title' => $this->project->name . ' project',
+            'title' => $this->project->name.' project',
         ));
+
         return $template;
     }
 
-    function phpinfo() {
+    public function phpinfo()
+    {
         $this->addCrumb('PHP Info');
-        return new PHPInfo;
+
+        return new PHPInfo();
     }
 
-    function rewrite_check() {
+    public function rewrite_check()
+    {
         die('Apache Rewrite module is enabled');
     }
 
-    function project_icon() {
+    public function project_icon()
+    {
         $favicon = $this->project->getFavicon();
         if ($favicon) {
             return new FileDocument($favicon);
         }
-        return new FileDocument(APP_DIR . 'public/icons/project.png');
+
+        return new FileDocument(APP_DIR.'public/icons/project.png');
     }
 
     /**
-     * Als er geen bestand in de module_icons map staat voor de opgegeven module, geeft dan het standaard icoon weer
+     * Als er geen bestand in de module_icons map staat voor de opgegeven module, geeft dan het standaard icoon weer.
      */
-    function module_icons_folder() {
+    public function module_icons_folder()
+    {
         $url = URL::getCurrentURL();
         file_extension($url->getFilename(), $module);
-        $icon = $this->project->modules[$module]->path . 'icon.png';
+        $icon = $this->project->modules[$module]->path.'icon.png';
         if (file_exists($icon)) {
             return new FileDocument($icon);
         }
-        return new FileDocument(APP_DIR . 'public/icons/module.png');
+
+        return new FileDocument(APP_DIR.'public/icons/module.png');
     }
 
-    function files_folder() {
+    public function files_folder()
+    {
         $this->addCrumb('Files', $this->getPath(true));
         $command = new FileBrowser($this->project->path, array('show_fullpath' => true, 'show_hidden_files' => true));
+
         return $command->generateContent();
     }
 
-    function tests_folder() {
-        $folder = new UnitTests($this->project);
-        return $folder->generateContent();
+    /**
+     * Execute the generated test.
+     */
+    public function tests_folder($filename)
+    {
+        include \Sledgehammer\TMP_DIR.'UnitTests/'.$filename;
+        exit;
     }
 
-    function phpunit_folder($filename) {
+    public function phpunit_folder($filename)
+    {
         $url = URL::getCurrentURL();
         $folders = $url->getFolders();
         $module = $this->project->modules[$folders[$this->depth + 1]];
 
-        $command = '/usr/local/bin/phpunit --strict --bootstrap ' . escapeshellarg($this->project->modules['core']->path . 'init_tests.php') . ' ' . escapeshellarg(($module->path) . "tests/" . $url->getFilename());
-        $source = '<?php echo "<pre>"; passthru("' . $command . '"); echo "</pre>";';
+        $command = '/usr/local/bin/phpunit --strict --bootstrap '.escapeshellarg($this->project->modules['core']->path.'init_tests.php').' '.escapeshellarg(($module->path).'tests/'.$url->getFilename());
+        $source = '<?php echo "<pre>"; passthru("'.$command.'"); echo "</pre>";';
+
         return new ViewHeaders(new PHPSandbox($source), array('title' => 'PHPUnit'));
     }
 
-    function phpdocs_folder() {
+    public function phpdocs_folder()
+    {
         $folder = new PhpDocs($this->project);
+
         return $folder->generateContent();
     }
 
-    function dynamicFoldername($folder) {
+    public function dynamicFoldername($folder)
+    {
         $vendorPackages = $this->packages->where(['vendor' => $folder]);
         if (count($vendorPackages) === 0) {
             return $this->onFolderNotFound();
         }
         $controller = new VendorFolder($folder, $vendorPackages);
+
         return $controller->generateContent();
     }
 
-    function generateDocument() {
+    public function generateDocument()
+    {
         if ($this->login() == false) {
             $doc = new HtmlDocument();
             $doc->content = new HttpError(401);
+
             return $doc;
         }
+
         return parent::generateDocument();
     }
 
-    function wrapContent($content) {
-//        if (!$this->project) {
+    public function wrapContent($content)
+    {
+        //        if (!$this->project) {
 //            return $content;
 //        }
 //        $navigation = array(
@@ -221,42 +244,48 @@ class DevUtilsWebsite extends Website {
                 ), array(
             'css' => array(
                 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',
-                \Sledgehammer\WEBROOT.'css/devutils.css'
+                \Sledgehammer\WEBROOT.'css/devutils.css',
             ),
         ));
+
         return $template;
     }
 
-    function onSessionStart() {
+    public function onSessionStart()
+    {
         return false;
     }
 
-    function addCrumb($crumb, $url = null) {
+    public function addCrumb($crumb, $url = null)
+    {
         $this->breadcrumbs->add($crumb, $url);
     }
 
-    private function login() {
+    private function login()
+    {
         $auth = new HttpAuthentication('DevUtils', function ($username, $password) {
             \Sledgehammer\su_exec($username, $password, 'true', $retval);
-            return ($retval === 0);
+
+            return $retval === 0;
         });
         $credentials = $auth->authenticate();
         if ($credentials) {
             self::$username = $credentials['username'];
             self::$password = $credentials['password'];
+
             return true;
         }
+
         return false;
     }
 
-    static function suExec($command, &$retval = null) {
+    public static function suExec($command, &$retval = null)
+    {
         return \Sledgehammer\su_exec(self::$username, self::$password, $command, $retval);
     }
 
-    static function sudo($command) {
+    public static function sudo($command)
+    {
         return \Sledgehammer\sudo(self::$username, self::$password, $command);
     }
-
 }
-
-?>

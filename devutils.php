@@ -4,6 +4,7 @@ use Sledgehammer\Core\Debug\ErrorHandler;
 use Sledgehammer\Devutils\DevUtilsWebsite;
 use Sledgehammer\Mvc\Template;
 
+define('Sledgehammer\DEVUTILS_PATH', __DIR__.'/');
 /**
  * Start the DevUtils App
  *
@@ -37,31 +38,18 @@ if ($webpath != '/') {
 }
 $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); // Het path gedeelte van de uri
 $filename = substr($uriPath, strlen($webpath)); // Bestandsnaam is het gedeelte van de uriPath zonder de WEBPATH
-if (substr($filename, 0, 10) == 'run_tests/') {
+ini_set('display_errors', true);
+error_reporting(E_ALL);
+if (substr($filename, 0, 4) === 'run/') {
     // Include het gegenereerde unitest bestand.
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
-    $tmpDir = __DIR__ . '/tmp' . DIRECTORY_SEPARATOR;
-    if ((is_dir($tmpDir) && is_writable($tmpDir)) == false) {  // Use the project heeft geen schrijfbare tmp folder?
-        $tmpDir = '/tmp/sledgehammer-' . md5(__DIR__ . DIRECTORY_SEPARATOR);
-        if (function_exists('posix_getpwuid')) {
-            $user = posix_getpwuid(posix_geteuid());
-            $tmpDir .= '-' . $user['name'];
-        }
-        $tmpDir .= '/';
-    } else {
-        if (function_exists('posix_getpwuid')) {
-            $user = posix_getpwuid(posix_geteuid());
-            $tmpDir .= $user['name'] . '/';
-        }
-    }
-    include($tmpDir . 'UnitTests/' . basename($filename));
+    $script = sys_get_temp_dir(). 'devutils/' . basename($filename);
+    register_shutdown_function(function ($script) { unlink($script); }, $script);
+    include($script);
     exit;
 }
 
 // Render static files vanuit de Devutils map
 include_once(__DIR__ . '/vendor/sledgehammer/core/src/render_public_folders.php');
-define('Sledgehammer\VENDOR_DIR', $projectPath.$vendorDir);
 // Include the target first (sets the Sledgehammer constants in the target) 
 $loader = require_once($projectPath.$vendorDir.'autoload.php');
 // Include the devutils autoloader
