@@ -1,10 +1,8 @@
-<h1><?php echo $module->name; ?> <small>module</small></h1>
+<h1><?php echo $module->name; ?> <small>package</small></h1>
 <div class="row">
 	<div class="col-md-7">
 		<?php
 		render($properties);
-		echo '<h3>Documentation</h3>';
-		render($documentation);
 		if (is_view($utilities)) {
 			echo '<h3>Utilities</h3>';
 			render($utilities);

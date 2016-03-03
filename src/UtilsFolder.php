@@ -1,7 +1,7 @@
 <?php
-
 namespace Sledgehammer\Devutils;
 
+use Sledgehammer\Mvc\Component\Breadcrumbs;
 use Sledgehammer\Mvc\Component\HttpError;
 use Sledgehammer\Mvc\ViewHeaders;
 use Sledgehammer\Mvc\VirtualFolder;
@@ -24,7 +24,7 @@ class UtilsFolder extends VirtualFolder
     {
         $utils = $this->module->getUtilities();
         $util = $utils[$filename];
-        $this->addCrumb($util->title, false);
+        Breadcrumbs::instance()->add($util->title, false);
         Util::$module = $this->module;
         $component = $util->generateContent();
         if (\Sledgehammer\is_valid_view($component)) {

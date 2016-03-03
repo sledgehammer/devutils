@@ -34,11 +34,4 @@ class VendorFolder extends VirtualFolder
         return $this->onFolderNotFound();
     }
 
-//
-//	function generateContent() {
-//		$name = $this->module->name.' module';
-//		// getDocument()->title = $name;
-//		$this->addCrumb($name, $this->getPath());
-//		return parent::generateContent();
-//	}
 }

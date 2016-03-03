@@ -1,15 +1,12 @@
-/**
- *
- */
-
 (function ($) {
 	$(document).ready(function () {
 
 		/**
 		 * Update UnitTest indicator after the tests have run.
 		 */
-		var $indicator = $('[data-unittest=indicator]');
+		var $indicator = $('[data-unittest="indicator"]');
 		if ($indicator.length > 0) {
+            $indicator.removeClass('label-default');
 			if ($('.unittest-summary').length == 0) {
 				$indicator.text('Crashed').addClass('label-danger');
 			} else {

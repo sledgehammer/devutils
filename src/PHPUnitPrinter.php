@@ -123,26 +123,23 @@ class PHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Framework_T
         $this->groups = $suite->getGroupDetails();
         echo '<div class="unittest">';
         static $first = true;
+        $name = $suite->getName();
         if ($first) {
             $first = false;
         } else {
             $url = false;
-            // $filename = \Sledgehammer\Framework::$autoloader->getFilename($suite->getName());
-            // if (substr($filename, 0, strlen(\Sledgehammer\MODULES_DIR)) === \Sledgehammer\MODULES_DIR) {
-            // 	$filename = substr($filename, strlen(Sledgehammer\MODULES_DIR));
-            // 	if (preg_match('@^(?<module>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
-            // 		$url = DEVUTILS_WEBPATH.'tests/'.$matches['module'].'/'.$matches['file'];
-            // 	}
-            // } elseif (substr($filename, 0, strlen(\Sledgehammer\APP_DIR)) === \Sledgehammer\APP_DIR) {
-            // 	$filename = substr($filename, strlen(dirname(Sledgehammer\APP_DIR)));
-            // 	if (preg_match('@^/(?<app>[^/]+)/tests/(?<file>[^/]+\.php)$@', $filename, $matches)) {
-            // 		$url = DEVUTILS_WEBPATH.'tests/'.$matches['app'].'/'.$matches['file'];
-            // 	}
-            // }
+            if (strpos($name, '::') === false) {
+                $class = new \ReflectionClass($name);
+                $filename = $class->getFileName();
+                $relPath = preg_replace('/^'.preg_quote(DEVUTILS_PACKAGE_PATH, '/').'/', '', $filename);
+                if ($relPath !== $filename) {
+                    $url = DEVUTILS_TEST_URL.$relPath;
+                }
+            }
             if ($url) {
-                echo '<h3><a href="'.$url.'">'.$suite->getName().'</a></h3>';
+                echo '<h3><a href="'.$url.'">'.$name.'</a></h3>';
             } else {
-                echo '<h3>'.$suite->getName().'</h3>';
+                echo '<h3>'.$name.'</h3>';
             }
         }
         if (ob_get_level()) {

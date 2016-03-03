@@ -34,29 +34,46 @@ class Package extends Object
         return [];
     }
 
-    public function getUnitTests($path = null)
+    public function getUnitTests()
     {
         $tests = [];
-        if (is_dir($this->path.'tests/')) {
-            $basepath = $this->path.'tests/';
-        } else {
-            $basepath = $this->path;
+        $xml = false;
+        if (file_exists($this->path.'phpunit.xml')) {
+            $xml = simplexml_load_file($this->path.'phpunit.xml');
         }
-        if ($path === null) {
-            $path = $basepath;
+        if (file_exists($this->path.'phpunit.xml.dist')) {
+            $xml = simplexml_load_file($this->path.'phpunit.xml.dist');
         }
+        
+        if ($xml) {
+            foreach ($xml->testsuite as $suite) {
+                foreach ($suite->directory as $dirNode) {
+                    $suffix = (string) $dirNode['suffix'] ?: 'Test.php';
+                    $dir = (string) $dirNode;
+                    $dir = preg_replace('/^\.\//','', $dir); // strip leading "./"
+                    $tests = array_merge($tests, $this->detectTestsIn($this->path.$dir, $suffix));
+                }
+            }
+        } elseif (is_dir($this->path.'tests')) {
+            $tests = $this->detectTestsIn($this->path.'tests');
+        }
+        return $tests;
+    }
+    
+    protected function detectTestsIn($path, $suffix = 'Test.php') {
+        $tests = [];
         $dir = new DirectoryIterator($path);
         foreach ($dir as $entry) {
             if ($entry->isDot()) {
                 continue;
             }
             if ($entry->isDir()) {
-                $tests = array_merge($tests, $this->getUnitTests($entry->getPathname()));
+                $tests = array_merge($tests, $this->detectTestsIn($entry->getPathname(), $suffix));
                 continue;
             }
             $filename = $entry->getPathname();
-            if (substr($filename, -8) == 'Test.php' && strpos(file_get_contents($filename), 'function test')) {
-                $tests[] = substr($filename, strlen($basepath));
+            if (\Sledgehammer\text($filename)->endsWith($suffix)) { // && strpos(file_get_contents($filename), 'function test')
+                $tests[] = substr($filename, strlen($this->path));
             }
         }
         ksort($tests); // Sorteer de tests alfabetisch

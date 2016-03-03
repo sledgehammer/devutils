@@ -1,17 +1,12 @@
 <?php
 /**
- * rewrite
- */
-
-/**
  * Detect and include the DevUtils installation.
- *
- * @package DevUtils
  */
 define('Sledgehammer\STARTED', microtime(true));
 // Detecteer de locatie van de devutils bestanden.
 $locations = array(
 	dirname(__DIR__).'/', // Is installed in full
+	dirname(dirname(__DIR__)).'/devutils/', // In $project/
 	dirname(dirname(dirname(__DIR__))).'/devutils/', // In a  $project/public
 	dirname(dirname(dirname(dirname(__DIR__)))).'/devutils/', // in a $project/app/webroot
 	'/var/www/devutils/',
@@ -28,4 +23,3 @@ if ($devutilsPath == false) {
 	die('Error: DevUtils installation not found.');
 }
 require($devutilsPath.'devutils.php');
-?>

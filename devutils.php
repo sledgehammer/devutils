@@ -49,7 +49,7 @@ if (substr($filename, 0, 4) === 'run/') {
 }
 
 // Render static files vanuit de Devutils map
-include_once(__DIR__ . '/vendor/sledgehammer/core/src/render_public_folders.php');
+require_once(__DIR__ . '/vendor/sledgehammer/core/src/render_public_folders.php');
 // Include the target first (sets the Sledgehammer constants in the target) 
 $loader = require_once($projectPath.$vendorDir.'autoload.php');
 // Include the devutils autoloader

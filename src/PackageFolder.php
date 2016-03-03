@@ -3,6 +3,7 @@
 namespace Sledgehammer\Devutils;
 
 use Sledgehammer\Core\Html;
+use Sledgehammer\Mvc\Component\Breadcrumbs;
 use Sledgehammer\Mvc\Component\DescriptionList;
 use Sledgehammer\Mvc\Component\Nav;
 use Sledgehammer\Mvc\Template;
@@ -42,22 +43,20 @@ class PackageFolder extends VirtualFolder
             $utilities = false;
         }
 
-        return new Template('module.php', array(
+        return new Template('package.php', array(
             'module' => $this->package,
             'properties' => new DescriptionList(array('class' => 'dl-horizontal', 'items' => $properties)),
-            'documentation' => $this->getDocumentationList(),
             'utilities' => $utilities,
             'unittests' => $this->getUnitTestList(),
                 ), array(
-            'title' => $this->package->name.' module',
+            'title' => $this->package->name.' package',
         ));
     }
 
     public function generateContent()
     {
-        $name = $this->package->name.' module';
-        // getDocument()->title = $name;
-        $this->addCrumb($name, $this->getPath());
+        $name = $this->package->name;
+        Breadcrumbs::instance()->add($name, $this->getPath());
 
         return parent::generateContent();
     }
@@ -78,7 +77,7 @@ class PackageFolder extends VirtualFolder
 
     public function files_folder()
     {
-        $this->addCrumb('Files', $this->getPath(true));
+        Breadcrumbs::instance()->add('Files', $this->getPath(true));
         $command = new FileBrowser($this->package->path, array('show_fullpath' => true, 'show_hidden_files' => true));
 
         return $command->generateContent();
@@ -110,19 +109,6 @@ class PackageFolder extends VirtualFolder
         }
 
         return $properties;
-    }
-
-    protected function getDocumentationList()
-    {
-        $iconPrefix = \Sledgehammer\WEBROOT.'icons/';
-        $actions = array(
-            'phpdocs/' => array('icon' => $iconPrefix.'documentation.png', 'label' => 'API Documentation'),
-        );
-        if (file_exists($this->package->path.'docs/')) {
-            $actions['files/docs/'] = array('icon' => $iconPrefix.'documentation.png', 'label' => 'Documentation folder');
-        }
-        //'files/' => array('icon' => 'mime/folder.png', 'label' => 'Files'),
-        return new Nav($actions, array('class' => 'nav nav-list'));
     }
 
     /**
