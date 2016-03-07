@@ -229,7 +229,7 @@ class PHPUnitPrinter extends PHPUnit_Util_Printer implements PHPUnit_Framework_T
         $method = $test->getName();
         if (count($this->groups) > 1) {
             foreach ($this->groups as $group => $tests) {
-                if ($group === '__nogroup__') {
+                if ($group === 'default') {
                     continue;
                 }
                 if (in_array($test, $tests, true)) {

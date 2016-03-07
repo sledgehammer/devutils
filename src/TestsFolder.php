@@ -74,7 +74,18 @@ class TestsFolder extends VirtualFolder
     private function generateTestSuite($title, $path, $group = null)
     {
         $xml = false;
-        $bootstrap = false;
+        $flags = [
+            'report-useless-tests',
+            'strict-coverage',
+            'disallow-test-output',
+            'enforce-time-limit',
+            'debug',
+            'printer' => PHPUnitPrinter::class,
+        ];
+        if ($group) {
+            $flags['group']= $group;
+        }
+        $source = '<h1 class="unittest-heading">' . Html::escape($title) . " <span class=\"label label-default\" data-unittest=\"indicator\">Running tests</span></h1>\n";
         if (file_exists($this->package->path . 'phpunit.xml')) {
             $xml = $this->package->path . 'phpunit.xml';
         }
@@ -84,18 +95,9 @@ class TestsFolder extends VirtualFolder
         if ($xml) {
             $config = simplexml_load_file($xml);
             if (in_array($config['bootstrap'], ['vendor/autoload.php', './vendor/autoload.php']) && file_exists($this->package->path . 'vendor/autoload.php') === false) { // modules 
-                $bootstrap = \Sledgehammer\VENDOR_DIR . 'autoload.php';
-//                <div class="unittest-assertion"><span class="label label-info" data-unittest="skipped">Skipped</span> Skipping tests for "apc" backend, the php-extension "apc" is not installed.<br><b>SledgehammerTests\Core\CacheTest</b>-&gt;<b>test_startup</b>() was skipped<br><b>PHPUnit_Framework_SkippedTestError</b>  thrown in <b>/Volumes/Sites/devutils/vendor/sledgehammer/core/tests/CacheTest.php</b> on line <b>34</b></div>
-//                .unittest .unittest-assertion .label {
-//    text-transform: uppercase;
-//    font-size: 9px;
-//    padding: .1em .5em .2em;
-//}
+                $flags['bootstrap'] = \Sledgehammer\VENDOR_DIR . 'autoload.php';
+                $source .= '<div class="unittest"><div class="unittest-assertion"><span class="label label-default">WARNING</span> No local vendor/autoload.php detected, using <b>'.$bootstrap.'</b></div></div>';
             }
-        }
-        $source = '<h1 class="unittest-heading">' . Html::escape($title) . " <span class=\"label label-default\" data-unittest=\"indicator\">Running tests</span></h1>\n";
-        if ($bootstrap) {
-            $source .= '<div class="unittest"><div class="unittest-assertion"><span class="label label-default">WARNING</span> No local vendor/autoload.php detected, using <b>'.$bootstrap.'</b></div></div>';
         }
         $source .= "<?php\n";
         $source .= 'chdir(' . var_export($this->package->path, true) . ");\n";
@@ -104,28 +106,19 @@ class TestsFolder extends VirtualFolder
         $source .= "define('DEVUTILS_TEST_URL', ".var_export($this->getPath(), true).");\n";
         $source .= "define('DEVUTILS_PACKAGE_PATH', ".var_export($this->package->path, true).");\n";
         $source .= "\$GLOBALS['title'] = '" . $title . "';\n";
-        $source .= "\$_SERVER['argv'] = array(\n";
-        $source .= "\t'--printer', " . var_export(PHPUnitPrinter::class, true) . ",\n";
-        $flags = [
-            'report-useless-tests',
-            'strict-coverage',
-            'disallow-test-output',
-            'enforce-time-limit',
-            'debug',
-        ];
-        foreach ($flags as $flag) {
-            $source .= "\t'--" . $flag . "',\n";
-        }
-        if ($bootstrap) {
-            $source .= "\t'--bootstrap', " . var_export($bootstrap, true) . ",\n";
-        }
-        if ($group) {
-            $source .= "\t'--', " . var_export($group, true) . ",\n";
+        $source .= "\$_SERVER['argv'] = [\n";
+        
+        foreach ($flags as $flag => $value) {
+            if (is_int($flag)) {
+                $source .= "\t'--" . $value . "',\n";
+            } else {
+                $source .= "\t'--".$flag ."', ". var_export($value, true) . ",\n";
+            }
         }
         if ($path) {
             $source .= "\t" . var_export($path, true) . ",\n";
         }
-        $source .= ");\n";
+        $source .= "];\n";
         $source .= "\$loader = require_once('" . \Sledgehammer\DEVUTILS_PATH . "vendor/autoload.php');\n";
         $source .= "PHPUnit_TextUI_Command::main(false);\n";
         $source .= PHPUnitPrinter::class . "::summary();\n";
