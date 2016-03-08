@@ -3,19 +3,51 @@
 namespace Sledgehammer\Devutils;
 
 use DirectoryIterator;
+use Exception;
 use Sledgehammer\Core\Object;
+use Sledgehammer\Core\Json;
 
 class Package extends Object
 {
-    public $name;
-    public $vendor;
+
+    /**
+     * @var string
+     */
     public $path;
 
-    public function __construct($name)
+    /**
+     * @var object
+     */
+    public $composer;
+
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var string
+     */
+    public $vendor;
+
+    /**
+     * @var Package
+     */
+    public $project;
+
+    public function __construct($path, $project = null)
     {
-        $this->name = $name;
-        $this->vendor = substr($name, 0, strpos($name, '/'));
-        $this->path = \Sledgehammer\VENDOR_DIR.$name.'/';
+        if (substr($path, -1) !== '/') {
+            $path .= '/';
+        }
+        $this->path = $path;
+        $this->project = $project;
+        if (file_exists($path.'composer.json') === false) {
+            throw new Exception('Invalid path "'.$path.'", composer.json not found');
+        }
+        $this->composer = Json::decode(file_get_contents($path.'composer.json'));
+        $this->name = $this->composer->name;
+        $this->vendor = substr($this->name, 0, strpos($this->name, '/'));
     }
 
     public function getProperties()
@@ -44,13 +76,12 @@ class Package extends Object
         if (file_exists($this->path.'phpunit.xml.dist')) {
             $xml = simplexml_load_file($this->path.'phpunit.xml.dist');
         }
-        
         if ($xml) {
-            foreach ($xml->testsuite as $suite) {
+            foreach ($xml->xpath('//testsuite') as $suite) {
                 foreach ($suite->directory as $dirNode) {
                     $suffix = (string) $dirNode['suffix'] ?: 'Test.php';
                     $dir = (string) $dirNode;
-                    $dir = preg_replace('/^\.\//','', $dir); // strip leading "./"
+                    $dir = preg_replace('/^\.\//', '', $dir); // strip leading "./"
                     $tests = array_merge($tests, $this->detectTestsIn($this->path.$dir, $suffix));
                 }
             }
@@ -59,8 +90,9 @@ class Package extends Object
         }
         return $tests;
     }
-    
-    protected function detectTestsIn($path, $suffix = 'Test.php') {
+
+    protected function detectTestsIn($path, $suffix = 'Test.php')
+    {
         $tests = [];
         $dir = new DirectoryIterator($path);
         foreach ($dir as $entry) {
@@ -79,4 +111,5 @@ class Package extends Object
         ksort($tests); // Sorteer de tests alfabetisch
         return $tests;
     }
+
 }

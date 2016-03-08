@@ -5,7 +5,6 @@ namespace Sledgehammer\Devutils;
 use DirectoryIterator;
 use Sledgehammer\Core\Collection;
 use Sledgehammer\Core\HttpAuthentication;
-use Sledgehammer\Core\Json;
 use Sledgehammer\Core\Url;
 use Sledgehammer\Mvc\Component\Breadcrumbs;
 use Sledgehammer\Mvc\Component\HttpError;
@@ -34,11 +33,9 @@ class DevUtilsWebsite extends Website
 
     public function __construct($path)
     {
-        $composer = Json::decode(file_get_contents($path.'composer.json'));
-        $this->project = new Package($composer->name);
-        $this->project->path = $path;
-        $this->packages = new Collection();
-        $vendorDir = new DirectoryIterator(\Sledgehammer\VENDOR_DIR);
+        $this->project = new Package($path);
+        $this->packages = new Collection([$this->project]);
+        $vendorDir = new DirectoryIterator($path.'vendor');
         foreach ($vendorDir as $entry) {
             if ($entry->isDot() || $entry->isFile() || in_array($entry->getFilename(), ['composer', 'bin'])) {
                 continue;
@@ -48,7 +45,7 @@ class DevUtilsWebsite extends Website
                 if ($subentry->isDot() || $subentry->isFile()) {
                     continue;
                 }
-                $this->packages[] = new Package($entry->getFilename().'/'.$subentry->getFilename());
+                $this->packages[] = new Package($subentry->getPathname(), $this->project);
             }
         }
         Breadcrumbs::instance()->add(['icon' => 'home-white', 'label' => 'Home'], $this->getPath());

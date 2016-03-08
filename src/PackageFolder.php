@@ -126,11 +126,8 @@ class PackageFolder extends VirtualFolder
              $urlPrefix => array('icon' => 'play', 'label' => 'Run all'),
         ];
         foreach ($tests as $testfile) {
-            if (\Sledgehammer\text($testfile)->endsWith('Test.php')) {
-                $label = substr($testfile, 0, -8);
-            } else {
-                $label = substr($testfile, 0, -4);
-            }
+            $label = preg_replace('/(Test)?\.php$/i', '', $testfile);
+            $label = preg_replace('/^test[s]?\//i', '', $label);
             $list[$urlPrefix.$testfile] = array('icon' => $iconPrefix.'test.png', 'label' => $label);
         }
 

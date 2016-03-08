@@ -29,7 +29,7 @@ class TestsFolder extends VirtualFolder
     {
         $tests = $this->package->getUnitTests();
 
-        return $this->build($this->package->name . ' TestSuite', null, value($_GET['group']));
+        return $this->build($this->package->name . ' TestSuite', null, array_value($_GET, 'group'));
     }
 
     public function dynamicFoldername($folder, $filename = null)
@@ -40,7 +40,7 @@ class TestsFolder extends VirtualFolder
         \Sledgehammer\file_extension(basename($filename), $title);
         Breadcrumbs::instance()->add($title, false);
 
-        return $this->build($title, $this->package->path . DIRECTORY_SEPARATOR . $filename, value($_GET['group']));
+        return $this->build($title, $this->package->path . $filename, array_value($_GET, 'group'));
     }
 
     public function dynamicFilename($filename)
@@ -95,8 +95,10 @@ class TestsFolder extends VirtualFolder
         if ($xml) {
             $config = simplexml_load_file($xml);
             if (in_array($config['bootstrap'], ['vendor/autoload.php', './vendor/autoload.php']) && file_exists($this->package->path . 'vendor/autoload.php') === false) { // modules 
-                $flags['bootstrap'] = \Sledgehammer\VENDOR_DIR . 'autoload.php';
-                $source .= '<div class="unittest"><div class="unittest-assertion"><span class="label label-default">WARNING</span> No local vendor/autoload.php detected, using <b>'.$bootstrap.'</b></div></div>';
+                if ($this->package->project) {
+                    $flags['bootstrap'] = $this->package->project->path . 'vendor/autoload.php';
+                    $source .= '<div class="unittest"><div class="unittest-assertion"><span class="label label-default">WARNING</span> No local vendor/autoload.php detected, using <b>'.$flags['bootstrap'].'</b></div></div>';
+                }
             }
         }
         $source .= "<?php\n";
