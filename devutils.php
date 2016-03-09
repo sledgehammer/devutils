@@ -1,6 +1,7 @@
 <?php
 
 use Sledgehammer\Core\Debug\ErrorHandler;
+use Sledgehammer\Core\Debug\Autoloader;
 use Sledgehammer\Devutils\DevUtilsWebsite;
 use Sledgehammer\Mvc\Template;
 
@@ -50,17 +51,22 @@ if (substr($filename, 0, 4) === 'run/') {
 
 // Render static files vanuit de Devutils map
 require_once(__DIR__ . '/vendor/sledgehammer/core/src/render_public_folders.php');
-// Include the target first (sets the Sledgehammer constants in the target) 
-$loader = require_once($projectPath.$vendorDir.'autoload.php');
-// Include the devutils autoloader
-require_once(__DIR__ . '/vendor/autoload.php');
-// Set the ClassLoader from the target as the first autoloader
+// Include the target first (sets the Sledgehammer constants based on the target)
+foreach($devutilsIncludes as $include) {
+    require_once($include);    
+}
+// Include the devutils autoloader, and configure the ordering of autoloaders, target first,  devutils last.
+$loader = require_once(__DIR__ . '/vendor/autoload.php');
 $loader->unregister();
-$loader->register(true);
+spl_autoload_unregister([Autoloader::class, 'lazyRegister']);
+$loader->register(false);
+spl_autoload_register([Autoloader::class, 'lazyRegister']);
 
+// Initialize ErrorHandler and configure templates
 ErrorHandler::enable();
 Template::$includePaths[] = __DIR__.'/vendor/';
 Template::$includePaths[] = __DIR__.'/templates/';
-// Build website
+
+// Handle the request
 $website = new DevUtilsWebsite($projectPath);
 $website->handleRequest();
