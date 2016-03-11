@@ -2,3 +2,5 @@ autoloader.db.php
 /nbproject
 /tmp
 /vendor
+/node_modules
+/public/build

@@ -1,0 +1,24 @@
+{
+  "name": "devutils",
+  "version": "1.0.0",
+  "description": "An Introspection & diagnostics tool for composer based projects",
+  "dependencies": {
+    "@angular/router": "^0.2.0",
+    "@reactivex/rxjs": "^5.0.0-beta.2",
+    "angular": "^1.5.0",
+    "angular-animate": "^1.5.0",
+    "angular-aria": "^1.5.0",
+    "angular-material": "^1.0.6",
+    "angular-messages": "^1.5.0",
+    "angular-ui-router": "^0.2.18",
+    "gulp": "^3.9.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-noprotocol": "^0.8.0",
+    "jquery": "^2.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "./node_modules/.bin/gulp",
+    "setup": "composer install && npm install && ./node_modules/.bin/gulp deploy"
+  }
+}

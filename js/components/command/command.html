@@ -1,0 +1,9 @@
+<div class="command">
+    <div class="command__box" ng-class="{'command__box--focussed': vm.focussed}">
+        <input type="search" class="command__input">
+        <div class="command__results" ng-if="vm.focussed">
+            <div ng-repeat="command in vm.commands" class="command__result" ng-class="{'command__result--active': vm.active == command}">{{command.title}}</div>
+         </div>
+    </div>
+</div>
+<div class="command-spacer"></div>

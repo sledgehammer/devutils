@@ -1,0 +1,64 @@
+@import "../../../sass/colors";
+
+.command {
+    background: $amber400;
+    height: 5.6rem;
+    box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+    display: flex;
+    align-items: center;   
+    justify-content: center;
+    position: fixed;
+    z-index: 100;
+    backface-visibility: hidden;
+    left: 0;
+    right: 0; 
+}
+.command-spacer {
+    height: 5.6rem;
+}
+.command__box {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    background: $amber300;
+    height: 3.6rem;
+    max-width: 60rem;
+    margin: 0 40px;
+    border-radius: 2px;
+    
+    &.command__box--focussed {
+        background: $amber100;
+    }
+}
+.command__input {
+    flex-grow: 1;
+    border: none;
+    height: 3.6rem;
+    padding: 0 1rem;
+    background: transparent;
+    &:focus {
+        outline: none;
+    }
+}
+.command__results {
+    position: absolute;
+    max-height: 50vh;
+    overflow: auto;
+    top: 3.8rem;
+    left: 0;
+    right: 0;
+    box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+}
+.command__result {
+    background: $amber50;
+    padding: 1rem;
+    cursor: pointer;
+
+    &.command__result--active {
+        background: $amberAccent400;
+        color: white;
+    }
+    &:hover {
+        background: $amberAccent100;
+    }
+}
