@@ -19,6 +19,10 @@ while (strlen($projectPath) > 4) {
     //  Extract vendor-dir from composer.json
     if (file_exists($projectPath . 'composer.json')) {
         $composerJson = json_decode(file_get_contents($projectPath . 'composer.json'), true);
+        if ($composerJson['name'] === "sledgehammer/devutils") {
+            $projectPath = dirname($projectPath) . DIRECTORY_SEPARATOR;
+            continue;
+        }        
         $vendorDir = (isset($composerJson['config']['vendor-dir'])) ? $composerJson['config']['vendor-dir'].'/' : 'vendor/';
     } else {
         $vendorDir = 'vendor/';
