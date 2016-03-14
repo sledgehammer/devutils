@@ -22,8 +22,10 @@ if ($devutilsPath == false) {
 	error_log('DevUtils not found in "'.implode('", "', $locations).'"', E_USER_WARNING);
 	die('Error: DevUtils installation not found.');
 }
-// Define the bootstrap files to initialize, by default uses "vendor/autoload.php".
 $devutilsIncludes = [
-    __DIR__.'/../../vendor/autoload.php'
+	// Define your bootstrap file(s) here.
 ];
+if (file_exists(__DIR__.'/../../vendor/autoload.php')) { // check for a "vendor/autoload.php".
+	$devutilsIncludes[] = realpath(__DIR__.'/../../vendor/autoload.php'); // comment this line it conflict with your bootstrap file(s).
+}
 require($devutilsPath.'devutils.php');
