@@ -3,14 +3,14 @@
 namespace Sledgehammer\Devutils;
 
 use Sledgehammer\Core\Object;
-use Sledgehammer\Mvc\View;
+use Sledgehammer\Mvc\Component;
 
 /**
  * Een View dat een url inlaad en direct laat zien.
  *
  * Een soort iframe principe, maar dan wordt de html direct in document gezet.
  */
-class PHPFrame extends Object implements View
+class PHPFrame extends Object implements Component
 {
     private $url;
 

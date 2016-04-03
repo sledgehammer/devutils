@@ -2,14 +2,14 @@
 namespace Sledgehammer\Devutils;
 
 use Sledgehammer\Mvc\Component\Breadcrumbs;
+use Sledgehammer\Mvc\Component\Headers;
 use Sledgehammer\Mvc\Component\HttpError;
-use Sledgehammer\Mvc\ViewHeaders;
-use Sledgehammer\Mvc\VirtualFolder;
+use Sledgehammer\Mvc\Folder;
 
 /**
  * Run utilities from inside a module folder.
  */
-class UtilsFolder extends VirtualFolder
+class UtilsFolder extends Folder
 {
     private $module;
 
@@ -20,15 +20,15 @@ class UtilsFolder extends VirtualFolder
         $this->module = $module;
     }
 
-    public function dynamicFilename($filename)
+    public function file($filename)
     {
         $utils = $this->module->getUtilities();
         $util = $utils[$filename];
         Breadcrumbs::instance()->add($util->title, false);
         Util::$module = $this->module;
         $component = $util->generateContent();
-        if (\Sledgehammer\is_valid_view($component)) {
-            return new ViewHeaders($component, array(
+        if (\Sledgehammer\is_valid_component($component)) {
+            return new Headers($component, array(
                 'title' => $util->title,
             ), true);
         }

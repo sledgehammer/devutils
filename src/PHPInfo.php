@@ -4,11 +4,11 @@
 namespace Sledgehammer\Devutils;
 
 use Sledgehammer\Core\Object;
-use Sledgehammer\Mvc\View;
+use Sledgehammer\Mvc\Component;
 /**
  * phpinfo() with TwBootstrap styling.
  */
-class PHPInfo extends Object implements View
+class PHPInfo extends Object implements Component
 {
     public function getHeaders()
     {

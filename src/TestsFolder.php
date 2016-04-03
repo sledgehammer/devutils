@@ -5,13 +5,13 @@ namespace Sledgehammer\Devutils;
 use Sledgehammer\Core\Html;
 use Sledgehammer\Core\Url;
 use Sledgehammer\Mvc\Component\Breadcrumbs;
-use Sledgehammer\Mvc\ViewHeaders;
-use Sledgehammer\Mvc\VirtualFolder;
+use Sledgehammer\Mvc\Component\Headers;
+use Sledgehammer\Mvc\Folder;
 
 /**
  * Configure and run PHPUnit unittests.
  */
-class TestsFolder extends VirtualFolder
+class TestsFolder extends Folder
 {
 
     /**
@@ -32,7 +32,7 @@ class TestsFolder extends VirtualFolder
         return $this->build($this->package->name . ' TestSuite', null, array_value($_GET, 'group'));
     }
 
-    public function dynamicFoldername($folder, $filename = null)
+    public function folder($folder, $filename = null)
     {
         $url = Url::getCurrentURL();
         $filename = substr($url->path, strlen($this->getPath()));
@@ -43,7 +43,7 @@ class TestsFolder extends VirtualFolder
         return $this->build($title, $this->package->path . $filename, array_value($_GET, 'group'));
     }
 
-    public function dynamicFilename($filename)
+    public function file($filename)
     {
         \Sledgehammer\file_extension(basename($filename), $title);
         Breadcrumbs::instance()->add($title, false);
@@ -68,7 +68,7 @@ class TestsFolder extends VirtualFolder
         $url = Url::getCurrentURL();
         $url->path = \Sledgehammer\WEBPATH . 'run/' . basename($path);
 
-        return new ViewHeaders(new PHPFrame($url), array('title' => $title));
+        return new Headers(new PHPFrame($url), array('title' => $title));
     }
 
     private function generateTestSuite($title, $path, $group = null)

@@ -3,17 +3,17 @@
 namespace Sledgehammer\Devutils;
 
 use Sledgehammer\Core\Html;
+use Sledgehammer\Mvc\Component;
 use Sledgehammer\Mvc\Component\Breadcrumbs;
 use Sledgehammer\Mvc\Component\DescriptionList;
 use Sledgehammer\Mvc\Component\Nav;
-use Sledgehammer\Mvc\Template;
-use Sledgehammer\Mvc\View;
-use Sledgehammer\Mvc\VirtualFolder;
+use Sledgehammer\Mvc\Component\Template;
+use Sledgehammer\Mvc\Folder;
 
 /**
  * De Modules map, toon eigenschappen, toon unittests.
  */
-class PackageFolder extends VirtualFolder
+class PackageFolder extends Folder
 {
     /**
      * @var Package A composer package
@@ -112,7 +112,7 @@ class PackageFolder extends VirtualFolder
     }
 
     /**
-     * @return View
+     * @return Component
      */
     protected function getUnitTestList()
     {

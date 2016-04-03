@@ -6,11 +6,12 @@
 namespace Sledgehammer\Devutils;
 
 use Sledgehammer\Core\Object;
+use Sledgehammer\Mvc\Component;
 
 /**
  * Run phpcode in a separate process.
  */
-class PHPSandbox extends Object implements View
+class PHPSandbox extends Object implements Component
 {
     /**
      * @var string PHP source code

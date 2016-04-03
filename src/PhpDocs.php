@@ -4,12 +4,12 @@ namespace Sledgehammer\Devutils;
 use Sledgehammer\Mvc\Component\Breadcrumbs;
 use Sledgehammer\Mvc\FileDocument;
 use Sledgehammer\Mvc\Template;
-use Sledgehammer\Mvc\VirtualFolder;
+use Sledgehammer\Mvc\Folder;
 
 /**
  * Generate and show API documentation.
  */
-class PhpDocs extends VirtualFolder
+class PhpDocs extends Folder
 {
     /**
      * @var Module|Project
@@ -60,11 +60,11 @@ class PhpDocs extends VirtualFolder
     {
         return $this->staticFile('index.html');
     }
-    public function dynamicFilename($filename)
+    public function file($filename)
     {
         return $this->staticFile($filename);
     }
-    public function dynamicFoldername($folder, $filename = null)
+    public function folder($folder, $filename = null)
     {
         if ($filename !== false) {
             return $this->staticFile($folder.'/'.$filename);

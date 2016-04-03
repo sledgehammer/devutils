@@ -3,7 +3,7 @@
 	<div class="col-md-7">
 		<?php
 		render($properties);
-		if (is_view($utilities)) {
+		if (is_component($utilities)) {
 			echo '<h3>Utilities</h3>';
 			render($utilities);
 		}?>

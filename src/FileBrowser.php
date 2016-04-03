@@ -8,7 +8,7 @@ namespace Sledgehammer\Devutils;
 /**
  * Een eenvoudige filebrowser.
  */
-class FileBrowser extends VirtualFolder
+class FileBrowser extends Folder
 {
     private $path;
     private $options;
@@ -112,7 +112,7 @@ class FileBrowser extends VirtualFolder
         ));
     }
 
-    public function dynamicFilename($filename)
+    public function file($filename)
     {
         if (!file_exists($this->path.$filename)) {
             return $this->onFileNotFound();
@@ -147,7 +147,7 @@ class FileBrowser extends VirtualFolder
         }
     }
 
-    public function dynamicFoldername($folder)
+    public function folder($folder)
     {
         Breadcrumbs::instance()->add($folder, $this->getPath(true));
         if (value($this->options['document_title']) == 'subfolder') {

@@ -2,9 +2,9 @@
 
 namespace Sledgehammer\Devutils;
 
-use Sledgehammer\Mvc\VirtualFolder;
+use Sledgehammer\Mvc\Folder;
 
-class VendorFolder extends VirtualFolder
+class VendorFolder extends Folder
 {
     /**
      * @var string
@@ -22,7 +22,7 @@ class VendorFolder extends VirtualFolder
         $this->packages = $packages;
     }
 
-    public function dynamicFoldername($folder)
+    public function folder($folder)
     {
         $packages = $this->packages->where(['name' => $this->vendor.'/'.$folder]);
         if (count($packages) === 1) {

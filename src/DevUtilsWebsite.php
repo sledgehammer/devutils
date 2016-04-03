@@ -9,9 +9,8 @@ use Sledgehammer\Core\Url;
 use Sledgehammer\Mvc\Component\Breadcrumbs;
 use Sledgehammer\Mvc\Component\HttpError;
 use Sledgehammer\Mvc\Component\Nav;
-use Sledgehammer\Mvc\FileDocument;
-use Sledgehammer\Mvc\HtmlDocument;
-use Sledgehammer\Mvc\Template;
+use Sledgehammer\Mvc\Component\Template;
+use Sledgehammer\Mvc\Document\Html;
 use Sledgehammer\Mvc\Website;
 
 /**
@@ -136,7 +135,7 @@ class DevUtilsWebsite extends Website
         return new FileDocument(APP_DIR.'public/icons/module.png');
     }
 
-    public function dynamicFoldername($folder)
+    public function folder($folder)
     {
         $vendorPackages = $this->packages->where(['vendor' => $folder]);
         if (count($vendorPackages) === 0) {
@@ -150,7 +149,7 @@ class DevUtilsWebsite extends Website
     public function generateDocument()
     {
         if ($this->login() == false) {
-            $doc = new HtmlDocument();
+            $doc = new Html();
             $doc->content = new HttpError(401);
 
             return $doc;

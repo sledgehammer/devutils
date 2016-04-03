@@ -1,9 +1,9 @@
 <?php
 
-use Sledgehammer\Core\Debug\ErrorHandler;
 use Sledgehammer\Core\Debug\Autoloader;
+use Sledgehammer\Core\Debug\ErrorHandler;
 use Sledgehammer\Devutils\DevUtilsWebsite;
-use Sledgehammer\Mvc\Template;
+use Sledgehammer\Mvc\Component\Template;
 
 define('Sledgehammer\DEVUTILS_PATH', __DIR__.'/');
 /**
