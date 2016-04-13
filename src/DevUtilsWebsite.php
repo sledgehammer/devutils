@@ -10,7 +10,7 @@ use Sledgehammer\Mvc\Component\Breadcrumbs;
 use Sledgehammer\Mvc\Component\HttpError;
 use Sledgehammer\Mvc\Component\Nav;
 use Sledgehammer\Mvc\Component\Template;
-use Sledgehammer\Mvc\Document\Html;
+use Sledgehammer\Mvc\Document\Page;
 use Sledgehammer\Mvc\Website;
 
 /**
@@ -149,7 +149,7 @@ class DevUtilsWebsite extends Website
     public function generateDocument()
     {
         if ($this->login() == false) {
-            $doc = new Html();
+            $doc = new Page();
             $doc->content = new HttpError(401);
 
             return $doc;
