@@ -2,9 +2,9 @@
     "name": "sledgehammer/devutils",
     "description": "An Introspection & diagnostics tool for composer based projects",
     "require": {
-        "sledgehammer/core": "16.x-dev",
-        "sledgehammer/mvc": "16.x-dev",
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "sledgehammer/core": "^16.05",
+        "sledgehammer/mvc": "^16.05"
     },
     "autoload": {
         "psr-4": {
