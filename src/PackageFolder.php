@@ -43,14 +43,14 @@ class PackageFolder extends Folder
             $utilities = false;
         }
 
-        return new Template('package.php', array(
+        return new Template('package.php', [
             'module' => $this->package,
             'properties' => new DescriptionList(array('class' => 'dl-horizontal', 'items' => $properties)),
             'utilities' => $utilities,
             'unittests' => $this->getUnitTestList(),
-                ), array(
+        ], [
             'title' => $this->package->name.' package',
-        ));
+        ]);
     }
 
     public function generateContent()
@@ -78,7 +78,7 @@ class PackageFolder extends Folder
     public function files_folder()
     {
         Breadcrumbs::instance()->add('Files', $this->getPath(true));
-        $command = new FileBrowser($this->package->path, array('show_fullpath' => true, 'show_hidden_files' => true));
+        $command = new FileBrowser($this->package->path, ['show_fullpath' => true, 'show_hidden_files' => true]);
 
         return $command->generateContent();
     }

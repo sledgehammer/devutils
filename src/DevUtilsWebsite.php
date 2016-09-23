@@ -6,6 +6,7 @@ use DirectoryIterator;
 use Sledgehammer\Core\Collection;
 use Sledgehammer\Core\HttpAuthentication;
 use Sledgehammer\Core\Url;
+use Sledgehammer\Core\Html;
 use Sledgehammer\Mvc\Component\Breadcrumbs;
 use Sledgehammer\Mvc\Component\HttpError;
 use Sledgehammer\Mvc\Component\Nav;
@@ -33,7 +34,7 @@ class DevUtilsWebsite extends Website
     public function __construct($path)
     {
         $this->project = new Package($path);
-        $this->packages = new Collection([$this->project]);
+        $this->packages = new Collection();
         $vendorDir = new DirectoryIterator($path.'vendor');
         foreach ($vendorDir as $entry) {
             if ($entry->isDot() || $entry->isFile() || in_array($entry->getFilename(), ['composer', 'bin'])) {
@@ -68,34 +69,23 @@ class DevUtilsWebsite extends Website
 //        }
 //        $utilityList['phpinfo.php'] = array('icon' => $iconPrefix.'php.gif', 'label' => 'PHP Info');
 
-        // Unittests
-//        if (file_exists($this->project->path.'tests')) {
-            // tests are in the project root? extract tests
-//            array_key_unshift($this->packages, 'project', new Module('project', $this->project->path));
-//        } elseif (file_exists($this->project->path.'app/tests')) {
-            // A non sledgehammer app? extract tests
-//            array_key_unshift($this->packages, 'app', new Module('app', $this->project->path.'app'));
-//        }
-//        foreach ($this->packages as $identifier => $module) {
-//            foreach ($module->getUnitTests() as $testfile) {
-//                if (\Sledgehammer\text($testfile)->endsWith('Test.php')) {
-//                    $label = substr($testfile, 0, -8);
-//                } else {
-//                    $label = substr($testfile, 0, -4);
-//                }
-//                $label = basename($label);
-//                $unittestList['tests/'.$identifier.'/'.$testfile] = array('icon' => $iconPrefix.'test.png', 'label' => ucfirst($identifier).' - '.$label);
-//            }
-//        }
         $template = new Template('project.php', [
             'project' => $this->project->name,
-//            'properties' => new DescriptionList($properties, array('class' => 'dl-horizontal')),
+            'unittests' => $this->getUnitTestList(),
             'packages' => new Nav($this->packages->orderBy('name')->select('name', 'name'), ['class' => 'nav nav-list']),
+//            'properties' => new DescriptionList($properties, array('class' => 'dl-horizontal')),
 //            'utilities' => new Nav($utilityList, array('class' => 'nav nav-list')),
-//            'unittests' => new Nav($unittestList, array('class' => 'nav nav-list')),
-                ], ['title' => $this->project->name.' project']);
-
+        ], [
+            'title' => $this->project->name.' project'
+        ]);
         return $template;
+    }
+
+    public function project_folder()
+    {
+        $controller = new PackageFolder($this->project);
+
+        return $controller->generateContent();
     }
 
     public function phpinfo()
@@ -177,6 +167,29 @@ class DevUtilsWebsite extends Website
     public function onSessionStart()
     {
         return false;
+    }
+
+    /**
+     * @return Component
+     */
+    protected function getUnitTestList()
+    {
+        $tests = $this->project->getUnitTests();
+        if (count($tests) == 0) {
+            return new Html('<span class="muted">No tests found</span>');
+        }
+        $iconPrefix = \Sledgehammer\WEBROOT.'icons/';
+        $urlPrefix = $this->getPath().'project/tests/';
+        $list = [
+             $urlPrefix => array('icon' => 'play', 'label' => 'Run all'),
+        ];
+        foreach ($tests as $testfile) {
+            $label = preg_replace('/(Test)?\.php$/i', '', $testfile);
+            $label = preg_replace('/^test[s]?\//i', '', $label);
+            $list[$urlPrefix.$testfile] = array('icon' => $iconPrefix.'test.png', 'label' => $label);
+        }
+
+        return new Nav($list, array('class' => 'nav nav-list'));
     }
 
     private function login()
